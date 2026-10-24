@@ -1,0 +1,9 @@
+{{#contentFor "body"}}
+  <template data-toggle-template>
+    <button class="ml-1 cursor-pointer hover:text-brand" data-class="rotate-180" title="{{t "Menu toggle"}}" aria-label="{{t "Menu toggle"}}"
+      aria-controls="" aria-expanded="false" @click="toggleDropdown(event)"
+    >
+      {{> icon name="chevron-down" icon_class="size-4 stroke-2"}}
+    </button>
+  </template>
+{{/contentFor}}

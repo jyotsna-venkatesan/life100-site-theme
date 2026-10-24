@@ -1,0 +1,83 @@
+<header class="px-5 sm:px-6 whitespace-nowrap font-sans [&_.is-subitem]:hidden [&_.is-mainitem_.is-subitem]:flex" data-header 
+  x-init="$nextTick(() => { initDropdown($el, 'z-50 min-w-[calc(100%_+_16px)] text-sm absolute top-0 border-t-[2.5px] flex flex-col gap-0.25 shadow-lg rounded-theme py-1.5 px-2 -ml-2 mt-8.5 opacity-0 invisible') })"
+  style="background-color: #3D251D; color: #FFEFE5;">
+  <div class="max-w-site mx-auto flex flex-col">
+    <div class="flex gap-4 border-b border-white/20 py-3 md:py-4 text-base md:text-lg" data-header-bottom>
+      
+      {{!-- Menu button --}}
+      <button class="flex flex-col items-center gap-0.75 justify-center rounded-theme cursor-pointer p-1 transition-all" 
+        data-menu-toggle aria-label="{{t "Menu toggle"}}" aria-expanded="false" aria-haspopup="true" aria-controls="menu"
+        @click="menuOpen = !menuOpen" :aria-expanded="menuOpen.toString()"
+        style="color: #FFEFE5;"
+      >
+        <span class="relative pointer-events-none h-0.5 rounded-sm w-4.5 transition-all" style="background-color: #FFEDFC;"></span>
+        <span class="relative pointer-events-none h-0.5 rounded-sm w-4.5 transition-all" style="background-color: #FFEDFC;"></span>
+        <span class="relative pointer-events-none h-0.5 rounded-sm w-4.5 transition-all" style="background-color: #FFEDFC;"></span>
+        <span class="sr-only">{{t "Menu"}}</span> 
+      </button>
+
+      {{!-- Navigation --}}
+      <nav class="flex-1 relative justify-start" data-nav="header">
+        <div class="flex gap-3 items-center">
+          <a href="/" class="home-hover-btn" style="background-color: #fc9504; color: #1b1000; padding: 6px 16px; border-radius: 6px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; font-size: 0.95rem; text-decoration: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1b1000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Home</span>
+          </a>
+          {{navigation 
+            ul_class="flex gap-3 hidden lg:flex"
+            li_class="flex items-center relative rounded-theme"
+            a_class="w-full flex rounded-theme py-1"
+          }}
+        </div>
+      </nav>
+
+      {{!-- Sign in (desktop only) + Subscribe --}}
+      <div class="flex items-center gap-3 md:gap-4 text-sm md:text-base font-medium">
+        {{#if @member}}
+          <button class="relative flex items-center justify-center size-8 md:size-9 cursor-pointer rounded-full" data-portal="account" aria-label="{{@member.name}}" style="color: #FFEDFC;">
+            <img class="relative size-7 md:size-8 rounded-full z-2" 
+              src="{{@member.avatar_image}}"
+              alt="{{@member.name}}">
+            {{>icon name="user" icon_class="absolute z-1 size-5 stroke-2 inset-1.5 md:inset-2"}}
+          </button>
+        {{else}}
+          <a href="/signin/" {{#if @custom.use_portal_links}}data-portal="signin"{{/if}}
+            class="hidden md:block"
+            style="color: #FFEDFC;">
+            <span>{{t "Sign in"}}</span>
+          </a>
+          <a href="/signup/" {{#if @custom.use_portal_links}}data-portal="subscribe"{{/if}}
+            style="background-color: #fc9504; color: #1b1000; padding: 6px 16px; border-radius: 6px; font-weight: 500;">
+            <span>{{t "Subscribe"}}</span>
+          </a>
+        {{/if}}
+      </div>
+
+      {{!-- Socials --}}
+      <nav class="hidden sm:flex gap-2.5 items-center self-center">
+        <a href="{{@site.facebook}}" class="hover:text-brand" aria-label="Facebook" style="color: #FFEDFC;">
+          {{> icon name="brand-facebook" icon_class="stroke-2 size-4 lg:size-4.5"}}
+          <span class="sr-only">Facebook</span>
+        </a>
+        <a href="https://www.instagram.com/6090club" class="hover:text-brand" aria-label="Instagram" style="color: #FFEDFC;">
+          {{> icon name="brand-instagram" icon_class="stroke-2 size-4 lg:size-4.5"}}
+          <span class="sr-only">Instagram</span>
+        </a>
+        <a href="https://www.youtube.com/@6090club" class="hover:text-brand" aria-label="Youtube" style="color: #FFEDFC;">
+          {{> icon name="brand-youtube" icon_class="stroke-2 size-4 lg:size-4.5"}}
+          <span class="sr-only">Youtube</span>
+        </a>
+      </nav>
+      <hr class="hidden sm:flex w-[1px] h-5 self-center opacity-20 -mr-1" style="background-color: #FFEDFC;"/>
+
+      {{!-- Search button --}}
+      <button class="flex items-center gap-1.5 justify-center rounded-theme cursor-pointer p-1" data-ghost-search title="{{t "Search"}}" aria-label="{{t "Search"}}" style="color: #FFEDFC;">
+        {{> icon name="search" icon_class="size-4 lg:size-4.5 stroke-[2.5] fill-bgr [&>svg]:fill-inherit"}}
+        <span class="">{{t "Search"}}</span>
+      </button>
+    </div>
+  </div>
+</header>

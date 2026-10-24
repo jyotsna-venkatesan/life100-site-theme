@@ -1,0 +1,67 @@
+{{#if @custom.show_podcasts}}
+  {{#get "posts" filter="tag:[podcast,hash-podcast]" include="tags,authors,tiers" limit="8" order="featured desc, published_at desc" as |podcasts|}}
+    {{#if podcasts}}
+      <section class="px-5 sm:px-6 mt-20" data-podcasts style="background-color: #D9C4B0; padding-top: 40px; padding-bottom: 40px; margin-top: 40px;">
+        <div class="max-w-site mx-auto">
+          {{> section-heading 
+            section_title=(t 'Podcasts')
+            section_link="/podcasts/"
+            section_link_text=(t 'See all')
+          }}
+          {{!-- Navigation arrows --}}
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 16px;">
+            <button type="button" id="podcast-prev" onclick="podcastNav(-1, event)" style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; border:none; background:#e5e5e5; cursor:not-allowed; opacity:0.5; box-shadow: 0 2px 6px rgba(0,0,0,0.12); pointer-events:none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button type="button" id="podcast-next" onclick="podcastNav(1, event)" style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; border:none; background:#3D251D; cursor:pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+          {{!-- Page 1: podcasts 1-4 --}}
+          <div id="podcast-page-1">
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {{#foreach podcasts from="1" to="4"}}
+                {{> cards/podcast-card
+                  excerpt_class="line-clamp-3 hidden"
+                }}
+              {{/foreach}}
+            </div>
+          </div>
+          {{!-- Page 2: podcasts 5-8 --}}
+          <div id="podcast-page-2" style="display:none;">
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {{#foreach podcasts from="5" to="8"}}
+                {{> cards/podcast-card
+                  excerpt_class="line-clamp-3 hidden"
+                }}
+              {{/foreach}}
+            </div>
+          </div>
+        </div>
+      </section>
+      <script>
+        var podcastPage = 1;
+        function podcastNav(dir, e) {
+          if (e) e.preventDefault();
+          var next = podcastPage + dir;
+          if (next < 1 || next > 2) return;
+          document.getElementById('podcast-page-' + podcastPage).style.display = 'none';
+          document.getElementById('podcast-page-' + next).style.display = 'block';
+          podcastPage = next;
+          var prevBtn = document.getElementById('podcast-prev');
+          var nextBtn = document.getElementById('podcast-next');
+          prevBtn.style.background = next === 1 ? '#e5e5e5' : '#3D251D';
+          prevBtn.style.opacity = next === 1 ? '0.5' : '1';
+          prevBtn.style.cursor = next === 1 ? 'not-allowed' : 'pointer';
+          prevBtn.style.pointerEvents = next === 1 ? 'none' : 'auto';
+          prevBtn.querySelector('svg').style.stroke = next === 1 ? '#999999' : 'white';
+          nextBtn.style.background = next === 2 ? '#e5e5e5' : '#3D251D';
+          nextBtn.style.opacity = next === 2 ? '0.5' : '1';
+          nextBtn.style.cursor = next === 2 ? 'not-allowed' : 'pointer';
+          nextBtn.style.pointerEvents = next === 2 ? 'none' : 'auto';
+          nextBtn.querySelector('svg').style.stroke = next === 2 ? '#999999' : 'white';
+        }
+      </script>
+    {{/if}}
+  {{/get}}
+{{/if}}

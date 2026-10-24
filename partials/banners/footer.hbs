@@ -1,0 +1,9 @@
+{{#get "pages" filter="slug:banner-footer" limit="1" as |banner|}}
+  {{#foreach banner}}
+    <section class="px-5 sm:px-6 mt-10 {{#if @member.paid}}hidden{{/if}}" data-banner="footer">
+      <div class="max-w-site mx-auto">
+        {{content}}
+      </div>  
+    </section>
+  {{/foreach}}
+{{/get}}

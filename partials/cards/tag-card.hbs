@@ -1,0 +1,10 @@
+<a href="{{url}}" class="flex flex-col gap-4 p-5 border border-brd-soft group hover:bg-bgr-tone">
+  <h2 class="text-lg font-semibold md:text-xl leading-none">
+    {{name}}
+  </h2>
+  <p class="text-sm sm:text-base text-typ-tone flex-1 line-clamp-3">{{{description}}}</p>
+  <p class="font-sans text-xs uppercase font-semibold leading-none text-typ group-hover:text-brand flex items-center gap-0.5 group-hover:gap-0.75  [&_a]:underline [&_a]:decoration-2 [&_a]:underline-offset-2 [&_a:hover]:text-brand">
+    <span>{{t "All in"}} {{name}}</span>
+    {{> icon name="chevron-right" icon_class="size-3.25 stroke-[3]"}}
+  </p>
+</a>

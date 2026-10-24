@@ -1,0 +1,14 @@
+<div class="max-w-site mx-auto">
+  {{#foreach top_story_posts}}
+    {{> cards/post-card-fullwidth 
+      image_loading="eager"
+    }}
+  {{/foreach}}
+  {{#unless top_story_posts.length}}
+    {{#foreach hero_posts from="1" to="1"}}
+      {{> cards/post-card-fullwidth 
+        image_loading="eager"
+      }}
+    {{/foreach}}
+  {{/unless}}
+</div>

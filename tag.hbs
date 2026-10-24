@@ -1,0 +1,70 @@
+{{!< default}}
+
+{{!-- Hero --}}
+{{#tag}}
+  <section class="px-5 sm:px-6" data-tag-hero>
+    <div class="max-w-site mx-auto flex flex-col md:flex-row gap-6 py-5">
+      <div class="flex-1 max-w-xl flex flex-col justify-center gap-3 md:gap-4 py-4">
+        {{#if description}}
+          <p class="text-lg md:text-xl text-typ-tone text-balance [&_a]:underline [&_a]:decoration-2 [&_a]:underline-offset-2 [&_a:hover]:text-brand">
+            {{{description}}}
+          </p>
+        {{/if}}
+      </div>
+
+      {{#if feature_image}}
+        <figure class="flex-1 h-full w-full left-0 top-0">
+          {{> image
+            picture_class="flex h-full"
+            image_type="post"
+            image_class="w-full object-cover object-center rounded-theme"
+            image_url=feature_image
+            size_s=true
+            size_m=true
+            size_l=true
+            size_xl=true
+            sizes="(max-width: 767px) 90vw, (max-width: 1200px) 45vw, 600px"
+            loading="eager"
+          }}
+          {{#if feature_image_caption}}
+            <figcaption class="font-sans mt-1 text-xs opacity-80 text-typ-tone [&>a]:underline [&>a]:underline-offset-2 [&>a:hover]:text-brand text-center">
+              {{feature_image_caption}}
+            </figcaption>
+          {{/if}}
+        </figure>
+      {{/if}}
+    </div>
+  </section>
+{{/tag}}
+
+<section class="px-5 sm:px-6">
+  <div class="max-w-site mx-auto">
+    
+    {{!-- Header grid: Title on left, CTA on right at the same level --}}
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="min-w-0 flex-1">
+        {{#tag}}
+          <h1 class="font-semibold tracking-tight text-3xl sm:text-4xl md:text-5xl leading-tight">
+            {{name}}
+          </h1>
+          {{#if description}}
+            <p class="mt-2 text-lg md:text-xl text-typ-tone text-balance [&_a]:underline [&_a]:decoration-2 [&_a]:underline-offset-2 [&_a:hover]:text-brand">
+              {{{description}}}
+            </p>
+          {{/if}}
+        {{/tag}}
+      </div>
+    
+      <div class="shrink-0 self-start">
+        {{> subscribe-cta}}
+      </div>
+    </div>
+
+    {{!-- Divider positioned underneath both the title and CTA, followed by the posts --}}
+    <div class="border-t-3 border-brd-soft pt-8 mt-8">
+      {{> post-feed feed_type="latest" }}
+      {{> pagination }}
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,55 @@
+<article class="{{post_class}} {{card_class}} relative flex flex-col text-typ h-full" data-post-card="event"{{#if featured}} data-featured{{/if}}{{#if codeinjection_foot}} x-data="{ event: null, eventDate: null }" x-init="$nextTick(() => { event = getMetaInfo($el,'event'); const firstPart = event.date.split(' - ')[0].trim(); const yearMatch = event.date.match(/\b(20\d{2})\b/); const year = yearMatch ? yearMatch[1] : new Date().getFullYear(); const hasYear = /\d{4}/.test(firstPart); const dateStr = hasYear ? firstPart : (firstPart + ', ' + year); const d = parseMonthDayYearTime(dateStr); eventDate = d ? `${d.toLocaleDateString('sv-SE')}T${d.toLocaleTimeString('sv-SE')}` : null })" data-meta="{{codeinjection_foot}}"{{/if}} :data-event-date="eventDate">
+  {{!-- Feature Image --}}
+  {{#if feature_image}}
+    <a href="{{url}}" class="{{media_class}} relative group">
+      <figure class="block rounded-theme overflow-hidden relative group" role="none">
+        {{> image
+          image_type="post"
+          image_class="w-full aspect-[16/9] object-cover rounded-[inherit] group-hover:opacity-90 transition-opacity"
+          image_url=feature_image
+          size_s=true
+          size_m=true
+          size_l=true
+          sizes="(max-width: 767px) 90vw, (max-width: 1200px) 50vw, 600px"
+          loading=image_loading
+        }}
+      </figure>
+      <span x-show="event && (() => { const now = new Date(); const dates = event.date.split(' - '); const startDate = new Date(dates[0].trim()); const endDate = dates[1] ? new Date(dates[0].split(',')[0].split(' ')[0] + ' ' + dates[1].trim()) : startDate; return startDate > now || (now >= startDate && now <= endDate); })()" class="absolute left-4 top-4 text-[0.65rem] uppercase font-semibold font-sans bg-white text-black rounded-theme-btn px-2.5 py-0.75">{{t "Upcoming"}}</span>
+    </a>
+  {{/if}}
+
+  <div class="flex flex-col gap-2.5 p-6 bg-bgr-tone h-full {{content_class}}" data-post-card-content>
+
+    {{!-- Title --}}
+    <h3 class="text-lg font-semibold md:text-xl leading-tight md:leading-[1.15] {{title_class}}" data-post-card-title>
+      <a href="{{url}}" class="hover:underline underline-offset-4">
+        <span>{{title}}</span>
+      </a>
+    </h3>
+
+    {{!-- Excerpt --}}
+    {{#if custom_excerpt}}
+      <p class="text-base leading-snug mb-0.5 {{excerpt_class}}" data-post-card-excerpt>
+        {{custom_excerpt}}
+      </p>
+    {{/if}}
+
+    {{!-- Event info --}}
+    <template x-if="event">
+      <ul class="flex flex-col gap-2 text-sm font-medium font-sans whitespace-nowrap" x-show="event" x-cloak>      
+        <li x-show="event.date" class="flex items-center gap-1">
+          {{> icon name="calendar" icon_class="size-5 stroke-2"}}
+          <span x-text="event.date"></span>
+        </li>
+        <li x-show="event.startTime" class="flex items-center gap-1">
+          {{> icon name="clock" icon_class="size-5 stroke-2"}}
+          <span x-text="event.startTime + (event.endTime && event.startTime !== event.endTime ? ' - ' + event.endTime : '')"></span>
+        </li>
+        <li x-show="event.location" class="flex items-center gap-1">
+          {{> icon name="map-pin" icon_class="size-5 stroke-2"}}
+          <span x-text="event.location"></span>
+        </li>
+      </ul>
+    </template>
+  </div>
+</article>

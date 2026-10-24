@@ -1,0 +1,17 @@
+{{#unless @member}}
+  {{#if @custom.subscribe_cta_headline}}
+    <div class="flex flex-col gap-2 bg-bgr-tone p-6 sticky top-8 border-t-3 border-brd-soft w-full max-w-sm {{#is "home"}}mt-6.25{{/is}} {{cta_class}}">
+      <h3 class="font-semibold text-lg md:text-xl leading-none">{{@custom.subscribe_cta_headline}}</h2>
+      
+      <p class="text-sm md:text-base text-typ-tone leading-snug">{{@custom.subscribe_cta_subheading}}</p>
+
+      {{> subscribe-form 
+        form_class="w-full max-w-xs font-sans mt-1"
+        fieldset_class="w-full bg-bgr border border-brd-soft flex flex-wrap rounded-btn text-sm md:text-base"
+        input_class="text-sm bg-bgr text-typ flex-2 py-2.5 rounded-btn border-none focus:ring-0"
+        button_class="text-sm flex-1 px-5 py-2.5 bg-brand text-bgr font-medium rounded-btn md:px-6 hover:brightness-110"
+        show_signup_terms=false
+        }}
+    </div>
+  {{/if}}
+{{/unless}}

@@ -1,0 +1,10 @@
+{{!< default}}
+
+{{!-- Hero --}}
+{{#page}}
+  {{> page-hero}}
+{{/page}}
+
+{{#foreach page.tags}}
+  {{> sections/topic-w-description section_class="mt-0! mb-20"}}
+{{/foreach}}

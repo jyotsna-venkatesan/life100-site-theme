@@ -1,0 +1,12 @@
+<div class="px-5 sm:px-6 mb-8 font-sans" data-post-info>
+  <div class="max-w-content mx-auto border-b border-brd-soft pb-4 flex flex-wrap justify-between items-center gap-4 text-sm leading-none {{#match media_class "hidden"}} py-3! border-t{{/match}}{{#unless feature_image}} py-3! border-t{{/unless}}">
+    <div class="flex items-center gap-1 relative flex-1 justify-end" x-data="{shareOpen: false}">
+      <button class="flex items-center gap-1 cursor-pointer hover:text-brand px-2 py-1 rounded-sm" @click="shareOpen = !shareOpen" data-share-toggle>
+        {{> icon name="share" icon_class="size-4 stroke-2"}}
+        <span class="">{{t "Share"}}</span>
+      </button>
+      {{> social-share
+      }}
+    </div>
+  </div>
+</div>

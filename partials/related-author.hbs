@@ -1,0 +1,23 @@
+{{#if access}}
+  {{#get "posts" filter="authors:{{primary_author.slug}}+id:-{{id}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="4"}}
+    {{#if posts}}
+      <section class="px-5 sm:px-6 mt-16" data-related="author">
+        <div class="max-w-site mx-auto">
+          {{!-- {{t "More from"}} {{t "See all"}} --}}
+          {{> section-heading 
+            section_title=(concat (t 'More from') " " ../primary_author.name)
+            section_link=../primary_author.url
+            section_link_text=(t 'See all')
+          }}
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {{#foreach posts}}
+              {{> cards/post-card-vertical
+                excerpt_class="hidden"
+              }}
+            {{/foreach}}
+          </div>
+        </div>
+      </section>
+    {{/if}}
+  {{/get}}
+{{/if}}

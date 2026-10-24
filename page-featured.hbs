@@ -1,0 +1,25 @@
+{{!< default}}
+
+{{#get "posts" filter="featured:true+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="9"}}
+  {{#if posts}}
+    <section class="px-5 sm:px-6 mt-6" data-hero-posts="{{posts.length}}">
+      <div class="max-w-site mx-auto">
+        {{#foreach posts to="1"}}
+          {{> cards/post-card-fullwidth 
+            image_loading="eager"
+          }}
+        {{/foreach}}
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          {{#foreach posts from="2" to="3"}}
+            {{> cards/post-card-vertical title_class="lg:text-2xl xl:text-3xl"}}
+          {{/foreach}}
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+          {{#foreach posts from="4"}}
+            {{> cards/post-card-vertical}}
+          {{/foreach}}
+        </div>
+      </div>
+    </section>
+  {{/if}}
+{{/get}}

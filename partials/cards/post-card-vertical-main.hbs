@@ -1,0 +1,54 @@
+<article class="{{post_class}} {{card_class}} relative flex flex-col gap-4 text-typ" data-post-card{{#if featured}} data-featured{{/if}}>
+  {{!-- Feature Image --}}
+  {{#if feature_image}}
+    <a href="{{url}}" class="relative group {{media_class}}">
+      <figure class="block rounded-theme overflow-hidden" role="none">
+        {{> image
+          image_type="post"
+          image_class="aspect-[3/2] object-cover rounded-[inherit] w-full group-hover:opacity-90 transition-opacity"
+          image_url=feature_image
+          size_s=true
+          size_m=true
+          size_l=true
+          sizes="(max-width: 767px) 90vw, (max-width: 1200px) 50vw, 720px"
+          loading="eager"
+        }}        
+        {{> post-card-type-icon wrapper_class="scale-200 md:scale-300"}}
+      </figure>
+    </a>
+  {{/if}}
+
+  <div class="bg-bgr flex-1 flex flex-col gap-2.5{{#if feature_image}} lg:pl-8 lg:ml-16 lg:-mt-14 lg:pt-6 z-10{{/if}}" data-post-card-content>
+
+    {{!-- Post meta: tag / visibility / comment count --}}
+    {{#has tag="#top-story"}}
+      <span class="inline-block self-start mb-1 ml-1 text-sm uppercase font-semibold font-sans bg-transparent text-brand-contrast py-1 px-2.5 relative before:absolute before:inset-0 before:bg-brand before:rounded-theme before:z-[-1] before:skew-x-[-15deg]" data-top-story>{{t "Top Story"}}</span>
+    {{else}}
+      {{> post-card-meta-top element_class="mb-1"}}
+    {{/has}}
+
+    {{!-- Title --}}
+    <h1 class="text-xl font-semibold md:text-2xl lg:text-3xl xl:text-4xl" data-post-card-title>
+      <a href="{{url}}" class="hover:underline underline-offset-4 inline-flex gap-2 items-start">
+        <span>{{title}}</span>
+      </a>
+    </h1>
+
+    {{!-- Excerpt --}}
+    {{#if excerpt}}
+      <p class="text-base leading-normal md:text-lg mb-0.5 text-balance {{excerpt_class}}" data-post-card-excerpt>
+        {{excerpt words="30"}}
+      </p>
+    {{/if}}
+
+    {{!-- Post meta: authors and date --}}
+    {{> post-card-meta-bottom }}
+
+    {{!-- Read More button --}}
+    <a href="{{url}}" class="self-end mt-1 inline-flex items-center gap-1.5 text-sm font-semibold uppercase tracking-tight text-brand hover:underline underline-offset-4">
+      {{t "Read More"}}
+      <span aria-hidden="true">→</span>
+    </a>
+    
+  </div>
+</article>

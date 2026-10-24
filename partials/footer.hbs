@@ -1,0 +1,89 @@
+<footer class="px-5 sm:px-6 mt-16 font-sans" data-footer>
+  <div class="max-w-site mx-auto border-t-4 border-brd flex flex-col">
+    {{!-- Logo + Description + Socials --}}
+    <div class="flex flex-wrap gap-6 items-center justify-between border-b border-brd-soft pt-6 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+        <a href="{{@site.url}}" data-brand class="">
+          <span style="color: #FFEFE5; font-size: 1.5rem; font-weight: 700;">{{@site.title}}</span>
+        </a>
+        <p style="margin: 0; font-size: 0.9rem; color: rgba(255,239,229,0.75); line-height: 1.4; max-width: 500px;">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librari
+        </p>
+      </div>
+      
+      {{!-- Socials --}}
+      <nav class="flex flex-wrap gap-2.5 items-center">
+        <a href="{{@site.facebook}}" aria-label="Facebook" class="flex p-2 rounded-full footer-social">
+          {{> icon name="brand-facebook" icon_class="stroke-2 size-4 md:size-4.5"}}
+          <span class="sr-only">Facebook</span>
+        </a>
+        <a href="https://www.instagram.com/6090club" aria-label="Instagram" class="flex p-2 rounded-full footer-social">
+          {{> icon name="brand-instagram" icon_class="stroke-2 size-4 md:size-4.5"}}
+          <span class="sr-only">Instagram</span>
+        </a>
+        <a href="https://www.youtube.com/@6090club" aria-label="Youtube" class="flex p-2 rounded-full footer-social">
+          {{> icon name="brand-youtube" icon_class="stroke-2 size-4 md:size-4.5"}}
+          <span class="sr-only">Youtube</span>
+        </a>
+      </nav>
+    </div>
+
+    {{!-- Footer columns --}}
+    <div class="footer-grid">
+      <div>
+        <h4 style="color: #FFEFE5; font-weight: 600; margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Company</h4>
+        <ul style="display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0;">
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/contact/">Contact Us</a></li>
+          <li><a href="/team/">Our Team</a></li>
+          <li><a href="/careers/">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color: #FFEFE5; font-weight: 600; margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Content</h4>
+        <ul style="display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0;">
+          <li><a href="/tag/article/">Articles</a></li>
+          <li><a href="/podcasts/">Podcasts</a></li>
+          <li><a href="/tag/video/">Videos</a></li>
+          <li><a href="/newsletter/">Newsletter</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color: #FFEFE5; font-weight: 600; margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Topics</h4>
+        <ul style="display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0;">
+          <li><a href="/tag/health/">Health</a></li>
+          <li><a href="/tag/longevity/">Longevity</a></li>
+          <li><a href="/tag/lifestyle/">Lifestyle</a></li>
+          <li><a href="/tag/wellness/">Wellness</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color: #FFEFE5; font-weight: 600; margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Support</h4>
+        <ul style="display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0;">
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/privacy/">Privacy Policy</a></li>
+          <li><a href="/terms/">Terms of Use</a></li>
+          <li><a href="/sitemap/">Sitemap</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color: #FFEFE5; font-weight: 600; margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Follow Us</h4>
+        <ul style="display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0;">
+          <li><a href="{{@site.facebook}}">Facebook</a></li>
+          <li><a href="https://www.instagram.com/6090club">Instagram</a></li>
+          <li><a href="https://www.youtube.com/@6090club">YouTube</a></li>
+          <li><a href="/rss/">RSS Feed</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {{!-- Copy & Color scheme --}}
+    <div class="flex flex-wrap items-center gap-2 relative py-4">
+      <div class="text-sm" style="color: rgba(255,239,229,0.7);">
+        <span data-footer-date>&copy;{{date format="YYYY"}}&nbsp;{{#link href=@site.url class="footer-nav-link"}}{{@site.title}}{{/link}}.</span>
+        <span data-footer-ghost>{{t "Published with"}}&nbsp;{{#link href="https://ghost.org" class="footer-nav-link"}}Ghost{{/link}}</span>
+        <span data-footer-theme>&&nbsp;{{#link href="https://brightthemes.com/themes/gazet" class="footer-nav-link"}}Gazet{{/link}}.</span>
+      </div>
+    </div>
+  </div>
+</footer>

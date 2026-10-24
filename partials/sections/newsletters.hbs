@@ -1,0 +1,88 @@
+{{!-- Newsletters --}}
+{{#get "newsletters" limit="30" as |newsletters|}}
+  {{#if newsletters}}
+    <section class="px-5 sm:px-6 bg-bgr-tone py-6 sticky top-8" data-newsletters
+      x-data="{ 
+        member: {{#if @member}}true{{else}}false{{/if}},
+        newsletters: [{{#foreach newsletters}} { id: '{{id}}', active: false }{{#unless @last}},{{/unless}}{{/foreach}}],
+        totalNewsletters: {{newsletters.length}},
+        memberNewsletters: [],
+        toggleMemberNewsletter(newsletterId) {
+          const newsletter = this.memberNewsletters.find(n => n.id === newsletterId);
+          if (newsletter) {
+            this.newsletters.find(n => n.id === newsletterId).active = false;
+            this.memberNewsletters = this.memberNewsletters.filter(n => n.id !== newsletterId);
+          } else {
+            this.memberNewsletters = [...this.memberNewsletters, { id: newsletterId }];
+            this.newsletters.find(n => n.id === newsletterId).active = true;
+          }
+        }
+      }"  
+      x-init="$nextTick(async () => { 
+        if (member) {
+          memberNewsletters = await getMemberNewsletters()
+          newsletters = newsletters.map(newsletter => ({
+            ...newsletter,
+            active: memberNewsletters.some(mn => mn.id === newsletter.id)
+          }))
+        }
+      })">
+      <h2 class="text-xl font-semibold mb-3 flex items-center gap-2 leading-none">
+        {{#if @site.icon}}
+          <img class="size-6 -mt-1" src="{{img_url @site.icon absolute="true" size="xs"}}" alt="icon">
+        {{/if}}
+        <span>{{@site.title}}</span> 
+        <span class="text-typ-tone">{{t "Newsletters"}}</span>
+      </h2>
+
+      {{!-- Subscribe/unsubscribe --}}
+      <div class="max-w-site mx-auto flex flex-col gap-4 items-center mt-4">
+        {{#if @member}}
+          <div class="flex flex-col border-t border-brd-soft">
+            {{#foreach newsletters}}
+              <article class="group flex flex-col items-start gap-2 py-4 sm:py-5 relative border-b border-brd-soft cursor-pointer" data-newsletter-id="{{id}}" data-newsletter-slug="{{slug}}" data-newsletter-index="{{@number}}" :data-checked="checked" x-data="{ id: '{{id}}', checked: false }" x-effect="checked = newsletters.some(n => n.id === id && n.active)" @click="toggleMemberNewsletter(id); updateMemberNewsletters(memberNewsletters);">
+
+                {{!-- Name --}}
+                <span class="text-base leading-tight font-semibold font-heading">{{name}}</span>
+
+                {{!-- Description --}}
+                <span class="flex-1 text-sm text-typ-tone leading-tight max-w-md md:text-[0.925rem] font-body">{{description}}</span>
+
+                {{!-- 'Checkbox' --}} 
+                <span id="{{id}}" class="bg-bgr absolute top-5 -right-0.25 cursor-pointer size-4.5 flex items-center justify-center border border-brd focus:outline-none focus:ring-0 after:size-2.5 after:bg-transparent after:rounded-theme after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 group-hover:after:bg-brd-soft data-checked:after:bg-brand" :data-checked="checked"></span>
+              </article>
+            {{/foreach}}
+          </div>
+          <button 
+            @click="memberNewsletters = []; updateMemberNewsletters(memberNewsletters); newsletters.forEach(n => n.active = false)" 
+            class="cursor-pointer text-sm font-medium bg-rose-500 text-white px-6 py-2 rounded-btn font-sans hover:brightness-110">
+            <span>{{t "Unsubscribe"}}</span>
+          </button>
+        {{else}}
+          {{> subscribe-form 
+            include_newsletters=true
+            form_class="w-full max-w-md font-sans"
+            fieldset_class="w-full bg-bgr border border-brd-soft flex flex-wrap rounded-btn text-sm md:text-base mt-4"
+            input_class="text-sm bg-bgr text-typ flex-2 py-2.5 rounded-btn border-none focus:ring-0"
+            button_class="text-sm flex-1 px-5 py-2.5 bg-brand text-bgr font-medium rounded-btn md:px-6 hover:brightness-110"
+            show_signup_terms=false
+          }}
+          <div class="flex w-full items-center justify-between gap-3">
+            <button class="text-xs uppercase font-semibold font-sans text-typ hover:text-brand cursor-pointer" x-text="newsletters.length > 0 ? `${memberNewsletters.length}/${newsletters.length} {{t 'Select all'}}` : '{{t 'Select all'}}'" @click="memberNewsletters = Array.from(document.querySelectorAll('[data-members-newsletter]')).map(el => el.value);" x-show="memberNewsletters.length !== newsletters.length">
+              {{t "Select all"}}
+            </button>
+            <button class="text-xs uppercase font-semibold font-sans text-typ hover:text-brand cursor-pointer" @click="memberNewsletters = []" x-show="memberNewsletters.length == newsletters.length">
+              {{t "Deselect all"}}
+            </button>
+            {{#if ../show_preview_link}}
+              <a href="/newsletters/" class="flex items-center self-start font-semibold font-sans uppercase text-typ text-[0.8rem] hover:text-brand gap-0.5 hover:gap-0.75" data-newsletter-preview>
+                <span>{{t "Preview"}}</span>
+                {{> icon name="chevron-right" icon_class="size-3.25 stroke-[3]"}}
+              </a>
+            {{/if}}
+          </div>
+        {{/if}}
+      </div>
+    </section>
+  {{/if}}
+{{/get}}

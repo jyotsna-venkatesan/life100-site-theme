@@ -1,0 +1,13 @@
+{{!< default}}
+
+{{#page}}
+  {{!-- Hero section --}}
+  {{#match @page.show_title_and_feature_image}} 
+    {{> page-hero}}
+  {{/match}}
+  
+  {{!-- Content --}}
+  <article class="{{post_class}} ghost-content prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+    {{content}}
+  </article>
+{{/page}}

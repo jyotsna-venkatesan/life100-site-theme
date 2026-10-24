@@ -1,0 +1,27 @@
+{{!< default}}
+
+{{#post}}
+  {{> post-hero
+    type="fullwidth-image"
+    wrapper_class="flex-col-reverse pb-4"
+    content_class="relative z-10 md:pt-8 pb-6 border-b border-brd-soft md:-mt-18 md:bg-bgr md:before:absolute md:before:w-[calc(100%_+_5rem)] md:before:h-full md:before:-left-10 md:before:top-0 md:before:bg-bgr md:before:-z-1"
+    media_class="max-w-site"
+    image_sizes="(max-width: 1023px) 90vw, 1200px"
+  }}
+
+  <article class="ghost-content prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+    {{content}}
+  </article>
+
+  {{> author-box}}
+
+  {{> post-tags}}
+
+  {{> comments}}
+
+  {{> related-tag}}
+
+  {{> related-author}}
+
+  {{> sections/sponsored}}
+{{/post}}

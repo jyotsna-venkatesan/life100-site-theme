@@ -1,0 +1,84 @@
+{{!-- Menu --}}
+<div class="fixed flex justify-start opacity-0 transition-[opacity,z-index] duration-300 top-0 h-full w-full backdrop-blur-[2px] bg-gradient-to-br from-[hsla(0_0%_0%_/_8%)] to-[hsla(0_0%_0%_/_2%)] font-sans [&_.is-subitem_a]:text-sm [&_.is-subitem_a]:pl-3 [&_.is-subitem_a]:py-2 [&_[data-dropdown-open]_ul]:flex [&_[data-dropdown-open]_ul]:translate-y-0" 
+  :class="menuOpen ? 'opacity-100 z-[100]' : 'opacity-0 z-[-1]'" data-menu id="menu"
+  x-init="$nextTick(() => { initDropdown($el, 'hidden opacity-0 invisible basis-full flex-col gap-0.5 text-sm border-t border-brd-soft') })"
+> 
+  <div class="flex flex-col bg-bgr w-full max-w-xs max-h-full overflow-y-scroll transition-transform duration-300 px-5 sm:px-6 py-6 no-scrollbar"
+    :class="menuOpen ? 'translate-x-0' : '-translate-x-full'"
+    @click.outside="!event.target.hasAttribute('data-menu-toggle') ? menuOpen = false : null"
+  >
+    {{!-- Actions --}}
+    <div class="flex justify-between">
+      <button class="flex items-center gap-1.5 justify-center rounded-theme hover:text-brand cursor-pointer p-1" data-ghost-search title="{{t "Search"}}" aria-label="{{t "Search"}}">
+        {{> icon name="search" icon_class="size-4 lg:size-4.5 stroke-[2.5] fill-bgr [&>svg]:fill-inherit"}}
+        <span class="">{{t "Search"}}</span>
+      </button>
+      <button class="flex flex-col items-center gap-0.75 justify-center rounded-theme cursor-pointer p-1 transition-all hover:[&_span]:bg-brand" 
+        data-menu-toggle aria-label="{{t "Menu toggle"}}" aria-expanded="false" aria-haspopup="true" aria-controls="menu"
+        @click="menuOpen = !menuOpen" :aria-expanded="menuOpen.toString()"
+      >
+        <span class="relative pointer-events-none h-0.5 rounded-sm bg-typ w-4.5 transition-all rotate-45 translate-y-1.25"></span>
+        <span class="relative pointer-events-none h-0.5 rounded-sm bg-typ w-4.5 transition-all -translate-x-1 opacity-0"></span>
+        <span class="relative pointer-events-none h-0.5 rounded-sm bg-typ w-4.5 transition-all -rotate-45 -translate-y-1.25"></span>
+        <span class="sr-only">{{t "Close"}}</span> 
+      </button>
+    </div>
+
+    {{!-- Primary navigation --}}
+    <nav class="lg:hidden mt-6" data-nav="menu" data-primary-nav>
+      {{navigation 
+        ul_class="border-t-3 border-brd-soft flex flex-col text-typ text-[0.9rem]"
+        li_class="flex items-center flex-wrap w-full relative border-b border-brd-soft"
+        a_class="flex flex-1 py-2.5 md:py-3 px-0.5 hover:text-brand hover:[&+span]:text-brand"
+      }}
+    </nav>
+
+    {{!-- Secondary navigation --}}
+    <nav class="my-6" data-nav="menu" data-secondary-nav>
+      {{navigation 
+        type="secondary"
+        ul_class="border-t-3 border-brd-soft flex flex-col text-typ text-sm"
+        li_class="flex items-center flex-wrap w-full relative border-b border-brd-soft"
+        a_class="flex flex-1 py-2.5 md:py-3 px-0.5 hover:text-brand hover:[&+span]:text-brand"
+      }}
+    </nav>
+
+    <span class="flex-1"></span>
+
+    {{!-- Sign in (mobile only) --}}
+    {{#unless @member}}
+      <a href="/signin/" {{#if @custom.use_portal_links}}data-portal="signin"{{/if}}
+        class="w-full text-center py-2 border border-brd-soft rounded-theme mb-2 hover:text-brand">
+        <span>{{t "Sign in"}}</span>
+      </a>
+    {{/unless}}
+
+    {{!-- Subscribe --}}
+    {{#unless @member}}
+      <a href="/signup/" {{#if @custom.use_portal_links}}data-portal="subscribe"{{/if}}
+        class="w-full text-center py-2 bg-brand text-brand-contrast hover:brightness-110">
+        <span>{{t "Subscribe"}}</span>
+      </a>
+    {{/unless}}
+
+    {{!-- Socials --}}
+    <div class="flex items-center justify-between mt-4 border-t border-brd-soft pt-4">
+      <span class="text-sm font-medium">{{t "Follow us"}}</span>
+      <nav class="flex gap-2">
+        <a href="{{@site.facebook}}" aria-label="Facebook" class="hover:text-brand">
+          {{> icon name="brand-facebook" icon_class="stroke-2 size-4.5"}}
+          <span class="sr-only">Facebook</span>
+        </a>
+        <a href="https://www.instagram.com/6090club" aria-label="Instagram" class="hover:text-brand">
+          {{> icon name="brand-instagram" icon_class="stroke-2 size-4.5"}}
+          <span class="sr-only">Instagram</span>
+        </a>
+        <a href="https://www.youtube.com/@6090club" aria-label="Youtube" class="hover:text-brand">
+          {{> icon name="brand-youtube" icon_class="stroke-2 size-4.5"}}
+          <span class="sr-only">Youtube</span>
+        </a>
+      </nav>
+    </div>
+
+  </div>
+</div>

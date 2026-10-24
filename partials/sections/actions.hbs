@@ -1,0 +1,19 @@
+{{#get "pages" filter="slug:actions" limit="1"}}
+  {{#foreach pages}}
+    <section class="px-5 sm:px-6 my-12" data-actions 
+      x-init="$el.querySelectorAll('.kg-product-card-container').forEach(container => {
+        const button = container.querySelector('.kg-product-card-button');
+        if (button?.href) {
+          const link = document.createElement('a');
+          Object.assign(link, { href: button.href, target: '_self', rel: '', className: container.className + ' hover:opacity-80' });
+          link.append(...container.children);
+          link.querySelector('.kg-product-card-button')?.remove();
+          container.replaceWith(link);
+        }
+      });">
+      <div class="max-w-site mx-auto border-y border-brd-soft grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:gap-4 md:py-6 md:divide-x divide-y md:divide-y-0 divide-brd-soft [&_.kg-product-card-button]:hidden!">
+        {{content}}
+      </div>
+    </section>
+  {{/foreach}}
+{{/get}}

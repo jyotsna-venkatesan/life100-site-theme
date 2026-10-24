@@ -1,0 +1,17 @@
+{
+  "assets/src/js/index.js": {
+    "file": "app.js",
+    "name": "app",
+    "src": "assets/src/js/index.js",
+    "isEntry": true,
+    "css": [
+      "app.css"
+    ]
+  },
+  "assets/src/js/swiper.js": {
+    "file": "swiper.js",
+    "name": "swiper",
+    "src": "assets/src/js/swiper.js",
+    "isEntry": true
+  }
+}

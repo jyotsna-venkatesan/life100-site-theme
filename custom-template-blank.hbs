@@ -1,0 +1,15 @@
+{{!< default}}
+
+{{#contentFor "head"}}<style>[data-header],[data-footer] { display: none; }</style>{{/contentFor}}
+
+{{#page}}
+  {{> page-hero}}
+  
+  {{#if access}}
+    {{#if html}}
+      <article class="{{post_class}} ghost-content prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+        {{content}}
+      </article>
+    {{/if}}
+  {{/if}}
+{{/page}}

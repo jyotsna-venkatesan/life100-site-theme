@@ -1,0 +1,57 @@
+{{#if @site.members_enabled}}
+  <form class="group relative flex flex-col items-start [.error]:pointer-events-none {{#if form_class}} {{form_class}}{{/if}}" 
+    data-members-form="{{#if form_type}}{{form_type}}{{else}}subscribe{{/if}}" 
+    {{#if @site.portal_signup_terms_html}}{{#if show_signup_terms}}x-data="{ termsAccepted: false, submitTriggered: false }"{{/if}}{{/if}}>
+
+    {{#if include_newsletters}}
+      {{> subscribe-newsletters}}
+    {{/if}}
+    
+    <fieldset class="{{fieldset_class}}">
+      <legend class="sr-only">{{t "Personal information"}}</legend>
+      {{#if show_name_field}}
+        <input data-members-name  class="{{input_class}}" autocomplete="name" type="text" placeholder="{{t "Your name"}}" aria-label="{{t "Your name"}}" required aria-required="true">
+      {{/if}}
+      <input data-members-email class="{{input_class}}"
+        type="email" autocomplete="email" placeholder="{{t "Your email address"}}" 
+        aria-label="{{t "Your email address"}}" required  aria-required="true"/> 
+      <button class="cursor-pointer {{button_class}}" type="submit" {{#if @site.portal_signup_checkbox_required}}@click="submitTriggered = true"{{/if}}>
+        <span class="hidden group-[.loading]:flex items-center justify-center">{{> icon name="loader" icon_class="size-6 [&_svg]:animate-spin stroke-2"}}</span>
+        <span class="group-[.loading]:hidden">{{#if button_text}}{{button_text}}{{else}}{{t "Subscribe"}}{{/if}}</span>
+      </button>
+    </fieldset>
+
+    {{!-- Sign up terms --}}
+    {{#if @site.portal_signup_terms_html}}
+      {{#if show_signup_terms}}
+        <label class="mt-2.5 flex items-start gap-2{{#if @site.portal_signup_checkbox_required}} cursor-pointer{{/if}}" data-portal-notice>
+          <input id="signup-terms" name="signup-terms" type="checkbox" @click="termsAccepted = $el.checked" autocomplete='off'{{#if @site.portal_signup_checkbox_required}} required{{else}} hidden{{/if}}
+            class="size-4 rounded border-brd text-brand mt-0.5{{#unless @site.portal_signup_checkbox_required}} hidden{{/unless}}" 
+            :class="{ 'border border-red-500 ring-2 ring-red-500/20 focus:ring-2 focus:ring-red-500/20' : submitTriggered && !termsAccepted}"
+          >
+          <div class="[&_a]:underline [&_p]:leading-tight">{{{@site.portal_signup_terms_html}}}</div>
+        </label>
+      {{/if}}
+    {{/if}}
+
+    {{!-- Success/error notification --}}
+    <div data-notification class="absolute z-1000 opacity-0 invisible group-[.success]:opacity-100 group-[.success]:visible group-[.success]:translate-y-0 group-[.error]:opacity-100 group-[.error]:visible group-[.error]:translate-y-0 left-0 -bottom-16 text-sm text-left font-normal leading-none flex items-center w-full max-w-md rounded-[6px] gap-2 bg-white text-black p-3 transition-all -translate-y-4 shadow-notification">
+      {{!-- Success message --}}
+      <div class="hidden group-[.success]:flex items-center gap-2 flex-1">
+        {{> icon name="success" icon_class="size-6 text-success stroke-0 fill-current"}}
+        <p>{{t "Great! Check your inbox and click the link."}}</p>
+      </div>
+      {{!-- Error message --}}
+      <div class="hidden group-[.error]:flex items-center gap-2 flex-1">
+        {{> icon name="error" icon_class="size-6 text-error stroke-0 fill-current"}}
+        <p>{{t "Sorry, something went wrong. Please try again."}}</p>
+      </div>
+      <button type="button" class="flex items-center justify-center opacity-15 hover:opacity-40 cursor-pointer group-[.error]:pointer-events-auto"
+        @click="$el.parentNode.classList.add('opacity-0', 'invisible', '-translate-y-4');$el.parentNode.parentNode.classList.remove('success', 'error')">
+        <span class="sr-only">{{t "Close"}}</span>
+        {{> icon name="close" icon_class="size-6 stroke-[1.5]"}}
+      </button>
+    </div>
+
+  </form>
+{{/if}}

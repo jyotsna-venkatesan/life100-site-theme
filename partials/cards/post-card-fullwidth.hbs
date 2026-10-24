@@ -1,0 +1,48 @@
+<article class="{{post_class}} {{card_class}} relative flex flex-col gap-4 md:flex-row md:gap-5 lg:gap-0 text-typ" data-post-card{{#if featured}} data-featured{{/if}}>
+  {{!-- Feature Image --}}
+  {{#if feature_image}}
+    <a href="{{url}}" class="flex-1 relative group {{media_class}}">
+      <figure class="block flex-1 rounded-theme overflow-hidden" role="none">
+        {{> image
+          image_type="post"
+          image_class="w-full aspect-[3/2] bg-bgr object-cover rounded-[inherit] group-hover:opacity-90 transition-opacity"
+          image_url=feature_image
+          size_s=true
+          size_m=true
+          size_l=true
+          sizes="(max-width: 767px) 90vw, (max-width: 1200px) 50vw, 600px"
+          loading=image_loading
+        }}
+        {{> post-card-type-icon wrapper_class="scale-175 md:scale-250"}}
+      </figure>
+    </a>
+  {{/if}}
+
+  <div class="bg-bgr flex-1 flex flex-col justify-center gap-2.5 self-center lg:p-8 lg:pr-0 lg:-ml-8 z-1 {{content_class}}" data-post-card-content>
+
+    {{!-- Post meta: tag / visibility / comment count --}}
+    {{#has tag="#top-story"}}
+      <span class="inline-block self-start mb-1 ml-1 text-sm uppercase font-semibold font-sans bg-transparent text-brand-contrast py-1 px-2.5 relative before:absolute before:inset-0 before:bg-brand before:rounded-theme before:z-[-1] before:skew-x-[-15deg]">{{t "Top Story"}}</span>
+    {{else}}
+      {{> post-card-meta-top }}
+    {{/has}}
+
+    {{!-- Title --}}
+    <h1 class="text-2xl font-semibold sm:text-3xl lg:text-4xl" data-post-card-title>
+      <a href="{{url}}" class="hover:underline underline-offset-4">
+        <span>{{title}}</span>
+      </a>
+    </h1>
+
+    {{!-- Excerpt --}}
+    {{#if excerpt}}
+      <p class="text-base leading-normal md:text-lg" data-post-card-excerpt>
+        {{excerpt words="30"}}
+      </p>
+    {{/if}}
+
+    {{!-- Post meta: authors and date --}}
+    {{> post-card-meta-bottom }}
+    
+  </div>
+</article>

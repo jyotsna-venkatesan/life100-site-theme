@@ -1,0 +1,78 @@
+{{#get "posts" filter="{{posts_filter}}" include="tags,authors,tiers" limit="8"}}
+  {{#if posts}}
+    <script src="{{asset "built/swiper.js"}}"></script>
+    <section class="px-5 sm:px-6 mt-12 overflow-x-hidden" data-members-only x-init="$nextTick(() => { new Swiper('[data-slider]', {
+        modules: [Navigation, Scrollbar, Mousewheel],
+        slidesPerView: 1,
+        spaceBetween: 24,
+        mousewheel: {
+          enabled: true,
+          forceToAxis: true
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 1.8
+          },
+          960: {
+            slidesPerView: 2.8
+          },
+          1200: {
+            slidesPerView: 3.4
+          }
+        },
+        scrollbar: {
+          el: '.swiper-scrollbar',
+          draggable: true,
+        },
+        navigation: {
+          prevEl: '[data-swipe-left]',
+          nextEl: '[data-swipe-right]',
+        },
+      })
+    })"
+    >
+      <div class="max-w-site mx-auto sm:bg-bgr-tone pt-4 sm:p-5 md:p-6 border-t-3 border-brd overflow-hidden relative">
+        <div class="flex justify-between items-center mb-4 sm:mb-6">
+          <h2 class="text-sm md:text-base font-bold! uppercase flex gap-1 items-center">        
+            {{> icon name="bolt" icon_class="size-4 md:size-5 [&_svg]:fill-brand text-brand"}}
+            <span class="leading-none mt-1">{{t "Members-only"}}</span>
+          </h2>
+
+          {{#unless @member}}
+            <a href="/membership/" {{#if @custom.use_portal_links}}data-portal="signup"{{/if}} class="text-sm font-semibold font-sans flex gap-1 items-center hover:text-brand leading-none">
+              {{t "Become a member"}}
+              {{> icon name="arrow-up-right" icon_class="size-4 stroke-[2.5]"}}
+            </a>
+          {{/unless}}
+        </div>
+
+        <div class="swiper overflow-visible!" data-slider>
+          <div class="swiper-wrapper">
+            {{#foreach posts}}
+              {{> cards/post-card-vertical
+                card_class="bg-bgr-tone sm:bg-bgr whitespace-normal [&_p]:hidden [&_[data-post-card-visibility]]:hidden [&_[data-post-card-comment-count]]:hidden [&_[data-post-card-meta]]:justify-center [&_[data-post-card-date]]:hidden swiper-slide !h-[unset]"
+                content_class="p-5 md:p-6 text-center"
+              }}
+            {{/foreach}}
+          </div>
+          
+          <div class="flex justify-between mt-6 gap-4">
+            <button class="p-1.5 border border-brd-soft md:p-2 cursor-pointer bg-bgr hover:bg-typ hover:text-bgr hover:border-typ" data-swipe-left>
+              {{> icon name="chevron-left" icon_class="size-5 stroke-2"}}
+              <span class="sr-only">{{t "Previous"}}</span>
+            </button>
+            
+            <div class="relative w-full">
+              <div class="swiper-scrollbar !bg-brd-soft !top-[calc(50%-2px)] !h-0.5 [&_div]:!h-0.5 [&_div]:!bg-typ"></div>
+            </div>
+              
+            <button class="p-1.5 border border-brd-soft md:p-2 cursor-pointer bg-bgr hover:bg-typ hover:text-bgr hover:border-typ" data-swipe-right>
+              <span class="sr-only">{{t "Next"}}</span>
+              {{> icon name="chevron-right" icon_class="size-5 stroke-2"}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  {{/if}}
+{{/get}}

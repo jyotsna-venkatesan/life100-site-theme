@@ -1,0 +1,15 @@
+{{#match pagination.pages ">" 1}}
+  <nav class="font-sans uppercase border-t-3 border-brd-soft py-4 text-typ-tone flex items-center justify-center gap-4 font-semibold text-[0.825rem] sm:gap-6 {{nav_class}}" data-pagination>
+    <a data-prev class="flex items-center gap-0.5 rounded-btn {{#if pagination.prev}} group bg-bgr text-typ hover:text-brand {{else}} cursor-not-allowed disabled opacity-50{{/if}}" 
+      href="{{#if pagination.prev}}{{page_url pagination.prev}}{{else}}javascript:{{/if}}">
+      {{> icon name="chevron-left" icon_class="size-3.25 stroke-[3] transition-transform group-hover:-translate-x-0.25"}}
+      <span>{{t "Previous"}}</span>
+    </a>
+    <span data-page-number class="">{{t "Page {current_page} of {total_pages}" current_page=pagination.page total_pages=pagination.pages}}</span>
+    <a data-next class="flex items-center gap-0.5 rounded-btn {{#if pagination.next}} group bg-bgr text-typ hover:text-brand {{else}} cursor-not-allowed disabled opacity-50{{/if}}" 
+      href="{{#if pagination.next}}{{page_url pagination.next}}{{else}}javascript:{{/if}}">
+      <span>{{t "Next"}}</span>
+      {{> icon name="chevron-right" icon_class="size-3.25 stroke-[3] transition-transform group-hover:translate-x-0.25"}}
+    </a>
+  </nav>
+{{/match}}

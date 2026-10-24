@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="{{@site.locale}}" class="scroll-smooth">
+  <head>
+    {{!-- Document Settings --}}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    {{!-- Page Meta --}}
+    <title>{{meta_title}}</title>
+
+    {{!-- Mobile Meta --}}
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    {{!-- Theme color --}}
+    <meta name="theme-color" content="{{@site.accent_color}}">
+    <meta name="ghost-theme" content="Gazet 1.4.0">
+
+    {{!-- Font definitions --}}
+    {{> fonts}}
+
+    {{!-- Main theme scripts --}}
+    <script type="module" src="{{asset 'built/app.js'}}"></script>
+
+    {{!-- Styles --}}
+    <link rel="stylesheet" type="text/css" href="{{asset 'built/app.css'}}" />
+
+    {{!-- Theme configs --}}
+    {{> config}}
+
+    {{!-- Block for styles --}}
+    {{{block "head"}}}
+
+    {{!-- Ghost outputs important style and meta data with this tag --}}
+    {{ghost_head}}
+  </head>
+  <body class="{{body_class}} subpixel-antialiased relative overflow-x-hidden bg-bgr text-typ"
+    data-user="{{#if @member.paid}}paid-member{{else if @member}}free-member{{else}}visitor{{/if}}"
+    @keydown.escape="menuOpen = false" @keydown.cmk.k="document.querySelector('[data-ghost-search]').click()"
+    x-data="{ menuOpen: false, socials }" :class="menuOpen ? 'overflow-hidden' : 'overflow-y-auto'"
+    x-init="navigator.platform.includes('Win') && document.body.classList.add('is-win');$nextTick(() =>{socials = window.socials})" 
+    {{#if @custom.enable_dropcaps}}{{#is "post"}}data-dropcap{{/is}}{{/if}}
+  >
+    {{!-- Skip to content --}}
+    <a class="sr-only sr-only-focusable" href="#main">{{t "Skip to content"}}</a>
+    
+    {{!-- Progress Bar for posts --}}
+    {{> progress-bar}}
+    
+    {{!-- Header --}}
+    {{> header}}
+
+    {{!-- Banner --}}
+    {{> banners/header}}
+
+    {{!-- Menu & dropdown --}}
+    {{> menu}}
+
+    {{!-- All the main content gets inserted here, index.hbs, post.hbs, etc --}}
+    <main class="main" id="main">
+      {{{body}}}
+    </main>
+
+    {{!-- Banner --}}
+    {{> banners/footer}}
+
+    {{!-- Footer --}}
+    {{> footer}}
+
+    {{!-- Dropdown toggle --}}
+    {{> dropdown-toggle}}
+
+    {{!-- Block for scripts --}}
+    {{{block "body"}}}
+
+    {{!-- Ghost outputs important scripts and data with this tag --}}
+    {{ghost_foot}}
+  </body>
+</html>

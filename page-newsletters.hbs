@@ -1,0 +1,31 @@
+{{!< default}}
+
+{{!-- Hero --}}
+{{#page}}
+  {{> page-hero}}
+{{/page}}
+
+<section class="px-5 sm:px-6" data-newsletters>
+  <div class="max-w-site mx-auto">
+    <div class="flex flex-col md:flex-row gap-8">
+      <div class="flex-7 border-t-3 border-brd-soft pt-6">
+        {{> post-feed 
+          feed_type="newsletters"
+        }}
+        {{> pagination}}
+      </div>
+      <div class="flex-3 border-t-3 border-brd-soft pt-6">
+        {{> sections/newsletters}}
+      </div>
+    </div>
+  </div>
+</section>
+
+{{!-- Content --}}
+{{#page}}
+  {{#if html}}
+    <article class="{{post_class}} ghost-content prose prose-lg prose-theme mt-12"{{#unless access}} data-preview{{/unless}}>
+      {{content}}
+    </article>
+  {{/if}}
+{{/page}}

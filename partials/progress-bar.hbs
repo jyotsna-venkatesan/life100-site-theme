@@ -1,0 +1,8 @@
+{{#is "post"}}
+  <progress value="0" max="100" data-progress-bar 
+    class="appearance-none fixed top-0 w-full h-1.25 bg-transparent z-1100"
+    x-init="$nextTick(() => { document.querySelector('[data-progress-bar]').setAttribute('value',getScrollPercent()) })" 
+    @scroll.window="document.querySelector('[data-progress-bar]').setAttribute('value',getScrollPercent())" 
+  >
+  </progress>
+{{/is}}

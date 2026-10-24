@@ -1,0 +1,39 @@
+routes:
+  /latest/:
+    controller: channel
+    permalink: /latest/
+    template: index
+    data: page.latest
+    filter: tag:-[hash-newsletter,hash-event,hash-podcast,hash-sponsored]
+collections:
+  /newsletters/:
+    permalink: /{slug}/
+    template: page-newsletters
+    data: page.newsletters
+    filter: tag:[newsletter,hash-newsletter]
+  /events/:
+    permalink: /events/{slug}/
+    template: page-events
+    data: page.events
+    filter: tag:[event,hash-event]
+  /podcasts/:
+    permalink: /podcasts/{slug}/
+    template: page-podcasts
+    data: page.podcasts
+    filter: tag:[podcast,hash-podcast]
+  /sponsored/:
+    permalink: /{slug}/
+    template: tag
+    data: tag.sponsored
+    filter: tag:[sponsored,hash-sponsored]
+  /videos/:
+    permalink: /videos/{slug}/
+    template: index
+    filter: tag:[video,hash-video]
+  /:
+    permalink: /{slug}/
+    template: index
+    filter: tag:-[hash-newsletter,hash-event,hash-podcast,hash-sponsored,hash-video,video]
+taxonomies:
+  tag: /tag/{slug}/
+  author: /author/{slug}/

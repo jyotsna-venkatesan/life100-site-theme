@@ -1,0 +1,38 @@
+{{#if @custom.show_writers}}
+  {{#get "pages" filter="slug:writers" include="tags,authors" limit="1"}}
+    {{#foreach pages}}
+      <section class="px-5 sm:px-6 mt-20" data-writers>
+        <div class="max-w-site mx-auto">
+          {{!-- {{t "Our writers"}} {{t "See all"}} --}}
+          {{> section-heading 
+            section_title=(t 'Our writers')
+            section_link="/writers/"
+            section_link_text=(t 'See all')
+          }}
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex-7 flex flex-col gap-6">
+              {{#foreach authors limit="4"}}
+                {{#if @custom.show_newsletters}}
+                  {{> author-card-w-posts
+                      posts_limit=2
+                    }}
+                  {{else}}
+                    {{> author-card-w-posts
+                      posts_limit=3
+                    }}
+                  {{/if}}
+              {{/foreach}}
+            </div>
+            {{#if @custom.show_newsletters}}
+              <div class="flex-3">
+                {{> sections/newsletters 
+                  show_preview_link=true
+                }}
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      </section>
+    {{/foreach}}
+  {{/get}}
+{{/if}}

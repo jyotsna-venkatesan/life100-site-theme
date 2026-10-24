@@ -1,0 +1,111 @@
+<div class="max-w-site mx-auto flex flex-col gap-5 lg:flex-row">
+  {{!-- Slot 1 --}}
+  {{#foreach top_story_posts}}
+    {{> cards/post-card-vertical-main 
+      card_class="flex-2 pb-5 border-b border-brd-soft lg:pb-0 lg:border-b-0 lg:px-5 lg:border-x text-center [&_[data-post-card-content]]:pt-0! [&_[data-post-card-content]]:px-4! [&_[data-post-card-content]]:m-0! [&_[data-post-card-content]]:items-center"
+      image_loading="eager"
+    }}
+  {{/foreach}}
+  {{#unless top_story_posts.length}}
+    {{#foreach hero_posts from="1" to="1"}}
+      {{> cards/post-card-vertical-main 
+        card_class="flex-2 pb-5 border-b border-brd-soft lg:pb-0 lg:border-b-0 lg:px-5 lg:border-x text-center [&_[data-post-card-content]]:pt-0! [&_[data-post-card-content]]:px-4! [&_[data-post-card-content]]:m-0! [&_[data-post-card-content]]:items-center"
+        image_loading="eager"
+      }}
+    {{/foreach}}
+  {{/unless}}
+
+  <div class="flex-1 flex flex-col gap-6 md:grid md:grid-cols-2 md:gap-0 lg:gap-6 lg:flex lg:flex-col lg:-order-1">
+    {{#if top_story_posts.length}}
+      {{#foreach hero_posts from="1" to="2"}}
+        {{#match @number 1}}
+          {{> cards/post-card-vertical 
+            card_class="border-b border-brd-soft pb-6 md:border-b-0 md:border-r md:pr-4 lg:border-r-0 lg:border-b lg:pr-0"
+            excerpt_class="hidden"
+            image_loading="eager"
+          }}
+        {{else}}
+          {{> cards/post-card-vertical 
+            card_class="md:ml-4 lg:ml-0"
+            excerpt_class="hidden"
+            image_loading="eager"
+          }}
+        {{/match}}
+      {{/foreach}}
+    {{else}}
+      {{#foreach hero_posts from="2" to="3"}}
+        {{#match @number 2}}
+          {{> cards/post-card-vertical 
+            card_class="border-b border-brd-soft pb-6 md:border-b-0 md:border-r md:pr-4 lg:border-r-0 lg:border-b lg:pr-0"
+            excerpt_class="hidden"
+            image_loading="eager"
+          }}
+        {{else}}
+          {{> cards/post-card-vertical 
+            card_class="md:ml-4 lg:ml-0"
+            excerpt_class="hidden"
+            image_loading="eager"
+          }}
+        {{/match}}
+      {{/foreach}}
+    {{/if}}
+  </div>
+
+  <div class="flex-1 flex flex-col gap-6 md:grid md:grid-cols-2 md:grid-rows-2 lg:flex lg:flex-col">
+    {{#if top_story_posts.length}}
+      {{#foreach hero_posts from="3" to="5"}}
+        {{#match @number 3}}
+          {{> cards/post-card-vertical 
+            card_class="border-b border-brd-soft pb-6 md:row-span-2 [&_p]:hidden lg:[&_p]:block"
+            title_class="lg:text-2xl"
+            excerpt_class="hidden!"
+            image_loading="eager"
+            use_h2=true
+          }}
+        {{else match @number 4}}
+          {{> cards/post-card-vertical 
+            card_class="border-b border-brd-soft pb-6"
+            media_class="hidden md:block lg:hidden"
+            title_class=""
+            image_loading="eager"
+            excerpt_class="hidden!"
+          }}
+        {{else}}
+          {{> cards/post-card-vertical 
+            media_class="hidden md:block lg:hidden"
+            title_class=""
+            image_loading="eager"
+            excerpt_class="hidden!"
+          }}
+        {{/match}}
+      {{/foreach}}
+    {{else}}
+      {{#foreach hero_posts from="4" to="6"}}
+        {{#match @number 4}}
+          {{> cards/post-card-vertical 
+            card_class="border-b border-brd-soft pb-6 md:row-span-2 [&_p]:hidden lg:[&_p]:block"
+            title_class="lg:text-2xl"
+            excerpt_class="hidden!"
+            image_loading="eager"
+            use_h2=true
+          }}
+        {{else match @number 5}}
+          {{> cards/post-card-vertical 
+            card_class="border-b border-brd-soft pb-6"
+            media_class="hidden md:block lg:hidden"
+            title_class=""
+            image_loading="eager"
+            excerpt_class="hidden!"
+          }}
+        {{else}}
+          {{> cards/post-card-vertical 
+            media_class="hidden md:block lg:hidden"
+            title_class=""
+            image_loading="eager"
+            excerpt_class="hidden!"
+          }}
+        {{/match}}
+      {{/foreach}}
+    {{/if}}
+  </div>
+</div>

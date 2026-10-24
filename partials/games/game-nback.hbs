@@ -1,0 +1,154 @@
+<script>
+window.GAMES = window.GAMES || {};
+
+const NB_TRIALS = 20;
+const NB_TARGETS = 6;
+const NB_SHAPES = [
+  { name: 'red circle',     color: '#e63946', svg: '<circle cx="50" cy="50" r="40"/>' },
+  { name: 'blue square',    color: '#3a86ff', svg: '<rect x="12" y="12" width="76" height="76" rx="8"/>' },
+  { name: 'green triangle', color: '#2a9d8f', svg: '<polygon points="50,10 92,88 8,88"/>' },
+  { name: 'yellow diamond', color: '#fcbf49', svg: '<polygon points="50,6 94,50 50,94 6,50"/>' },
+  { name: 'purple star',    color: '#9b5de5', svg: '<polygon points="50,6 61,38 95,38 67,58 78,92 50,71 22,92 33,58 5,38 39,38"/>' },
+  { name: 'orange hexagon', color: '#fb8500', svg: '<polygon points="50,6 88,28 88,72 50,94 12,72 12,28"/>' }
+].map(s => ({ ...s, html: `<svg viewBox="0 0 100 100" role="img" aria-label="${s.name}" fill="${s.color}">${s.svg}</svg>` }));
+
+const NB_CFG = {
+  1: { n: 1, ms: 3000 },
+  2: { n: 2, ms: 3000 },
+  3: { n: 2, ms: 2400 }
+};
+const NB_GAP = 600;
+
+const nb = { tap: null };
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && nb.tap && activeGame === 'n-back' && !$('view-play').hidden) {
+    e.preventDefault();
+    nb.tap();
+  }
+});
+
+function nbMakeSequence(n) {
+  const rand = () => Math.floor(Math.random() * NB_SHAPES.length);
+  const slots = shuffle(Array.from({ length: NB_TRIALS - n }, (_, k) => k + n)).slice(0, NB_TARGETS);
+  const targets = new Set(slots);
+  const seq = [];
+  for (let i = 0; i < NB_TRIALS; i++) {
+    let s;
+    if (i < n) s = rand();
+    else if (targets.has(i)) s = seq[i - n].shape;
+    else { do { s = rand(); } while (s === seq[i - n].shape); }
+    seq.push({ shape: s, target: targets.has(i) });
+  }
+  return seq;
+}
+
+window.GAMES['n-back'] = {
+  title: 'Shape Match',
+  desc: 'Shapes appear one at a time. Tap when one matches an earlier shape.',
+  max: NB_TARGETS,
+  interactive: true,
+  icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="4"/><rect x="14" y="8" width="8" height="8" rx="1"/></svg>',
+  study: lvl => NB_CFG[lvl].n === 1
+    ? 'Tap "Match!" when a shape is the same as the one just before it.'
+    : 'Tap "Match!" when a shape is the same as the one two shapes ago.',
+  levelSub: 'Pick how far back you need to remember.',
+  levelNote: l => ['1-back · relaxed pace', '2-back · relaxed pace', '2-back · faster pace'][l - 1],
+  unlockAt: 4,
+
+  start(stage, lvl, done) {
+    const cfg = NB_CFG[lvl];
+    const seq = nbMakeSequence(cfg.n);
+    let i = 0, hits = 0, misses = 0, falseAlarms = 0;
+    let responded = false, pending = '', live = false;
+    let card, status, prog;
+
+    stage.innerHTML = `
+      <div class="nb-wrap">
+        <p class="nb-intro">${cfg.n === 1
+          ? 'Tap <strong>Match!</strong> when a shape is the same as the one right before it.'
+          : 'Tap <strong>Match!</strong> when a shape is the same as the one two shapes ago.'}</p>
+        <p class="nb-intro nb-example">${cfg.n === 1
+          ? 'Example: ▲ ■ ■ → the second square is a match.'
+          : 'Example: ▲ ■ ▲ → the second triangle is a match.'}</p>
+        <button class="g-btn g-btn-orange g-btn-lg nb-go">Start</button>
+      </div>`;
+    stage.querySelector('.nb-go').addEventListener('click', begin);
+
+    function setStatus(text, cls) {
+      status.textContent = text || '';
+      status.className = 'nb-status' + (cls ? ' ' + cls : '');
+    }
+
+    function begin() {
+      stage.innerHTML = `
+        <div class="nb-wrap">
+          <div class="nb-progress"></div>
+          <div class="nb-card"><span class="nb-ready">Get ready…</span></div>
+          <div class="nb-status">&nbsp;</div>
+          <button class="g-btn g-btn-orange g-btn-lg nb-tap">Match!</button>
+          <div class="nb-hint">You can also press the space bar</div>
+        </div>`;
+      card = stage.querySelector('.nb-card');
+      status = stage.querySelector('.nb-status');
+      prog = stage.querySelector('.nb-progress');
+      stage.querySelector('.nb-tap').addEventListener('click', tap);
+      nb.tap = tap;
+      tickId = setTimeout(runTrial, 1200);
+    }
+
+    function tap() {
+      if (!live || responded) return;
+      responded = true;
+      const t = seq[i];
+      if (t.target) {
+        hits++;
+        card.classList.add('ok');
+        setStatus('✓ Match!', 'ok');
+      } else {
+        falseAlarms++;
+        card.classList.add('bad');
+        setStatus('✗ Not a match', 'bad');
+      }
+    }
+
+    function runTrial() {
+      responded = false;
+      prog.textContent = `Shape ${i + 1} of ${NB_TRIALS}`;
+      live = true;
+      card.className = 'nb-card';
+      card.innerHTML = NB_SHAPES[seq[i].shape].html;
+      setStatus(pending, pending ? 'bad' : '');
+      pending = '';
+      tickId = setTimeout(() => {
+        card.innerHTML = '';
+        tickId = setTimeout(endTrial, NB_GAP);
+      }, cfg.ms - NB_GAP);
+    }
+
+    function endTrial() {
+      if (seq[i].target && !responded) { misses++; pending = 'You missed a match'; }
+      i++;
+      if (i >= NB_TRIALS) finish(); else runTrial();
+    }
+
+    function finish() {
+      nb.tap = null;
+      live = false;
+      const score = Math.max(0, hits - falseAlarms);
+      done(score, `
+        <div class="g-breakdown-row">
+          <h3>How you did</h3>
+          <div class="g-tags">
+            <span class="g-tag ${hits ? 'hit' : 'miss'}">${hits ? '✓' : '✗'} ${hits} of ${NB_TARGETS} matches caught</span>
+            <span class="g-tag ${misses ? 'miss' : 'hit'}">${misses ? '✗' : '✓'} ${misses} missed</span>
+            <span class="g-tag ${falseAlarms ? 'miss' : 'hit'}">${falseAlarms ? '✗' : '✓'} ${falseAlarms} wrong tap${falseAlarms === 1 ? '' : 's'}</span>
+          </div>
+        </div>
+        <div class="g-breakdown-row">
+          <h3>How the score works</h3>
+          <div class="g-typed">Matches caught minus wrong taps (never below 0) = ${score}</div>
+        </div>`);
+    }
+  }
+};
+</script>

@@ -1,0 +1,16 @@
+<fieldset class="flex flex-col border-t border-brd-soft w-full">
+  <legend class="sr-only">{{t "Newsletters"}}</legend>
+  {{#foreach newsletters}}
+    <label class="flex flex-col items-start gap-2 py-4 sm:py-5 relative border-b border-brd-soft cursor-pointer" data-newsletter-id="{{id}}" data-newsletter-slug="{{slug}}" data-newsletter-index="{{@number}}">
+
+      {{!-- Name --}}
+      <span class="text-base leading-tight font-semibold font-heading">{{name}}</span>
+
+      {{!-- Description --}}
+      <span class="flex-1 text-sm text-typ-tone leading-tight max-w-md md:text-[0.925rem] font-body">{{description}}</span>
+
+      {{!-- Checkbox --}} 
+      <input type="checkbox" id="{{slug}}" value="{{name}}" class="bg-bgr absolute top-5 -right-0.25 cursor-pointer size-4.5 flex items-center justify-center border border-brd focus:outline-none focus:ring-0 after:size-2.5 after:bg-transparent after:rounded-theme after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 hover:after:bg-brd-soft checked:after:bg-brand checked:hover:after:bg-brand" x-model="memberNewsletters" data-members-newsletter/>
+    </label>
+  {{/foreach}}
+</fieldset>

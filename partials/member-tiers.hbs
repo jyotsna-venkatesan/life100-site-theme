@@ -1,0 +1,94 @@
+
+{{!-- Render all tiers (public) --}}{{! Get all tiers with monthly price, yearly price, and benefits data }}
+{{#get "tiers" include="monthly_price,yearly_price,benefits" filter="type:[{{type}}]+visibility:public" limit="15" as |tiers|}}
+  {{#if tiers}}
+    <div class="{{#match tiers.length ">" "2"}}max-w-site{{else}}max-w-[48rem]{{/match}} mx-auto grid justify-center gap-6 grid-cols-[repeat(auto-fill,minmax(calc(18rem+2vw),1fr))]" data-tiers-count="{{tiers.length}}">
+      {{!-- Toggle --}}
+      <button class="font-sans mb-4 relative text-sm font-medium flex text-typ bg-bgr border border-brd rounded-btn justify-self-center col-span-full before:content-[''] before:absolute before:w-1/2 before:h-full before:rounded-btn before:bg-typ before:z-2 before:transition-transform cursor-pointer" 
+        data-plan-toggle @click="toggleMembershipPlan()">
+        <span data-plan="monthly" class="min-w-32 flex-1 py-2 px-6 z-3">{{t "Monthly"}}</span>
+        <span data-plan="yearly" class="min-w-32 flex-1 py-2 px-6 z-3">{{t "Yearly"}}</span>
+      </button>
+
+      {{!-- Tiers --}}
+      {{#foreach tiers}}
+        <article data-tier="{{slug}}" class="relative flex flex-col gap-4 p-6 md:p-8 bg-bgr rounded-theme border-3 border-double border-brd items-center text-center" 
+          data-tier="{{@number}}" style="--color-accent: var(--color-tier-{{@number}},var(--color-brand))" data-currency="{{price currency=currency}}">
+
+          {{!-- Title & Price --}}
+          <header class="flex flex-col gap-3">
+            <h3 class="text-xl md:text-2xl leading-none font-semibold">{{name}}</h3>
+            {{#if description}}<p class="text-base md:text-lg text-typ-tone leading-snug">{{description}}</p>{{/if}}
+          </header>
+          
+          {{!-- Benefits --}}
+          {{#if benefits}}
+            <ul class="w-full flex-1 flex flex-col gap-1 text-[0.9rem] md:text-base text-typ-tone sm:flex-1 border-t border-brd-soft pt-6 my-2 text-left" data-tier-benefits>
+              {{#foreach benefits as |benefit|}}
+                <li class="flex gap-2 items-start">
+                  <span class="before:content-[attr(data-benefit-symbol)] before:font-medium" data-benefit-symbol="✓"></span>
+                  <span class="" data-benefit-text>{{benefit}}</span>
+                </li>
+              {{/foreach}}
+            </ul>
+          {{else}}
+            <span class="flex-1"></span>
+          {{/if}}
+
+
+          <div class="text-brand font-medium">
+            {{#match type "free"}}
+              <span class="hidden font-sans leading-none text-2xl md:text-3xl md:leading-none font-semibold" data-price="free" x-text="document.querySelector(`[data-currency]:not([data-currency=''])`).getAttribute('data-currency') + 0">{{price 0 currency="USD"}}</span>
+            {{/match}}
+
+            {{#if monthly_price}}
+              <div class="font-sans flex items-end" data-price="monthly">
+                <span class="leading-none text-2xl md:text-3xl md:leading-none font-semibold">{{price monthly_price currency=currency}}</span>
+                <span class="text-sm">/{{t "month"}}</span>
+              </div>
+            {{/if}}
+
+            {{#if yearly_price}}
+              <div class="font-sans flex items-end" data-price="yearly">
+                <span class="leading-none! text-2xl md:text-3xl font-semibold">{{price yearly_price currency=currency}}</span>
+                <span class="text-sm">/{{t "year"}}</span>
+              </div>
+            {{/if}}
+          </div>
+
+          {{!-- Subscribe --}}
+          <div class="font-sans">
+            {{#if monthly_price}}
+              <a href="javascript:" data-tier-link="monthly" data-portal="signup/{{id}}/monthly"
+                class="block text-center bg-brand text-sm font-semibold text-brand-contrast px-5 py-2.5 rounded-btn hover:brightness-110">
+                {{t "Subscribe now"}}
+              </a>
+            {{/if}}
+
+            {{#if yearly_price}}
+              <a href="javascript:" data-tier-link="yearly" data-portal="signup/{{id}}/yearly" 
+                  class="block text-center bg-brand text-sm font-semibold text-brand-contrast px-5 py-2.5 rounded-btn hover:brightness-110">
+                {{t "Subscribe now"}}
+              </a>
+            {{/if}}
+
+            {{!-- Free signup --}}
+            {{#match type "free"}}
+              {{#link href="/signup/" data-portal="signup" class="block text-center bg-brand text-sm font-semibold text-brand-contrast px-5 py-2.5 rounded-btn hover:brightness-110"}}{{t "Subscribe now"}}{{/link}}
+            {{/match}}
+          </div>
+
+          <div class="absolute bottom-1 md:bottom-2 left-0 right-0 w-full text-center text-xs font-semibold font-sans text-typ-tone">
+            {{#if trial_days}}
+              <span class="">{{trial_days}} {{t "days free"}}</span>
+            {{/if}}
+            {{#if yearly_price}}
+              {{#if trial_days}}<span class="mx-0.5" data-discount>•</span>{{/if}}
+              <span class="before:content-[attr(data-discount)]" data-discount="0" {{#if monthly_price}}data-monthly-price="{{price monthly_price}}"{{/if}} data-yearly-price="{{price yearly_price}}"> {{t "discount"}}</span>
+            {{/if}}
+          </div>
+        </article>
+      {{/foreach}}
+    </div>
+  {{/if}}
+{{/get}}

@@ -1,0 +1,95 @@
+{{!< default}}
+
+{{!-- Hero / Page Header --}}
+<section class="px-5 sm:px-6">
+  <div class="max-w-site mx-auto py-12">
+    <div class="flex flex-col gap-4 max-w-content">
+      <h1 class="font-semibold tracking-tight text-3xl sm:text-4xl md:text-5xl leading-tight text-typ">
+        {{title}}
+      </h1>
+      {{#if custom_excerpt}}
+        <p class="text-lg md:text-xl text-typ-tone text-balance">{{custom_excerpt}}</p>
+      {{/if}}
+    </div>
+  </div>
+</section>
+
+{{!-- Games Hub & Stage --}}
+<section class="px-5 sm:px-6 pb-20">
+  <div class="max-w-site mx-auto">
+    <div class="g-app">
+
+      {{!-- HUB --}}
+      <div id="view-hub">
+        <div class="g-stats">
+          <div class="g-stat"><span class="g-stat-icon">★</span><div><div class="g-stat-num" id="stat-stars">0</div><div class="g-stat-label">Stars earned</div></div></div>
+          <div class="g-stat"><span class="g-stat-icon">🔓</span><div><div class="g-stat-num" id="stat-unlocked">0</div><div class="g-stat-label">Levels unlocked</div></div></div>
+          <div class="g-stat"><span class="g-stat-icon">🏆</span><div><div class="g-stat-num" id="stat-perfect">0</div><div class="g-stat-label">Perfect levels</div></div></div>
+        </div>
+        <h2 class="g-section-title">Choose your challenge</h2>
+        <div class="g-cards" id="hub-cards"></div>
+      </div>
+
+      {{!-- LEVEL SELECT --}}
+      <div id="view-levels" hidden>
+        <div class="g-topbar">
+          <button class="g-btn g-btn-dark g-btn-sm" onclick="showHub()">&larr; All games</button>
+        </div>
+        <div class="g-panel">
+          <h2 class="g-title" id="levels-title">Select Level</h2>
+          <p class="g-sub" id="levels-sub">Pick how long you get to study before everything disappears.</p>
+          <div class="g-levels" id="levels-grid"></div>
+        </div>
+      </div>
+
+      {{!-- PLAY --}}
+      <div id="view-play" hidden>
+        <div class="g-topbar">
+          <button class="g-btn g-btn-dark g-btn-sm" onclick="openLevels(activeGame)">&larr; Levels</button>
+          <div class="g-hud">
+            <span class="g-pill" id="hud-level"></span>
+            <span class="g-pill g-pill-best" id="hud-best"></span>
+          </div>
+        </div>
+
+        <div class="g-panel">
+          <h2 class="g-title" id="play-title"></h2>
+          <p class="g-sub" id="play-instructions"></p>
+
+          <div class="g-timer" id="g-timer" hidden>
+            <div class="g-timer-track"><div class="g-timer-fill" id="g-timer-fill"></div></div>
+            <span class="g-timer-label" id="g-timer-label"></span>
+          </div>
+
+          <div class="g-stage" id="g-stage"></div>
+
+          <div class="g-input" id="g-input-wrap" hidden>
+            <label class="g-input-label" id="g-input-label"></label>
+            <textarea id="g-input-area" class="g-field" rows="3" hidden></textarea>
+            <input id="g-input-text" class="g-field g-field-center" type="text" hidden />
+            <button class="g-btn g-btn-orange g-btn-lg" onclick="submitAnswer()">Submit answer</button>
+          </div>
+
+          <div id="g-results" hidden></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{{!-- CSS --}}
+{{> "games/styles"}}
+
+{{!-- Shared Word Bank --}}
+{{> "games/word-pool"}}
+
+{{!-- Individual Games --}}
+{{> "games/game-words"}}
+{{> "games/game-numbers"}}
+{{> "games/game-oddgrids"}}
+{{> "games/game-nback"}}
+{{> "games/game-photos"}}
+
+{{!-- Core Game Loop Engine --}}
+{{> "games/engine"}}

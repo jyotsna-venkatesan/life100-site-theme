@@ -1,0 +1,314 @@
+<script>
+window.GAMES = window.GAMES || {};
+
+/* Photo Detective: 4 photos (2x2), auto-discovered from Ghost CMS */
+(function () {
+  const ROUNDS = 5;
+  const ODD_COUNT = 1;
+  const TILES = 4;
+  const SEEN_KEY = 'spot-odd_seen';
+
+  let run = 0;
+  let manifest = null;
+
+  function cleanUrl(img) {
+    if (!img) return '';
+    return img.getAttribute('src') || img.src || '';
+  }
+
+  // Fetch the published Ghost page directly and parse its gallery images
+  async function discoverSetsFromGhost() {
+    try {
+      const res = await fetch('/game-assets/');
+      if (!res.ok) return [];
+      const htmlText = await res.text();
+      const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+
+      const discovered = [];
+
+      // Check for Ghost Gallery Cards (pair of 2 images + optional caption)
+      const galleries = doc.querySelectorAll('.kg-gallery-card');
+      galleries.forEach((gal, idx) => {
+        const imgs = gal.querySelectorAll('img');
+        if (imgs.length >= 2) {
+          const caption = gal.querySelector('figcaption')?.textContent?.trim() || '';
+          discovered.push({
+            id: `gallery-${idx + 1}`,
+            base: cleanUrl(imgs[0]),
+            variants: [{ file: cleanUrl(imgs[1]), change: caption }]
+          });
+        }
+      });
+
+      // Fallback: Check individual images with -base and -odd in filename/alt
+      if (discovered.length === 0) {
+        const allImgs = [...doc.querySelectorAll('article img, .post-content img, .gh-content img')];
+        const baseImgs = allImgs.filter(img => /(-base|\bbase\b)/i.test(img.src + img.alt));
+        
+        baseImgs.forEach((base, idx) => {
+          const baseSrc = cleanUrl(base);
+          const prefix = baseSrc.replace(/(-base|\bbase\b)[^/]*$/i, '');
+          const odd = allImgs.find(img => img !== base && cleanUrl(img).startsWith(prefix));
+          
+          if (odd) {
+            discovered.push({
+              id: `pair-${idx + 1}`,
+              base: baseSrc,
+              variants: [{ file: cleanUrl(odd), change: odd.alt || '' }]
+            });
+          }
+        });
+      }
+
+      return discovered;
+    } catch (e) {
+      console.error('Failed to discover game assets:', e);
+      return [];
+    }
+  }
+
+  function preload(urls, timeoutMs = 8000) {
+    return Promise.all(urls.map(u => new Promise(resolve => {
+      const img = new Image();
+      const timer = setTimeout(() => resolve(false), timeoutMs);
+      img.onload = () => { clearTimeout(timer); resolve(true); };
+      img.onerror = () => { clearTimeout(timer); resolve(false); };
+      img.src = u;
+    }))).then(results => results.every(Boolean));
+  }
+
+  function readSeen() {
+    try { return JSON.parse(localStorage.getItem(SEEN_KEY) || '[]'); } catch (e) { return []; }
+  }
+
+  function markSeen(id, totalSets) {
+    let seen = readSeen();
+    if (seen.length >= totalSets) seen = [];
+    if (!seen.includes(id)) seen.push(id);
+    try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) {}
+  }
+
+  function chooseOdd(set) {
+    const v = shuffle(set.variants.filter(x => x && x.file));
+    return Array.from({ length: ODD_COUNT }, (_, i) => v[i % v.length]);
+  }
+
+  function plan() {
+    const usable = manifest.filter(s => s && s.base && Array.isArray(s.variants) && s.variants.length > 0);
+    const seen = readSeen();
+    const ordered = shuffle(usable);
+    return [...ordered.filter(s => !seen.includes(s.id)), ...ordered.filter(s => seen.includes(s.id))]
+      .map(set => ({ set, odd: chooseOdd(set) }));
+  }
+
+  // Level 1: Full color. Level 2: Black & white. Level 3: Full color (timed).
+  function look(lvl) {
+    if (lvl === 2) return 'filter: grayscale(100%);';
+    return '';
+  }
+
+  window.GAMES['spot-odd'] = {
+    title: 'Photo Detective',
+    desc: 'Four photos, three of them the same. Spot the one with something different.',
+    max: ROUNDS,
+    interactive: true,
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+    study: lvl => [
+      'Three photos are identical. Find the 1 that has something different.',
+      'Photos are in black and white. Look closely at shapes, textures, and outlines.',
+      'Beat the clock! Find the odd photo before the 20-second timer runs out.'
+    ][lvl - 1],
+    levelSub: 'Choose your challenge style.',
+    levelNote: l => ['Full color (Relaxed)', 'Black & White', '20s Time Trial'][l - 1],
+
+    async start(stage, lvl, done) {
+      const token = ++run;
+      const alive = () => token === run && activeGame === 'spot-odd' && !$('view-play').hidden;
+      const log = [];
+      let roundTimer = null;
+
+      const stopTimer = () => {
+        if (roundTimer) {
+          clearInterval(roundTimer);
+          roundTimer = null;
+        }
+      };
+
+      const say = html => { stage.innerHTML = `<div class="og-wrap">${html}</div>`; };
+      const loading = () => say('<p class="sp-msg">Loading photos…</p>');
+      const fail = msg => {
+        stopTimer();
+        say(`
+          <p class="sp-msg">${msg}</p>
+          <div class="g-actions">
+            <button class="g-btn g-btn-orange" onclick="startRound()">↻ Try again</button>
+            <button class="g-btn g-btn-light" onclick="openLevels(activeGame)">Levels</button>
+          </div>`);
+      };
+
+      loading();
+
+      // Fetch sets on start
+      if (!manifest || manifest.length === 0) {
+        manifest = await discoverSetsFromGhost();
+      }
+
+      if (!manifest || manifest.length === 0) {
+        fail('No photo puzzles found. Please verify the published page at /game-assets/.');
+        return;
+      }
+
+      let queue = plan();
+      const next = () => { if (!queue.length) queue = plan(); return queue.shift(); };
+      let upcoming = next();
+      preload([upcoming.set.base, ...upcoming.odd.map(v => v.file)]);
+
+      const render = cand => {
+        stopTimer();
+
+        const tiles = shuffle([
+          ...Array.from({ length: TILES - ODD_COUNT }, () => ({ file: cand.set.base, odd: false })),
+          ...cand.odd.map(v => ({ file: v.file, odd: true }))
+        ]).map(t => ({ ...t, look: look(lvl) }));
+
+        const changes = [...new Set(cand.odd.map(v => v.change).filter(Boolean))];
+        const picked = [];
+        let checked = false;
+        const pickText = `Pick ${ODD_COUNT} photo`;
+
+        stage.innerHTML = `
+          <div class="og-wrap">
+            <div class="og-progress">Puzzle ${log.length + 1} of ${ROUNDS}</div>
+            ${lvl === 3 ? `
+              <div class="g-timer" style="width: 100%; max-width: 480px;">
+                <div class="g-timer-track"><div class="g-timer-fill" style="width: 100%;"></div></div>
+                <div class="g-timer-label">20s</div>
+              </div>` : ''}
+            <div class="og-board sp-board">${tiles.map((t, i) => `
+              <button class="og-tile" aria-pressed="false" aria-label="Photo ${i + 1}">
+                <div class="sp-frame"><img class="sp-img" src="${esc(t.file)}" alt="" draggable="false"${t.look ? ` style="${t.look}"` : ''}></div>
+              </button>`).join('')}</div>
+            <div class="sp-caption" aria-live="polite"></div>
+            <button class="g-btn g-btn-orange g-btn-lg og-action" disabled>${pickText}</button>
+          </div>`;
+
+        const els = [...stage.querySelectorAll('.og-tile')];
+        const action = stage.querySelector('.og-action');
+        const caption = stage.querySelector('.sp-caption');
+
+        const handleCheck = (isTimeout = false) => {
+          if (checked) return;
+          checked = true;
+          stopTimer();
+
+          const ok = !isTimeout && picked.length === ODD_COUNT && picked.every(i => tiles[i].odd);
+
+          els.forEach((el, i) => {
+            el.disabled = true;
+            el.classList.remove('sel');
+            if (tiles[i].odd) {
+              el.classList.add(ok && picked.includes(i) ? 'right' : 'missed');
+            } else if (picked.includes(i)) {
+              el.classList.add('wrong');
+            }
+          });
+
+          log.push({ ok, changes });
+
+          const prefix = isTimeout ? '⏰ Time’s up! ' : (ok ? '✓ Correct! ' : '✗ Not quite. ');
+          caption.textContent = prefix +
+            (changes.length ? 'What was different: ' + changes.join(' · ') : 'The different photo is outlined in green.');
+
+          action.disabled = false;
+          action.textContent = log.length < ROUNDS ? 'Next puzzle ▶' : 'See results';
+        };
+
+        if (lvl === 3) {
+          let timeLeft = 20;
+          const timerFill = stage.querySelector('.g-timer-fill');
+          const timerLabel = stage.querySelector('.g-timer-label');
+
+          roundTimer = setInterval(() => {
+            if (!alive() || checked) {
+              stopTimer();
+              return;
+            }
+            timeLeft -= 0.1;
+            if (timeLeft <= 0) {
+              timeLeft = 0;
+              stopTimer();
+              if (timerLabel) timerLabel.textContent = '0s';
+              if (timerFill) {
+                timerFill.style.width = '0%';
+                timerFill.classList.add('low');
+              }
+              handleCheck(true);
+            } else {
+              if (timerLabel) timerLabel.textContent = Math.ceil(timeLeft) + 's';
+              if (timerFill) {
+                timerFill.style.width = ((timeLeft / 20) * 100) + '%';
+                if (timeLeft <= 5) timerFill.classList.add('low');
+              }
+            }
+          }, 100);
+        }
+
+        els.forEach((el, i) => el.addEventListener('click', () => {
+          if (checked) return;
+          const at = picked.indexOf(i);
+          if (at >= 0) picked.splice(at, 1);
+          else if (picked.length < ODD_COUNT) picked.push(i);
+          else picked[0] = i;
+
+          els.forEach((t, j) => {
+            t.classList.toggle('sel', picked.includes(j));
+            t.setAttribute('aria-pressed', picked.includes(j));
+          });
+          action.disabled = picked.length !== ODD_COUNT;
+          action.textContent = picked.length === ODD_COUNT ? 'Check answer' : pickText;
+        }));
+
+        action.addEventListener('click', () => {
+          if (!checked) {
+            handleCheck(false);
+          } else if (log.length < ROUNDS) {
+            action.disabled = true;
+            nextPuzzle().catch(() => { if (alive()) fail('Something went wrong loading the photos.'); });
+          } else {
+            stopTimer();
+            done(log.filter(x => x.ok).length, `
+              <div class="g-breakdown-row">
+                <h3>Your puzzles</h3>
+                <div class="g-tags">${log.map((x, i) =>
+                  `<span class="g-tag ${x.ok ? 'hit' : 'miss'}">${x.ok ? '✓' : '✗'} Puzzle ${i + 1}${x.changes.length ? ': ' + esc(x.changes.join(' + ')) : ''}</span>`).join('')}</div>
+              </div>`);
+          }
+        });
+      };
+
+      const nextPuzzle = async () => {
+        stopTimer();
+        const slow = setTimeout(() => { if (alive()) loading(); }, 250);
+        let cand = upcoming, tries = 0;
+        let ok = await preload([cand.set.base, ...cand.odd.map(v => v.file)]);
+        while (!ok && tries < 5) { 
+          tries++; 
+          cand = next(); 
+          ok = await preload([cand.set.base, ...cand.odd.map(v => v.file)]); 
+        }
+        clearTimeout(slow);
+        if (!alive()) return;
+        if (!ok) { fail("Some photos wouldn't load. Please check your connection and try again."); return; }
+        markSeen(cand.set.id, manifest.length);
+        if (log.length + 1 < ROUNDS) { 
+          upcoming = next(); 
+          preload([upcoming.set.base, ...upcoming.odd.map(v => v.file)]); 
+        }
+        render(cand);
+      };
+
+      nextPuzzle().catch(() => { if (alive()) fail('Something went wrong loading the photos.'); });
+    }
+  };
+})();
+</script>

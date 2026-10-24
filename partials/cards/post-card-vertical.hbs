@@ -1,0 +1,52 @@
+<article class="{{post_class}} {{card_class}} relative flex flex-col gap-4 text-typ" data-post-card{{#if featured}} data-featured{{/if}}>
+  {{!-- Feature Image --}}
+  {{#if feature_image}}
+    <a href="{{url}}" class="relative group {{media_class}}">
+      <figure class="block rounded-theme overflow-hidden" role="none">
+        {{> image
+          image_type="post"
+          image_class="w-full aspect-[16/9] object-cover rounded-[inherit] group-hover:opacity-90 transition-opacity"
+          image_url=feature_image
+          size_s=true
+          size_m=true
+          size_l=true
+          sizes="(max-width: 767px) 90vw, (max-width: 1200px) 50vw, 600px"
+          loading=image_loading
+        }}
+      </figure>
+      {{> post-card-type-icon wrapper_class="scale-110 md:scale-125"}}
+    </a>
+  {{/if}}
+
+  <div class="flex flex-col gap-2.5 {{content_class}}" data-post-card-content>
+
+    {{!-- Post meta: tag / visibility / comment count --}}
+    {{> post-card-meta-top }}
+
+    {{!-- Title --}}
+    {{#if use_h2}}
+      <h2 class="text-lg font-semibold md:text-xl leading-tight md:leading-[1.15] {{title_class}}" data-post-card-title>
+        <a href="{{url}}" class="hover:underline underline-offset-4">
+          <span>{{title}}</span>
+        </a>
+      </h2>
+    {{else}}
+      <h3 class="text-lg font-semibold md:text-xl leading-tight md:leading-[1.15] {{title_class}}" data-post-card-title>
+        <a href="{{url}}" class="hover:underline underline-offset-4">
+          <span>{{title}}</span>
+        </a>
+      </h3>
+    {{/if}}
+
+    {{!-- Excerpt --}}
+    {{#if excerpt}}
+      <p class="text-base leading-snug mb-0.5 {{excerpt_class}}" data-post-card-excerpt>
+        {{excerpt words="30"}}
+      </p>
+    {{/if}}
+
+    {{!-- Post meta: authors and date --}}
+    {{> post-card-meta-bottom }}
+    
+  </div>
+</article>

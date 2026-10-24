@@ -1,0 +1,139 @@
+<script>
+window.GAMES = window.GAMES || {};
+
+const OG_N = 3;
+const OG_ROUNDS = 5;
+const OG_PALETTE = ['#e63946', '#2a9d8f', '#3a86ff', '#fcbf49', '#9b5de5'];
+const OG_CFG = {
+  1: { colors: 3, filled: 5, changes: 3 },
+  2: { colors: 4, filled: 6, changes: 2 },
+  3: { colors: 5, filled: 7, changes: 1 }
+};
+
+function ogRot(g) {
+  const o = new Array(OG_N * OG_N);
+  for (let r = 0; r < OG_N; r++)
+    for (let c = 0; c < OG_N; c++)
+      o[r * OG_N + c] = g[(OG_N - 1 - c) * OG_N + r];
+  return o;
+}
+const ogSame = (a, b) => a.every((v, i) => v === b[i]);
+function ogRotations(g) {
+  const out = [g];
+  for (let i = 0; i < 3; i++) out.push(ogRot(out[i]));
+  return out;
+}
+const ogIsRotation = (a, b) => ogRotations(b).some(r => ogSame(r, a));
+const ogSpin = g => pick(ogRotations(g));
+
+function ogRandomGrid(cfg) {
+  const g = new Array(OG_N * OG_N).fill(null);
+  shuffle([...g.keys()]).slice(0, cfg.filled).forEach(i => { g[i] = Math.floor(Math.random() * cfg.colors); });
+  return g;
+}
+function ogAsymmetric(g) {
+  const rs = ogRotations(g);
+  return rs.every((a, i) => rs.every((b, j) => i === j || !ogSame(a, b)));
+}
+function ogMutate(base, cfg) {
+  let g;
+  do {
+    g = [...base];
+    shuffle([...g.keys()]).slice(0, cfg.changes).forEach(i => {
+      const options = [null, ...Array(cfg.colors).keys()].filter(v => v !== g[i]);
+      g[i] = pick(options);
+    });
+  } while (ogIsRotation(g, base));
+  return g;
+}
+function ogMakePuzzle(cfg) {
+  let base;
+  do { base = ogRandomGrid(cfg); } while (!ogAsymmetric(base));
+  const d1 = ogMutate(base, cfg);
+  let d2;
+  do { d2 = ogMutate(base, cfg); } while (ogIsRotation(d2, d1));
+  const tiles = [
+    ...Array.from({ length: 7 }, () => ({ grid: ogSpin(base), odd: false })),
+    { grid: ogSpin(d1), odd: true },
+    { grid: ogSpin(d2), odd: true }
+  ];
+  return shuffle(tiles);
+}
+function ogGridHTML(g) {
+  return `<div class="og-cells">${g.map(v =>
+    `<span class="og-cell"${v !== null ? ` style="background:${OG_PALETTE[v]}"` : ''}></span>`).join('')}</div>`;
+}
+
+window.GAMES['odd-grids'] = {
+  title: 'Odd Grids',
+  desc: 'Nine grids, all rotated. Find the two that are genuinely different.',
+  max: OG_ROUNDS,
+  interactive: true,
+  icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+  study: 'Seven grids are rotated copies of one pattern. Select the 2 that are not.',
+  levelSub: 'Pick how tricky the patterns get.',
+  levelNote: l => ['3 colours · obvious differences', '4 colours · smaller differences', '5 colours · one cell off'][l - 1],
+
+  start(stage, lvl, done) {
+    const cfg = OG_CFG[lvl];
+    const log = [];
+
+    const nextPuzzle = () => {
+      const tiles = ogMakePuzzle(cfg);
+      const picked = [];
+      let checked = false;
+
+      stage.innerHTML = `
+        <div class="og-wrap">
+          <div class="og-progress">Puzzle ${log.length + 1} of ${OG_ROUNDS}</div>
+          <div class="og-board">${tiles.map((t, i) =>
+            `<button class="og-tile" aria-pressed="false" aria-label="Grid ${i + 1}">${ogGridHTML(t.grid)}</button>`).join('')}</div>
+          <button class="g-btn g-btn-orange g-btn-lg og-action" disabled>Pick 2 grids</button>
+        </div>`;
+
+      const els = [...stage.querySelectorAll('.og-tile')];
+      const action = stage.querySelector('.og-action');
+
+      els.forEach((el, i) => el.addEventListener('click', () => {
+        if (checked) return;
+        const at = picked.indexOf(i);
+        if (at >= 0) picked.splice(at, 1);
+        else if (picked.length < 2) picked.push(i);
+        else return;
+        els.forEach((t, j) => {
+          t.classList.toggle('sel', picked.includes(j));
+          t.setAttribute('aria-pressed', picked.includes(j));
+        });
+        action.disabled = picked.length !== 2;
+        action.textContent = picked.length === 2 ? 'Check answer' : `Pick ${2 - picked.length} more`;
+      }));
+
+      action.addEventListener('click', () => {
+        if (!checked) {
+          checked = true;
+          const ok = picked.every(i => tiles[i].odd);
+          els.forEach((el, i) => {
+            el.disabled = true;
+            el.classList.remove('sel');
+            if (tiles[i].odd) el.classList.add(picked.includes(i) ? 'right' : 'missed');
+            else if (picked.includes(i)) el.classList.add('wrong');
+          });
+          log.push(ok);
+          action.textContent = log.length < OG_ROUNDS ? 'Next puzzle ▶' : 'See results';
+        } else if (log.length < OG_ROUNDS) {
+          nextPuzzle();
+        } else {
+          done(log.filter(Boolean).length, `
+            <div class="g-breakdown-row">
+              <h3>Your puzzles</h3>
+              <div class="g-tags">${log.map((ok, i) =>
+                `<span class="g-tag ${ok ? 'hit' : 'miss'}">${ok ? '✓' : '✗'} Puzzle ${i + 1}</span>`).join('')}</div>
+            </div>`);
+        }
+      });
+    };
+
+    nextPuzzle();
+  }
+};
+</script>

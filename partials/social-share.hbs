@@ -1,0 +1,35 @@
+{{!-- Post share --}}
+<div class="absolute top-8 right-0 flex flex-col bg-bgr rounded-md border border-brd-soft text-typ-tone p-0.5 text-[0.825rem] font-medium z-50 leading-normal" :class="shareOpen ? 'block' : 'hidden'" data-share @click.outside="!event.target.closest('[data-share-toggle]') && (shareOpen = false)">
+  {{!-- Copy link --}}
+  <button class="flex items-center gap-2 cursor-pointer px-2 py-1.5 hover:bg-bgr-tone hover:text-typ rounded-sm {{item_class}}" 
+      x-data="{ 
+        copied: false, 
+        copyText: '{{t "Copy link"}}', 
+        successText: '{{t "Copied!"}}',
+        url: '{{url absolute="true"}}'
+      }"
+      @click="navigator.clipboard.writeText(url);copied = true;setTimeout(() => { copied = false; shareOpen = false; }, 2000)"
+      title="{{t "Copy link"}}" 
+      aria-label="{{t "Copy"}}">
+    <span class="" :class="copied ? '[&_.icon-check]:block [&_.icon-link]:hidden' : '[&_.icon-check]:hidden [&_.icon-link]:block'">
+      {{>icon name="copy" icon_class="size-4 stroke-2 icon-link"}}
+      {{>icon name="copy-check" icon_class="size-4 stroke-0 icon-check"}}
+    </span>
+    <span class="whitespace-nowrap flex-1 text-left {{item_text_class}}" x-text="copied ? successText : copyText"></span>
+  </button>
+  {{!-- Facebook --}}
+  <a class="flex items-center gap-2 px-2 py-1.5 hover:bg-bgr-tone hover:text-typ rounded-sm {{item_class}}" target="_blank" href="https://www.facebook.com/sharer.php?u={{url absolute='true'}}" title="{{t "Share to"}} Facebook" @click="setTimeout(() => {shareOpen = false}, 2000)">
+    {{>icon name="brand-facebook-filled" icon_class="size-4 stroke-0"}}
+    <span class="whitespace-nowrap flex-1 text-left {{item_text_class}}">{{t "Share to"}} Facebook</span>
+  </a>
+  {{!-- Instagram --}}
+  <a class="flex items-center gap-2 px-2 py-1.5 hover:bg-bgr-tone hover:text-typ rounded-sm {{item_class}}" target="_blank" href="https://www.instagram.com/" title="{{t "Share to"}} Instagram" @click="setTimeout(() => {shareOpen = false}, 2000)">
+    {{>icon name="brand-instagram" icon_class="size-4 stroke-2"}}
+    <span class="whitespace-nowrap flex-1 text-left {{item_text_class}}">{{t "Share to"}} Instagram</span>
+  </a>
+  {{!-- Mail --}}
+  <a class="flex items-center gap-2 px-2 py-1.5 hover:bg-bgr-tone hover:text-typ rounded-sm {{item_class}}" data-share-mail href="mailto:?subject={{encode title}}&body={{url absolute='true'}}&nbsp;{{encode title}}" title="{{t "Share by email"}}" @click="setTimeout(() => {shareOpen = false}, 2000)">
+    {{>icon name="mail-filled" icon_class="size-4 stroke-0"}}
+    <span class="whitespace-nowrap flex-1 text-left {{item_text_class}}">{{t "Share by email"}}</span>
+  </a>
+</div>

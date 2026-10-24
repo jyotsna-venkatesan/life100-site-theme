@@ -1,0 +1,113 @@
+{{!< default}}
+
+{{!-- Hero section: Featured posts --}}
+{{#match @custom.hero_posts_filter "featured"}}
+  {{> sections/hero 
+    posts_filter="featured:true+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored,hash-top-story]"
+  }}
+{{/match}}
+
+{{!-- Hero section: Latest posts --}}
+{{#match @custom.hero_posts_filter "latest"}}
+  {{> sections/hero 
+    posts_filter="tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored,hash-top-story]"
+  }}
+{{/match}}
+
+{{!-- Actions section --}}
+{{> sections/actions}}
+
+{{!-- Members-only posts section --}}
+{{#match @custom.members_posts_filter "all-members"}}
+  {{> sections/members-only
+    posts_filter="visibility:-public+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]"
+    posts_limit="8"
+  }}
+{{/match}}
+{{#match @custom.members_posts_filter "free-members-only"}}
+  {{> sections/members-only
+    posts_filter="visibility:members+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]"
+    posts_limit="8"
+  }}
+{{/match}}
+{{#match @custom.members_posts_filter "paid-members-only"}}
+  {{> sections/members-only
+    posts_filter="visibility:-[members,public]+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]"
+    posts_limit="8"
+  }}
+{{/match}}
+
+{{!-- Topic sections: topics --}}
+{{#get "pages" filter="slug:topics" include="tags" limit="1"}}
+  {{#foreach pages.[0].tags}}
+    {{#get "tags" filter="slug:{{slug}}" include="count.posts" limit="1"}}
+      {{#foreach tags}}
+        {{#match @custom.topic_section_layout "grid-with-4-posts"}}
+          {{> sections/topic-4-posts }}
+        {{/match}}
+        {{#match @custom.topic_section_layout "grid-with-5-posts"}}
+          {{> sections/topic-5-posts }}
+        {{/match}}
+        {{#match @custom.topic_section_layout "grid-with-8-posts"}}
+          {{> sections/topic-8-posts }}
+        {{/match}}
+        {{#match @custom.topic_section_layout "description-and-5-posts"}}
+          {{> sections/topic-w-description }}
+        {{/match}}
+      {{/foreach}}
+    {{/get}}
+  {{/foreach}}
+
+  
+  {{#match @custom.topic_section_layout "column-with-5-posts"}}
+    <div class="px-5 sm:px-6 mt-20">
+      <div class="max-w-site mx-auto grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        {{#foreach pages.[0].tags}}
+          {{> sections/topic-column }}
+        {{/foreach}}
+      </div>
+    </div>
+  {{/match}}
+{{/get}}
+
+{{!-- Podcasts --}}
+{{> sections/podcasts}}
+
+{{!-- Videos --}}
+{{> sections/videos}}
+
+{{!-- Writers & newsletters --}}
+{{> sections/writers}}
+
+{{!-- Events --}}
+{{> sections/events}}
+
+{{!-- Latest posts section (if the hero section is set to featured) --}}
+{{#match @custom.hero_posts_filter "featured"}}
+  {{#get "posts" filter="featured:false+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="3"}}
+    {{#if posts}}
+      <section class="px-5 sm:px-6 mt-20" data-latest-posts>
+        <div class="max-w-site mx-auto">
+          <div class="flex flex-col md:flex-row gap-8 lg:gap-10">
+            <div class="flex-3 max-w-200 [&_[data-section-head]]:mb-8 md:[&_[data-section-head]]:mb-10">
+              {{!-- {{t "Latest"}} --}}
+              {{> section-heading 
+                section_title=(t "Things You May Have Missed")
+              }}
+              
+              {{> post-feed 
+                feed_type="latest"
+              }}
+
+            </div>
+
+            {{> sidebar}}
+          </div>
+        </div>
+      </section>  
+    {{/if}}
+  {{/get}}
+{{/match}}
+
+{{!-- Sponsored --}}
+{{> sections/sponsored}}

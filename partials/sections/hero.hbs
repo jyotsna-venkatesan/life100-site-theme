@@ -1,0 +1,105 @@
+{{#get "posts" filter="tag:hash-top-story" limit="1" include="tags,authors,tiers" as |top_story_posts|}}
+  {{#if top_story_posts.length}}
+    {{!-- Have top story: fetch more posts now that we have three posts per column --}}
+    {{#get "posts" filter=../posts_filter include="tags,authors,tiers" limit="7" as |hero_posts|}}
+      {{#if hero_posts.length}}
+        <section class="px-5 sm:px-6 mt-6" data-hero-posts="{{hero_posts.length}}" data-top-story-posts="{{top_story_posts.length}}" data-hero-layout="{{@custom.hero_posts_layout}}">
+          {{#match @custom.hero_posts_layout "dynamic"}}
+            {{!-- With top story we have one less hero post --}}
+            {{#match hero_posts.length 1}}
+              {{> sections/2-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 2}}
+              {{> sections/3-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 3}}
+              {{> sections/4-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 4}}
+              {{> sections/5-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 5}}
+              {{> sections/6-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "1-post"}}
+            {{> sections/1-post top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "2-posts"}}
+            {{> sections/2-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "3-posts"}}
+            {{> sections/3-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "4-posts"}}
+            {{> sections/4-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "5-posts"}}
+            {{> sections/5-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "6-posts"}}
+            {{> sections/6-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "5-posts-3-columns"}}
+            {{> sections/5-posts-3-columns top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "6-posts-3-columns"}}
+            {{> sections/6-posts-3-columns top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+        </section>
+      {{/if}}
+    {{/get}}
+  {{else}}
+    {{!-- No top story: fetch 7 --}}
+    {{#get "posts" filter=../posts_filter include="tags,authors,tiers" limit="7" as |hero_posts|}}
+      {{#if hero_posts.length}}
+        <section class="px-5 sm:px-6 mt-6" data-hero-posts="{{hero_posts.length}}" data-hero-layout="{{@custom.hero_posts_layout}}">
+          {{#match @custom.hero_posts_layout "dynamic"}}
+            {{#match hero_posts.length 1}}
+              {{> sections/1-post top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 2}}
+              {{> sections/2-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 3}}
+              {{> sections/3-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 4}}
+              {{> sections/4-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 5}}
+              {{> sections/5-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+            {{#match hero_posts.length 6}}
+              {{> sections/6-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+            {{/match}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "1-post"}}
+            {{> sections/1-post top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "2-posts"}}
+            {{> sections/2-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "3-posts"}}
+            {{> sections/3-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "4-posts"}}
+            {{> sections/4-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "5-posts"}}
+            {{> sections/5-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "6-posts"}}
+            {{> sections/6-posts top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "5-posts-3-columns"}}
+            {{> sections/5-posts-3-columns top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+          {{#match @custom.hero_posts_layout "6-posts-3-columns"}}
+            {{> sections/6-posts-3-columns top_story_posts=top_story_posts hero_posts=hero_posts}}
+          {{/match}}
+        </section>
+      {{/if}}
+    {{/get}}
+  {{/if}}
+{{/get}}

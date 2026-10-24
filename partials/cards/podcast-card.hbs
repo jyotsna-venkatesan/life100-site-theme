@@ -1,0 +1,53 @@
+<article class="{{post_class}} {{card_class}} relative flex flex-col text-typ h-full bg-bgr-tone" data-post-card="podcast"{{#if featured}} data-featured{{/if}} x-data="{ podcast: null }" {{#if codeinjection_foot}}x-init="$nextTick(() => { podcast = getMetaInfo($el,'podcast') })" data-meta="{{codeinjection_foot}}"{{/if}}>
+  {{!-- Feature Image --}}
+  {{#if feature_image}}
+    <a href="{{url}}" class="{{media_class}} relative group">
+      <figure class="block rounded-theme overflow-hidden relative group" role="none">
+        {{> image
+          image_type="post"
+          image_class="w-full aspect-[1/1] object-cover rounded-[inherit] group-hover:opacity-90 transition-opacity"
+          image_url=feature_image
+          size_s=true
+          size_m=true
+          size_l=true
+          sizes="(max-width: 767px) 90vw, (max-width: 1200px) 50vw, 600px"
+          loading=image_loading
+        }}
+      </figure>
+    </a>
+  {{/if}}
+
+  <div class="flex flex-col gap-2.5 h-full p-6 {{content_class}}" data-post-card-content>
+
+    <div class="inline-flex whitespace-nowrap font-sans font-normal uppercase text-[0.8rem]" data-post-card-meta="top">
+      {{!-- Tags --}}
+      {{#if tags}}
+        <ul class="flex gap-2 font-semibold" data-post-card-tags>
+          {{#foreach tags limit="1"}}
+            <li><a href="{{url}}" class="text-brand decoration-2 underline-offset-2 hover:underline">{{name}}</a></li>
+          {{/foreach}}
+        </ul>
+      {{/if}}
+
+      {{!-- Episode? --}}
+      <template x-if="podcast"><span class="mx-2 text-brd-soft">/</span></template>
+      <template x-if="podcast">
+        <span class="text-typ-tone font-semibold" x-text="`EP ${podcast.episodeNumber}`"></span>
+      </template>
+    </div>
+
+    {{!-- Title --}}
+    <h3 class="text-lg font-semibold md:text-xl leading-tight md:leading-[1.15] {{title_class}}" data-post-card-title>
+      <a href="{{url}}" class="hover:underline underline-offset-4">
+        <span>{{title}}</span>
+      </a>
+    </h3>
+
+    {{!-- Excerpt --}}
+    {{#if custom_excerpt}}
+      <p class="text-base leading-snug mb-0.5 {{excerpt_class}}" data-post-card-excerpt>
+        {{custom_excerpt}}
+      </p>
+    {{/if}}
+  </div>
+</article>

@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@source "../../../**/*.hbs";
+@plugin "@tailwindcss/forms"; 
+@plugin "@tailwindcss/typography"; 
+
+
+@theme {
+  --font-heading: var(--font-sans);
+  --font-body: var(--font-sans);
+  --default-font-family: var(--font-sans);
+
+  --container-site: 1200px;
+  --container-content: 680px;
+  --container-wide: 960px;
+
+  --radius-theme: 0px;
+  --radius-btn: 0px;
+  
+  --color-brand: var(--ghost-accent-color,#f32a52);
+  --color-brand-hsl: hsl(from var(--color-brand) h s l);
+  --color-brand-contrast: hsl(0 0% 100%);
+  --color-typ: hsl(0 0% 5%);
+  --color-typ-tone: hsl(0 0% 15%);
+  --color-typ-content: var(--color-typ);
+  --color-bgr: hsl(0 0% 100%);
+  --color-bgr-tone: hsl(0 0% 98%);
+  --color-brd: hsl(0 0% 5%);
+  --color-brd-soft: hsla(0 0% 90%);
+  --color-error: #fc365e;
+  --color-success: #48c774;
+
+  --shadow-theme: 0 20px 25px -5px hsla(0 0% 0% / 5%);
+  --shadow-notification: 
+    0px 0px 1px 0px rgba(0, 0, 0, 0.30), 
+    0px 51px 40px 0px rgba(0, 0, 0, 0.05), 
+    0px 15.375px 12.059px 0px rgba(0, 0, 0, 0.03), 
+    0px 6.386px 5.009px 0px rgba(0, 0, 0, 0.03), 
+    0px 2.31px 1.812px 0px rgba(0, 0, 0, 0.02);
+
+  /* Logo sizes */
+  --logo-h-mobile: 40px;
+  --logo-w-mobile: auto;
+  --logo-h-desktop: 64px;
+  --logo-w-desktop: auto;
+}
+
+/* Typography color tokens */
+.prose {
+  --tw-prose-body: var(--color-typ-content);
+  --tw-prose-headings: var(--color-typ);
+  --tw-prose-lead: var(--color-typ-content);
+  --tw-prose-links: var(--color-typ-content); /* var(--ghost-accent-color); */
+  --tw-prose-bold: var(--color-typ-content);
+  --tw-prose-counters: var(--color-typ-content);
+  --tw-prose-bullets: var(--color-typ-content);
+  --tw-prose-hr: var(--color-brd);
+  --tw-prose-quotes: var(--color-typ-content);
+  --tw-prose-quote-borders: var(--ghost-accent-color);
+  --tw-prose-captions: var(--color-typ-content);
+  --tw-prose-code: var(--color-typ-content);
+  --tw-prose-pre-code: var(--color-typ-reverse);
+  --tw-prose-pre-bg: var(--color-typ);
+  --tw-prose-th-borders: var(--color-brd);
+  --tw-prose-td-borders: var(--color-brd);
+}
+
+/* Font family definitions */
+body { font-family: var(--font-body); }
+article.ghost-content { font-family: var(--font-body); }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); }
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none; /* Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  i {
+    fill: currentColor;
+  }
+
+  .icon svg {
+    stroke: currentColor;
+    /* fill: inherit; */
+    stroke-width: inherit;
+    width: inherit;
+    height: inherit;
+  }
+}
+
+/* Progress bar */
+[data-progress-bar]::-webkit-progress-bar { background: transparent; }
+[data-progress-bar]::-moz-progress-bar { background: var(--ghost-accent-color); }
+[data-progress-bar]::-webkit-progress-value { background: var(--ghost-accent-color); }
+
+/* Color picker */
+input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+

@@ -1,0 +1,286 @@
+<script>
+const $ = id => document.getElementById(id);
+
+const LEVELS = {
+  1: { sec: 20, name: 'Easy' },
+  2: { sec: 15, name: 'Medium' },
+  3: { sec: 10, name: 'Hard' }
+};
+
+const MESSAGES = {
+  all: [
+    "Incredible focus! Your memory is razor-sharp.",
+    "Flawless! You nailed every single one.",
+    "Absolute perfection! Keep that momentum going.",
+    "Brilliant! Your brain is firing on all cylinders."
+  ],
+  some: [
+    "Good effort! You've got a solid foundation.",
+    "Nice job! Every round makes your memory stronger.",
+    "Not bad at all! Practice makes perfect.",
+    "You're getting closer! Keep challenging yourself."
+  ],
+  none: [
+    "Don't sweat it! Memory training takes a little warmup.",
+    "Tough round, but every try builds new pathways.",
+    "Warmup complete! Shake it off and try again.",
+    "No worries at all. Jump back in and beat this level!"
+  ]
+};
+
+/* ---------- Helpers ---------- */
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
+function starsFor(score, max) {
+  if (score === null || score === undefined) return 0;
+  if (score >= max) return 3;
+  if (score / max >= 0.6) return 2;
+  return score > 0 ? 1 : 0;
+}
+function starsHTML(n, large) {
+  return `<span class="g-stars ${large ? 'g-stars-lg' : ''}">` +
+    [1, 2, 3].map(i => `<span class="g-star ${i <= n ? 'on' : ''}">★</span>`).join('') + `</span>`;
+}
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/* ---------- Storage ---------- */
+function getUnlocked(game) { return parseInt(localStorage.getItem('unlocked_lvl_' + game) || '1'); }
+function unlockNext(game, lvl) {
+  if (lvl + 1 > getUnlocked(game) && lvl + 1 <= 3) localStorage.setItem('unlocked_lvl_' + game, lvl + 1);
+}
+function getBest(game, lvl) {
+  const v = localStorage.getItem(`highscore_${game}_lvl_${lvl}`);
+  return v !== null ? parseInt(v) : null;
+}
+function saveBest(game, lvl, score) {
+  const prev = getBest(game, lvl);
+  if (prev === null || score > prev) localStorage.setItem(`highscore_${game}_lvl_${lvl}`, score);
+  return { prev, best: Math.max(score, prev || 0), isNewBest: prev !== null && score > prev };
+}
+
+/* ---------- State ---------- */
+let activeGame = 'word-recall';
+let level = 1;
+let roundData = null;
+let tickId = null;
+
+function cancelTimer() { if (tickId) { clearInterval(tickId); tickId = null; } }
+
+function showView(name) {
+  cancelTimer();
+  if (window.nb) window.nb.tap = null;
+  ['hub', 'levels', 'play'].forEach(v => { $('view-' + v).hidden = (v !== name); });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ---------- Hub ---------- */
+function gameStars(id) {
+  let s = 0;
+  [1, 2, 3].forEach(l => { s += starsFor(getBest(id, l), window.GAMES[id].max); });
+  return s;
+}
+
+function showHub() {
+  let totalStars = 0, totalUnlocked = 0, totalPerfect = 0;
+  Object.keys(window.GAMES).forEach(id => {
+    totalStars += gameStars(id);
+    totalUnlocked += getUnlocked(id);
+    [1, 2, 3].forEach(l => { if (getBest(id, l) === window.GAMES[id].max) totalPerfect++; });
+  });
+  $('stat-stars').textContent = totalStars;
+  $('stat-unlocked').textContent = totalUnlocked;
+  $('stat-perfect').textContent = totalPerfect;
+
+  $('hub-cards').innerHTML = Object.keys(window.GAMES).map(id => {
+    const g = window.GAMES[id];
+    return `
+      <button class="g-card" onclick="openLevels('${id}')">
+        <div class="g-card-head">
+          <div class="g-card-icon">${g.icon}</div>
+          <div>
+            <h3 class="g-card-title">${g.title}</h3>
+            <p class="g-card-desc">${g.desc}</p>
+          </div>
+        </div>
+        <div class="g-card-foot">
+          <div class="g-card-progress">${gameStars(id)}/9 stars · Level ${getUnlocked(id)} unlocked</div>
+          <span class="g-card-play">Play ▶</span>
+        </div>
+      </button>`;
+  }).join('');
+
+  showView('hub');
+}
+
+/* ---------- Level select ---------- */
+function openLevels(id) {
+  activeGame = id;
+  const g = window.GAMES[id];
+  const unlocked = getUnlocked(id);
+  $('levels-title').textContent = g.title + ' · Select Level';
+  $('levels-sub').textContent = g.levelSub || 'Pick how long you get to study before everything disappears.';
+
+  const unlockHint = l => g.unlockAt
+    ? `Score ${g.unlockAt}/${g.max} or better on Level ${l - 1} to unlock`
+    : `Get a perfect score on Level ${l - 1} to unlock`;
+
+  $('levels-grid').innerHTML = [1, 2, 3].map(l => {
+    const best = getBest(id, l);
+    const locked = l > unlocked;
+    const pct = best !== null ? Math.round((best / g.max) * 100) : 0;
+    return `
+      <button class="g-level ${locked ? 'locked' : ''}" ${locked ? `title="${unlockHint(l)}"` : `onclick="startLevel(${l})"`}>
+        <div class="g-level-num">${locked ? '🔒' : l}</div>
+        <div class="g-level-name">${LEVELS[l].name}</div>
+        <div class="g-level-time">${g.levelNote ? g.levelNote(l) : LEVELS[l].sec + ' seconds to study'}</div>
+        ${starsHTML(starsFor(best, g.max))}
+        <div class="g-level-best">
+          ${locked ? 'Locked' : (best !== null ? `Best: ${best}/${g.max}` : 'Not played yet')}
+          <div class="g-bar"><div class="g-bar-fill" style="width:${pct}%"></div></div>
+        </div>
+      </button>`;
+  }).join('');
+
+  showView('levels');
+}
+
+/* ---------- Play ---------- */
+function startLevel(l) {
+  if (l > getUnlocked(activeGame)) return;
+  level = l;
+  startRound();
+}
+
+function startRound() {
+  const g = window.GAMES[activeGame];
+  const best = getBest(activeGame, level);
+
+  $('play-title').textContent = g.title;
+  $('hud-level').textContent = `Level ${level} · ${LEVELS[level].name}`;
+  $('hud-best').textContent = best !== null ? `★ Best ${best}/${g.max}` : '★ No best yet';
+  $('play-instructions').textContent = typeof g.study === 'function' ? g.study(level) : g.study;
+
+  $('g-results').hidden = true;
+  $('g-results').innerHTML = '';$('g-input-wrap').hidden = true;
+  $('g-stage').hidden = false;
+
+  if (g.interactive) {
+    $('g-timer').hidden = true;
+    $('g-stage').innerHTML = '';
+    showView('play');
+    g.start($('g-stage'), level, showResults);
+    return;
+  }
+
+  roundData = g.generate();
+  $('g-timer').hidden = false;
+  $('g-stage').innerHTML = g.render(roundData);
+
+  showView('play');
+
+  const ms = LEVELS[level].sec * 1000;
+  const fill = $('g-timer-fill'), label =$('g-timer-label');
+  fill.style.width = '100%';
+  fill.classList.remove('low');
+  label.textContent = LEVELS[level].sec + 's';
+
+  const start = Date.now();
+  tickId = setInterval(() => {
+    const left = Math.max(0, ms - (Date.now() - start));
+    fill.style.width = (left / ms * 100) + '%';
+    fill.classList.toggle('low', left <= 3000);
+    label.textContent = Math.ceil(left / 1000) + 's';
+    if (left <= 0) { cancelTimer(); beginRecall(); }
+  }, 100);
+}
+
+function beginRecall() {
+  const g = window.GAMES[activeGame];
+  $('g-timer').hidden = true;
+  $('play-instructions').textContent = "Time's up! Test your memory.";
+  $('g-stage').innerHTML = `<div class="g-hidden-msg"><div class="g-hidden-q">?</div><div>Hidden! What did you see?</div></div>`;
+
+  $('g-input-label').textContent = g.prompt;
+  const area = $('g-input-area'), text =$('g-input-text');
+  area.hidden = !g.multiline;
+  text.hidden = g.multiline;
+  const field = g.multiline ? area : text;
+  area.value = ''; text.value = '';
+  field.placeholder = g.placeholder;
+  $('g-input-wrap').hidden = false;
+  field.focus();
+}
+
+function submitAnswer() {
+  const g = window.GAMES[activeGame];
+  const input = (g.multiline ? $('g-input-area') :$('g-input-text')).value;
+  showResults(g.score(roundData, input), g.breakdown(roundData, input));
+}
+
+function showResults(score, breakdownHTML) {
+  const g = window.GAMES[activeGame];
+  const perfect = score === g.max;
+  if (score >= (g.unlockAt ?? g.max)) unlockNext(activeGame, level);
+
+  const rec = saveBest(activeGame, level, score);
+  const cat = perfect ? 'all' : (score > 0 ? 'some' : 'none');
+  const unlocked = getUnlocked(activeGame);
+  const needed = g.unlockAt ?? g.max;
+
+  let nextBtn = '';
+  if (level < 3) {
+    nextBtn = (level + 1 <= unlocked)
+      ? `<button class="g-btn g-btn-dark" onclick="startLevel(${level + 1})">Next level ▶</button>`
+      : `<button class="g-btn g-btn-dark" disabled title="Score ${needed}/${g.max} to unlock">🔒 Next level</button>`;
+  }
+
+  $('g-timer').hidden = true;
+  $('g-stage').hidden = true;
+  $('g-input-wrap').hidden = true;
+  $('play-instructions').textContent = 'Round complete!';$('hud-best').textContent = `★ Best ${rec.best}/${g.max}`;
+
+  $('g-results').innerHTML = `
+    <div class="g-result">
+      ${rec.isNewBest ? '<div class="g-newbest">🏆 NEW PERSONAL BEST!</div><br>' : ''}
+      ${starsHTML(starsFor(score, g.max), true)}
+      <div class="g-score-big">${score}<small> / ${g.max}</small></div>
+      <p class="g-result-msg">${pick(MESSAGES[cat])}</p>
+
+      <div class="g-compare">
+        <div class="g-compare-row">
+          <span>This round</span>
+          <div class="g-bar"><div class="g-bar-fill" style="width:${score / g.max * 100}%"></div></div>
+          <span>${score}/${g.max}</span>
+        </div>
+        <div class="g-compare-row best">
+          <span>Your best</span>
+          <div class="g-bar"><div class="g-bar-fill" style="width:${rec.best / g.max * 100}%"></div></div>
+          <span>${rec.best}/${g.max}</span>
+        </div>
+      </div>
+
+      <div class="g-breakdown">${breakdownHTML}</div>
+
+      <div class="g-actions">
+        <button class="g-btn g-btn-orange" onclick="startRound()">↻ Play again</button>
+        ${nextBtn}
+        <button class="g-btn g-btn-light" onclick="openLevels(activeGame)">Levels</button>
+        <button class="g-btn g-btn-light" onclick="showHub()">All games</button>
+      </div>
+    </div>`;
+  $('g-results').hidden = false;
+}
+
+$('g-input-text').addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(); });
+
+showHub();
+</script>

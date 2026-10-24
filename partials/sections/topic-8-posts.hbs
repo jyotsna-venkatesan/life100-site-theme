@@ -1,0 +1,46 @@
+{{#get "posts" filter="tag:{{slug}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="8"}}
+  {{#if posts}}
+    <section class="px-5 sm:px-6 mt-20" data-topic="{{../slug}}" data-topic-number="{{@number}}">
+      <div class="max-w-site mx-auto">
+        {{!-- {{t "See all"}} --}}
+        {{> section-heading 
+          section_title=../name 
+          section_link=../url 
+          section_link_text=(t 'See all')
+        }}
+        <div class="grid gap-5 divide-y divide-brd-soft md:divide-y-0 sm:grid-cols-2 lg:grid-cols-7">
+          <div class="sm:col-span-2 lg:col-span-3 pb-6 md:pb-0 lg:pr-5 lg:border-r lg:border-brd-soft" data-topic-main>
+            {{#foreach posts from="1" to="1"}}
+              {{> cards/post-card-vertical
+                card_class="[&_[data-post-card-type]]:lg:scale-175"
+                title_class="lg:text-3xl"
+                excerpt_class="md:text-lg"
+              }}
+            {{/foreach}}
+          </div>
+          <div class="flex flex-col gap-6 pb-6 md:pb-0 lg:col-span-2 lg:pr-5 lg:border-r lg:border-brd-soft" data-topic-secondary="1">
+            {{#foreach posts from="2" to="2"}}
+              {{> cards/post-card-vertical
+                card_class=""
+                excerpt_class="hidden"
+              }}
+            {{/foreach}}
+            {{#foreach posts from="3" to="3"}}
+              {{> cards/post-card-vertical
+                card_class="border-t border-brd-soft pt-6"
+                excerpt_class="hidden"
+              }}
+            {{/foreach}}
+          </div>
+          <div class="flex flex-col gap-5 lg:col-span-2" data-topic-secondary="2">
+            {{#foreach posts from="4" to="8"}}
+              {{> cards/post-card-horizontal-sm
+                card_class="not-last-of-type:border-b border-brd-soft not-last-of-type:pb-5 flex-row-reverse md:gap-4!"
+              }}
+            {{/foreach}}
+          </div>
+        </div>
+      </div>
+    </section>
+  {{/if}}
+{{/get}}

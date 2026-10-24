@@ -1,0 +1,60 @@
+
+<nav class="{{nav_class}}" data-socials="{{data_value}}" >
+
+  {{!-- Facebook --}}
+  {{#if @site.facebook}}
+    <a href="{{social_url type="facebook"}}" class="{{item_class}}" aria-label="Facebook">{{>icon name="brand-facebook" icon_class=icon_class}}<span class="{{text_class}}">Facebook</span></a>
+  {{/if}}
+
+  {{!-- Twitter --}}
+  {{#if @site.twitter}}
+    <a href="{{social_url type="twitter"}}" class="{{item_class}}" aria-label="Twitter">{{>icon name="brand-x" icon_class=icon_class}}<span class="{{text_class}}">Twitter</span></a>
+  {{/if}}
+
+  {{!-- Bluesky --}}
+  <a :href="socials.bluesky" :class="socials.bluesky && '!block'" class="hidden {{item_class}}" aria-label="Bluesky">{{>icon name="brand-bluesky" icon_class=icon_class}}<span class="{{text_class}}">Bluesky</span></a>
+  
+  {{!-- Discord --}}
+  <a :href="socials.discord" :class="socials.discord && '!block'" class="hidden {{item_class}}" aria-label="Discord">{{>icon name="brand-discord" icon_class=icon_class}}<span class="{{text_class}}">Discord</span></a>
+
+  {{!-- Github --}}
+  <a :href="socials.github" :class="socials.github && '!block'" class="hidden {{item_class}}" aria-label="Github">{{>icon name="brand-github" icon_class=icon_class}}<span class="{{text_class}}">Github</span></a>
+
+  {{!-- Instagram --}}
+  <a :href="socials.instagram" :class="socials.instagram && '!block'" class="hidden {{item_class}}" aria-label="Instagram">{{>icon name="brand-instagram" icon_class=icon_class}}<span class="{{text_class}}">Instagram</span></a>
+
+  {{!-- Linkedin --}}
+  <a :href="socials.linkedin" :class="socials.linkedin && '!block'" class="hidden {{item_class}}" aria-label="Linkedin">{{>icon name="brand-linkedin" icon_class=icon_class}}<span class="{{text_class}}">Linkedin</span></a>
+
+  {{!-- Mastodon --}}
+  <a :href="socials.mastodon" :class="socials.mastodon && '!block'" class="hidden {{item_class}}" aria-label="Mastodon">{{>icon name="brand-mastodon" icon_class=icon_class}}<span class="{{text_class}}">Mastodon</span></a>
+
+  {{!-- Pinterest --}}
+  <a :href="socials.pinterest" :class="socials.pinterest && '!block'" class="hidden {{item_class}}" aria-label="Pinterest">{{>icon name="brand-pinterest" icon_class=icon_class}}<span class="{{text_class}}">Pinterest</span></a>
+
+  {{!-- Reddit --}}
+  <a :href="socials.reddit" :class="socials.reddit && '!block'" class="hidden {{item_class}}" aria-label="Reddit">{{>icon name="brand-reddit" icon_class=icon_class}}<span class="{{text_class}}">Reddit</span></a>
+
+  {{!-- Telegram --}}
+  <a :href="socials.telegram" :class="socials.telegram && '!block'" class="hidden {{item_class}}" aria-label="Telegram">{{>icon name="brand-telegram" icon_class=icon_class}}<span class="{{text_class}}">Telegram</span></a>
+
+  {{!-- Threads --}}
+  <a :href="socials.threads" :class="socials.threads && '!block'" class="hidden {{item_class}}" aria-label="Threads">{{>icon name="brand-threads" icon_class=icon_class}}<span class="{{text_class}}">Threads</span></a>
+
+  {{!-- Tiktok --}}
+  <a :href="socials.tiktok" :class="socials.tiktok && '!block'" class="hidden {{item_class}}" aria-label="Tiktok">{{>icon name="brand-tiktok" icon_class=icon_class}}<span class="{{text_class}}">Tiktok</span></a>
+
+  {{!-- Whatsapp --}}
+  <a :href="socials.whatsapp" :class="socials.whatsapp && '!block'" class="hidden {{item_class}}" aria-label="Whatsapp">{{>icon name="brand-whatsapp" icon_class=icon_class}}<span class="{{text_class}}">Whatsapp</span></a>
+
+  {{!-- Youtube --}}
+  <a :href="socials.youtube" :class="socials.youtube && '!block'" class="hidden {{item_class}}" aria-label="Youtube">{{>icon name="brand-youtube" icon_class=icon_class}}<span class="{{text_class}}">Youtube</span></a>
+
+  {{!-- RSS --}}
+  <a :href="socials.rss" :class="socials.rss && '!block'" class="hidden {{item_class}}" aria-label="RSS">{{>icon name="rss" icon_class=icon_class}}<span class="{{text_class}}">RSS</span></a>
+
+</nav>
+
+{{#contentFor "body"}}
+  <script>window.socials = { rss: '/rss/' }</script>
+{{/contentFor}}

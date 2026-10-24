@@ -1,0 +1,19 @@
+
+{{#if @site.logo}}
+  {{!-- Site logo --}}
+  {{> image
+    data_prop="data-logo='default'"
+    picture_class=""
+    image_type="site"
+    image_class="h-[var(--logo-h-mobile)] w-[var(--logo-w-mobile)] md:h-[var(--logo-h-desktop)] md:w-[var(--logo-w-desktop)]"
+    image_url=@site.logo
+    size_xs=true
+    size_s=true
+    size_m=true
+    loading=loading
+    sizes="(max-width: 800px) 200px, 320px"
+  }}
+{{else}}
+  {{!-- Site Title --}}
+  <span data-text-logo class="leading-none text-typ font-heading text-2xl md:text-3xl lg:text-4xl font-semibold">{{@site.title}}</span>
+{{/if}}

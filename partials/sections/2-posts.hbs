@@ -1,0 +1,42 @@
+<div class="max-w-site mx-auto flex flex-col gap-5 md:flex-row">
+  {{!-- Slot 1: top story or hero_posts first --}}
+  {{#foreach top_story_posts}}
+    {{> cards/post-card-fullwidth 
+      card_class="flex-3 md:pr-5 md:border-r md:border-brd-soft [&_h1]:text-3xl"
+      content_class="lg:py-0 lg:pr-0 lg:pl-6 lg:ml-0 self-start flex-2"
+      media_class="flex-3"
+      image_loading="eager"
+    }}
+  {{/foreach}}
+  {{#unless top_story_posts.length}}
+    {{#foreach hero_posts from="1" to="1"}}
+      {{> cards/post-card-fullwidth 
+        card_class="flex-3 md:pr-5 md:border-r md:border-brd-soft [&_h1]:text-3xl"
+        content_class="lg:py-0 lg:pr-0 lg:pl-6 lg:ml-0 self-start flex-2"
+        media_class="flex-3"
+        image_loading="eager"
+      }}
+    {{/foreach}}
+  {{/unless}}
+
+  {{!-- Slot 2: hero_posts from 1 or 2 depending on top story --}}
+  {{#if top_story_posts.length}}
+    {{#foreach hero_posts from="1" to="1"}}
+      {{> cards/post-card-vertical
+        card_class="flex-1 [&_p]:hidden"
+        title_class="lg:text-2xl"
+        image_loading="eager"
+        use_h2=true
+      }}
+    {{/foreach}}
+  {{else}}
+    {{#foreach hero_posts from="2" to="2"}}
+      {{> cards/post-card-vertical
+        card_class="flex-1 [&_p]:hidden"
+        title_class="lg:text-2xl"
+        image_loading="eager"
+        use_h2=true
+      }}
+    {{/foreach}}
+  {{/if}}
+</div>

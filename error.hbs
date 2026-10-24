@@ -1,0 +1,18 @@
+{{!< default}}
+
+<section class="max-w-site mx-auto px-4 py-12 flex flex-col items-center justify-center text-center font-sans">
+  <h1 class="text-7xl tracking-none font-semibold lg:text-9xl font-sans!">{{statusCode}}</h1>
+  
+  <h2 class="mb-8 text-3xl tracking-tight font-semibold text-typ md:text-4xl font-sans!">{{message}}</h2>
+  
+  {{#match statusCode 404}}
+    <p class="mb-8 text-lg text-typ">
+      {{t "Something went wrong! We can't seem to find the page you are looking for."}}
+    </p>
+  {{/match}}
+
+  <div class="flex gap-3 text-sm md:text-base font-medium">
+    {{#link href="javascript:history.back()" class="bg-typ text-bgr rounded-theme px-4 py-1.5 hover:bg-brand hover:text-brand-contrast"}}{{t "Go back"}}{{/link}}
+    {{#link href=@site.url class="bg-typ text-bgr rounded-theme px-4 py-1.5 hover:bg-brand hover:text-brand-contrast"}}{{t "Home"}}{{/link}}
+  </div>
+</section>

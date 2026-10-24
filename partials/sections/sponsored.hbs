@@ -1,0 +1,43 @@
+{{#is "post"}}
+  {{#get "posts" filter="tag:[sponsored,hash-sponsored]+id:-{{id}}" include="tags,authors,tiers" limit="4"}}
+    {{#if posts}}
+      <section class="px-5 sm:px-6 mt-12 overflow-x-hidden" data-sponsored>
+        <div class="max-w-site mx-auto sm:bg-bgr-tone pt-4 sm:p-5 md:p-6 border-t-3 border-brd overflow-hidden relative">
+          <h2 class="text-sm md:text-base font-bold! uppercase flex gap-1 items-center mb-4">        
+            <span class="leading-none">{{t "From our partners"}}</span>
+          </h2>
+
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {{#foreach posts}}
+              {{> cards/post-card-vertical
+                card_class="bg-bgr-tone sm:bg-bgr whitespace-normal [&_p]:hidden [&_[data-post-card-visibility]]:hidden [&_[data-post-card-comment-count]]:hidden [&_[data-post-card-meta]]:justify-center [&_[data-post-card-date]]:hidden swiper-slide !h-[unset]"
+                content_class="p-5 md:p-6 text-center"
+              }}
+            {{/foreach}}
+          </div>
+        </div>
+      </section>
+    {{/if}}
+  {{/get}}
+{{else}}
+  {{#get "posts" filter="tag:[sponsored,hash-sponsored]" include="tags,authors,tiers" limit="4"}}
+    {{#if posts}}
+      <section class="px-5 sm:px-6 mt-12 overflow-x-hidden" data-sponsored>
+        <div class="max-w-site mx-auto sm:bg-bgr-tone pt-4 sm:p-5 md:p-6 border-t-3 border-brd overflow-hidden relative">
+          <h2 class="text-sm md:text-base font-bold! uppercase flex gap-1 items-center mb-4">        
+            <span class="leading-none">{{t "From our partners"}}</span>
+          </h2>
+
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {{#foreach posts}}
+              {{> cards/post-card-vertical
+                card_class="bg-bgr-tone sm:bg-bgr whitespace-normal [&_p]:hidden [&_[data-post-card-visibility]]:hidden [&_[data-post-card-comment-count]]:hidden [&_[data-post-card-meta]]:justify-center [&_[data-post-card-date]]:hidden swiper-slide !h-[unset]"
+                content_class="p-5 md:p-6 text-center"
+              }}
+            {{/foreach}}
+          </div>
+        </div>
+      </section>
+    {{/if}}
+  {{/get}}
+{{/is}}

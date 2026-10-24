@@ -1,0 +1,37 @@
+<div class="flex flex-col gap-3 sm:flex-row {{#unless @last}}border-b border-brd-soft pb-6{{/unless}}" data-author="{{slug}}">
+  <div class="flex flex-row gap-3{{#if @custom.show_newsletters}} flex-2{{else}} flex-1.5{{/if}}">
+    {{#if profile_image}}
+      <a href="{{url}}">
+        <figure class="rounded-full h-full relative" role="none">
+          {{> image
+            image_type="author"
+            image_class="object-cover size-20 rounded-full aspect-square"
+            image_url=profile_image
+            size_xs=true
+            size_s=true
+            size_m=true
+            sizes="80px"
+          }}
+        </figure>
+      </a>
+    {{/if}}
+  </div>
+  {{#get "posts" limit=posts_limit include="tags" filter="authors:{{slug}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" as |posts|}}
+    {{#if posts}}
+      <div class="hidden lg:flex flex-col md:flex-row gap-3 flex-3">
+        {{#foreach posts}}
+          <article class="flex-1 border-l border-brd-soft pl-4">
+            {{#if tags}}
+              <ul class="flex gap-2 font-semibold font-sans uppercase text-[0.85rem] mb-2" data-post-card-tags>
+                {{#foreach tags limit="1"}}
+                  <li><a href="{{url}}" class="text-brand decoration-2 underline-offset-2 hover:underline">{{name}}</a></li>
+                {{/foreach}}
+              </ul>
+            {{/if}}
+            <h3 class="font-semibold text-sm md:text-base leading-snug"><a href="{{url}}" class="hover:underline underline-offset-4 decoration-2">{{title}}</a></h3>
+          </article>
+        {{/foreach}}
+      </div>
+    {{/if}}
+  {{/get}}
+</div>

@@ -1,0 +1,68 @@
+{{!< default}}
+
+{{!-- {{#if @member}}
+  <script>window.location = '{{@site.url}}';</script>
+{{/if}} --}}
+
+{{#page}}
+  <section class="flex min-h-dvh" data-template-signin>
+    {{#match @page.show_title_and_feature_image}} 
+      {{#if feature_image}}
+        <figure class="relative flex-2 w-full hidden md:block h-dvh {{#if feature_image_caption}}before:absolute before:left-0 before:bottom-0 before:w-full before:h-full before:max-h-[10rem] before:bg-gradient-to-b before:from-transparent before:to-[rgba(0,0,0,0.8)]{{/if}}" role="none">
+          {{> image
+            picture_class=""
+            image_type="post"
+            image_class="w-full h-full object-cover object-center"
+            image_url=feature_image
+            size_s=true
+            size_m=true
+            size_l=true
+            size_xl=true
+            size_xxl=true
+            sizes="(max-width: 1023px) 90vw, 30vw"
+            loading="eager"
+          }}
+          {{#if feature_image_caption}}
+            <figcaption class="absolute left-0 bottom-0 w-full p-5 bg-transparent text-white font-sans text-xs [&_a]:underline [&_a]:decoration-2 [&_a]:underline-offset-2 [&_a:hover]:text-brand">{{feature_image_caption}}</figcaption>
+          {{/if}}
+        </figure>
+      {{/if}}
+    {{/match}}
+
+    <div class="flex-3 flex items-center relative">
+      <div class="px-5 sm:px-6 flex flex-col gap-2 py-6 lg:p-8 justify-center w-full max-w-sm mx-auto border border-brd rounded-theme">
+        {{#unless @site.members_invite_only}}
+          <h1 class="text-center font-semibold text-2xl sm:text-3xl mb-2">{{title}}</h1>
+          <p id="form-input-label" class="md:text-lg text-typ-tone mb-2">{{excerpt}}</p>
+
+          {{!-- {{t "Continue"}} --}}
+          {{> subscribe-form
+            form_class="font-sans"
+            form_type="signup" 
+            fieldset_class="w-full flex flex-col gap-4 rounded-theme"
+            input_class="bg-bgr-tone text-typ flex-2 px-4 py-2.5 rounded-btn border border-brd-soft focus:bg-bgr hover:border-brd hover:ring-0 focus:border-brd focus:ring-0"
+            button_class="flex-1 px-4 py-2.5 bg-brand text-brand-contrast font-medium rounded-btn md:px-6 hover:brightness-110"
+            button_text=(t 'Continue') 
+          }}
+
+          <p class="font-sans mt-1 text-center text-typ-tone">
+            <small>{{t "Already have an account?"}} 
+              {{#link class="underline hover:text-brand" href="/signin/"}}{{t "Sign in"}}{{/link}}
+            </small>
+          </p>
+        {{else}}
+          <p class="text-center mt-2">{{t "This site is invite-only, contact the owner for access."}}</p>
+        {{/unless}}
+      </div>
+
+      <button class="cursor-pointer absolute top-4 left-4 md:top-8 md:left-8 rounded-full bg-bgr-tone p-3 hover:brightness-95 transition-all" data-back-to-home aria-label="{{t "Go back"}}" @click="history.back()"
+      >
+        {{> icon name="arrow-left" icon_class="size-5 stroke-2" class="text-typ"}}
+      </button>
+    </div>
+  </section>
+{{/page}}
+
+{{#contentFor "head"}}
+  <style>[data-header], [data-footer], #announcement-bar-root { display: none; }</style>
+{{/contentFor}}

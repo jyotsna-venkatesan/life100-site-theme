@@ -1,0 +1,18 @@
+<picture {{#if picture_class}}class="{{picture_class}}"{{/if}} {{{data_prop}}}>
+  {{!-- Serve the WebP format if the browser supports it --}}
+  <source 
+    srcset="{{#if size_xxs}}{{img_url image_url size="xxs" format="webp"}} 30w{{/if}}{{#if size_xs}}{{#if size_xxs}}, {{/if}}{{img_url image_url size="xs" format="webp"}} 100w{{/if}}{{#if size_s}}{{#if size_xs}}, {{/if}}{{img_url image_url size="s" format="webp"}} 320w{{/if}}{{#if size_m}}{{#if size_s}}, {{/if}}{{img_url image_url size="m" format="webp"}} 600w{{/if}}{{#if size_l}}, {{img_url image_url size="l" format="webp"}} 960w{{/if}}{{#if size_xl}}, {{img_url image_url size="xl" format="webp"}} 1200w{{/if}}{{#if size_xxl}}, {{img_url image_url size="xxl" format="webp"}} 2000w{{/if}}"
+    sizes="{{sizes}}"
+    type="image/webp"
+  >
+  {{!-- Fallback image --}}
+  <img class="{{image_class}}{{^match loading "eager"}} will-change-[filter] transition-[filter] blur{{/match}}"
+    {{^match loading "eager"}}onload="this.classList.remove('blur')"{{/match}}
+    loading="{{#if loading}}{{loading}}{{else}}lazy{{/if}}"
+    srcset="{{#if size_xxs}}{{img_url image_url size="xxs" format="webp"}} 30w{{/if}}{{#if size_xs}}{{#if size_xxs}}, {{/if}}{{img_url image_url size="xs" format="webp"}} 100w{{/if}}{{#if size_s}}{{#if size_xs}}, {{/if}}{{img_url image_url size="s" format="webp"}} 320w{{/if}}{{#if size_m}}{{#if size_s}}, {{/if}}{{img_url image_url size="m" format="webp"}} 640w{{/if}}{{#if size_l}}, {{img_url image_url size="l" format="webp"}} 960w{{/if}}{{#if size_xl}}, {{img_url image_url size="xl" format="webp"}} 1280w{{/if}}{{#if size_xxl}}, {{img_url image_url size="xxl" format="webp"}} 2000w{{/if}}"
+    sizes="{{sizes}}"
+    src="{{img_url image_url size="xxs"}}"
+    alt="{{#if image_alt}}{{#match image_alt "!=" " "}}{{image_alt}}{{/match}}{{else}}{{#match image_type "post"}}{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}{{/match}}{{#match image_type "site"}}{{@site.title}}{{/match}}{{#match image_type "author"}}{{name}}{{/match}}{{#match image_type "tag"}}{{name}}{{/match}}{{#match image_type "custom"}}{{custom_alt}}{{/match}}{{/if}}"
+    {{#if img_data}}{{{img_data}}}{{/if}}
+  />
+</picture>

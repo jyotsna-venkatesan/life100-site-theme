@@ -1,0 +1,10 @@
+{{#if access}}
+  <section class="px-5 sm:px-6 mb-8">
+    <div class="max-w-content mx-auto flex flex-wrap gap-2 font-sans">
+      <span class="text-base font-medium">{{t "Tags"}}:</span>
+      {{#foreach tags}}
+        <a href="{{url}}" class="inline-block text-xs font-semibold uppercase border bg-bgr border-brd-soft px-2.5 py-1 hover:bg-bgr-tone">{{name}}</a>
+      {{/foreach}}
+    </div>
+  </section>
+{{/if}}

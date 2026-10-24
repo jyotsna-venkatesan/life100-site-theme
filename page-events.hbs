@@ -1,0 +1,134 @@
+{{!< default}}
+
+{{!-- Hero --}}
+{{#page}}
+  {{> page-hero}}
+{{/page}}
+
+<section class="px-5 sm:px-6" data-events x-init="$nextTick(() => { setTimeout(organizeEvents, 50) })">
+  <div class="max-w-site mx-auto">
+    <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 mb-8" data-all>
+      {{#get "posts" filter="tag:[event,hash-event]" include="tags,authors,tiers" limit="100" order="published_at desc" as |events|}}
+        {{#foreach events}}
+          {{> cards/event-card 
+            card_class="gap-0! h-full"
+            content_class="p-6 bg-bgr-tone h-full"
+          }}
+        {{/foreach}}
+      {{/get}}
+    </div>
+
+    <h2 class="text-lg md:text-xl font-semibold uppercase mb-2">{{t "Upcoming events"}}</h2>
+    <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 mb-16 border-t-3 border-brd-soft pt-8" data-upcoming>
+    </div>
+
+
+    <h2 class="text-lg md:text-xl font-semibold uppercase mb-2">{{t "Past events"}}</h2>
+    <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 mb-8 border-t-3 border-brd-soft pt-8" data-past>
+    </div>
+
+    {{!-- {{> pagination }} --}}
+  </div>
+</section>
+
+{{#contentFor "head"}}
+<script>
+function organizeEvents() {
+  const allEventsContainer = document.querySelector('[data-all]');
+  const upcomingContainer = document.querySelector('[data-upcoming]');
+  const pastContainer = document.querySelector('[data-past]');
+  
+  if (!allEventsContainer || !upcomingContainer || !pastContainer) return;
+  
+  const eventCards = Array.from(allEventsContainer.querySelectorAll('[data-event-date]'));
+  //console.log('Found event cards:', eventCards.length); // Debug line
+  
+  if (eventCards.length === 0) {
+    console.log('No event cards found with data-event-date attribute');
+    return;
+  }
+  
+  const now = new Date();
+  
+  // Separate events into upcoming and past
+  const upcomingEvents = [];
+  const pastEvents = [];
+  
+  eventCards.forEach(card => {
+    const eventDateStr = card.getAttribute('data-event-date');
+    if (!eventDateStr) return;
+    
+    const eventDate = new Date(eventDateStr);
+    
+    if (eventDate >= now) {
+      upcomingEvents.push({ card, date: eventDate });
+    } else {
+      pastEvents.push({ card, date: eventDate });
+    }
+  });
+  
+  // Sort upcoming events by date (earliest first)
+  upcomingEvents.sort((a, b) => a.date - b.date);
+  
+  // Sort past events by date (most recent first)
+  pastEvents.sort((a, b) => b.date - a.date);
+  
+  // Move cards to appropriate containers
+  upcomingEvents.forEach(({ card }) => {
+    upcomingContainer.appendChild(card);
+  });
+  
+  pastEvents.forEach(({ card }) => {
+    pastContainer.appendChild(card);
+  });
+  
+  // Hide the original container since we've moved all cards
+  allEventsContainer.style.display = 'none';
+}
+
+function parseMonthDayYearTime(input) {
+  const trimmed = input.trim();
+  const months = {
+    january:0, february:1, march:2, april:3, may:4, june:5,
+    july:6, august:7, september:8, october:9, november:10, december:11
+  };
+  // "Month Day, Year" (no time) → midnight
+  const dateOnly = trimmed.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/i);
+  if (dateOnly) {
+    const [, monthName, day, year] = dateOnly;
+    const monthIndex = months[monthName.toLowerCase()];
+    if (monthIndex === undefined) return null;
+    return new Date(parseInt(year, 10), monthIndex, parseInt(day, 10), 0, 0, 0);
+  }
+  // "Time TZ, Month Day, Year" (e.g. "11:00 EST, October 3, 2026" or "6:00 PM EST, August 25, 2025")
+  const timeFirst = trimmed.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*[A-Z]*\s*,\s*([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/i);
+  if (timeFirst) {
+    const [, hourStr, minuteStr, ampm, monthName, day, year] = timeFirst;
+    const monthIndex = months[monthName.toLowerCase()];
+    if (monthIndex === undefined) return null;
+    let hour = parseInt(hourStr, 10);
+    const minute = minuteStr ? parseInt(minuteStr, 10) : 0;
+    if (ampm) {
+      const a = ampm.toLowerCase();
+      if (a === 'pm' && hour !== 12) hour += 12;
+      if (a === 'am' && hour === 12) hour = 0;
+    }
+    return new Date(parseInt(year, 10), monthIndex, parseInt(day, 10), hour, minute, 0);
+  }
+  // "Month Day, Year, Hour:Minute am/pm"
+  const m = trimmed.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4}),\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
+  if (!m) return null;
+  const [, monthName, day, year, hourStr, minuteStr, ampm] = m;
+  const monthIndex = months[monthName.toLowerCase()];
+  if (monthIndex === undefined) return null;
+  let hour = parseInt(hourStr, 10);
+  const minute = minuteStr ? parseInt(minuteStr, 10) : 0;
+  if (ampm) {
+    const a = ampm.toLowerCase();
+    if (a === 'pm' && hour !== 12) hour += 12;
+    if (a === 'am' && hour === 12) hour = 0;
+  }
+  return new Date(parseInt(year, 10), monthIndex, parseInt(day, 10), hour, minute, 0);
+}
+</script>
+{{/contentFor}}

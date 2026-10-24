@@ -1,0 +1,31 @@
+{{!< default}}
+
+{{#page}}
+  {{> page-hero}}
+{{/page}}
+
+<section class="px-5 sm:px-6" data-plan="{{@site.portal_default_plan}}" data-plans="{{@site.portal_plans}}" data-member-status="{{#if @member}}{{@member.status}}{{else}}none{{/if}}"
+  x-init="$nextTick(() => { calculateDiscounts() })"
+>
+  {{#if @member.paid}}
+    {{!-- Redirect --}}
+    <script>window.location = '{{@site.url}}/membership/#/portal/account/';</script>
+  {{else if @member}}
+    {{!-- For free member show paid plans only --}}
+    {{> member-tiers type="paid"}}
+  {{else}}
+    {{!-- Show all plans --}}
+    {{> member-tiers type="free,paid"}}
+  {{/if}}
+
+  {{!-- To add some additional content create the /membership/ page --}}
+  {{#page}}
+    {{#if access}}
+      {{#if html}}
+        <article class="{{post_class}} mt-12 ghost-content prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+          {{content}}
+        </article>
+      {{/if}}
+    {{/if}}
+  {{/page}}
+</section>

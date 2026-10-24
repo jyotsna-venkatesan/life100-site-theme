@@ -1,0 +1,25 @@
+{{#get "posts" filter="tag:{{slug}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="5"}}
+  {{#if posts}}
+    <section class="" data-topic="{{../slug}}" data-topic-number="{{@number}}">
+      <div class="max-w-site mx-auto">
+        <h2 class="text-sm font-semibold! font-sans! uppercase border-b-3 border-brd">
+          <a href="{{../url}}" class="inline-block px-3 py-1 -mb-0.75 bg-brd text-bgr hover:bg-brand hover:text-brand-contrast">{{../name}}</a>
+        </h2>
+        <div class="grid gap-4 [&_[data-post-card-meta='bottom']]:hidden mt-5">
+          {{#foreach posts from="1" to="1"}}
+            {{> cards/post-card-vertical
+              card_class="border-b border-brd-soft pb-4"
+              excerpt_class="hidden"
+            }}
+          {{/foreach}}
+          {{#foreach posts from="2"}}
+            {{> cards/post-card-horizontal-sm
+              media_class="hidden"
+              card_class="not-last-of-type:border-b border-brd-soft not-last-of-type:pb-4 flex-row-reverse md:gap-4!"
+            }}
+          {{/foreach}}
+        </div>
+      </div>
+    </section>
+  {{/if}}
+{{/get}}

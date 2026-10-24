@@ -1,0 +1,38 @@
+{{{html}}}
+<aside class="gh-post-upgrade-cta bg-bgr-tone border border-brd-soft border-t-3 border-t-typ text-typ mt-8 max-w-150 mx-auto z-1">
+  <div class="gh-post-upgrade-cta-content">
+    {{#has visibility="paid"}}
+      <h2 class="text-typ! text-balance">
+        {{#is "page"}}
+          {{t "This page is for paying subscribers only"}}
+        {{else}}
+          {{t "This post is for paying subscribers only"}}
+        {{/is}}
+      </h2>
+    {{/has}}
+    {{#has visibility="members"}}
+      <h2 class="text-typ! text-balance">
+        {{#is "page"}}
+          {{t "This page is for subscribers only"}}
+        {{else}}
+          {{t "This post is for subscribers only"}}
+        {{/is}}
+      </h2>
+    {{/has}}
+    {{#has visibility="tiers"}}
+      <h2 class="text-typ! text-balance">
+        {{#is "page"}}
+          {{t "This page is for subscribers on the"}}<em class="text-brand">{{tiers}}</em> {{t "only"}}
+        {{else}}
+          {{t "This post is for subscribers on the"}}<em class="text-brand">{{tiers}}</em> {{t "only"}}
+        {{/is}}
+      </h2>
+    {{/has}}
+    {{#if @member}}
+      <a class="kg-button gh-btn rounded-btn! bg-brand! text-brand-contrast! hover:brightness-110 font-medium!" {{#if @custom.use_portal_links}}data-portal="account/plans" href="#/portal/account/plans"{{else}}href="/membership/"{{/if}}>{{t "Upgrade your account"}}</a>
+    {{else}}
+      <a class="kg-button gh-btn rounded-btn! bg-brand! text-brand-contrast! hover:brightness-110 font-medium!" {{#if @custom.use_portal_links}}data-portal="signup" href="#/portal/signup"{{else}}href="/membership/"{{/if}}>{{t "Subscribe now"}}</a>
+      <p class="text-typ"><small>{{t "Already have an account?"}} <a class="kg-link text-typ! hover:text-brand! hover:opacity-100! decoration-2! underline-offset-2!" {{#if @custom.use_portal_links}}data-portal="signin" href="#/portal/signin"{{else}}href="/signin/"{{/if}}>{{t "Sign in"}}</a></small></p>
+    {{/if}}
+  </div>
+</aside>

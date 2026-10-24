@@ -1,0 +1,24 @@
+{{!< default}}
+
+{{#post}}
+  {{> post-hero
+    type="no-image"
+    media_class="hidden"
+  }}
+
+  <article class="ghost-content prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+    {{content}}
+  </article>
+
+  {{> author-box}}
+
+  {{> post-tags}}
+
+  {{> comments}}
+
+  {{> related-tag}}
+
+  {{> related-author}}
+
+  {{> sections/sponsored}}
+{{/post}}

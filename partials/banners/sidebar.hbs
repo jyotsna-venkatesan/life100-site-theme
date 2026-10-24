@@ -1,0 +1,9 @@
+{{#get "pages" filter="slug:banner-sidebar" limit="1" as |banner|}}
+  {{#foreach banner}}
+    <section class="flex-1 {{#if @member.paid}}hidden{{/if}}" data-banner="sidebar">
+      <div class="max-w-site mx-auto sticky top-10">
+        {{content}}
+      </div>  
+    </section>
+  {{/foreach}}
+{{/get}}

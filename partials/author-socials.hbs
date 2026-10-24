@@ -1,0 +1,72 @@
+<ul class="flex flex-wrap gap-2 text-typ-tone {{ul_class}}">
+  {{#if twitter}}
+    <li class="flex items-center {{li_class}}">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="twitter"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-x" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if facebook}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="facebook"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-facebook" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if linkedin}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="linkedin"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-linkedin" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if bluesky}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="bluesky"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-bluesky" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if threads}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="threads"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-threads" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if mastodon}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="mastodon"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-mastodon" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if tiktok}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="tiktok"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-tiktok" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if youtube}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="youtube"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-youtube" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if instagram}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{social_url type="instagram"}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="brand-instagram" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+  {{#if website}}
+    <li class="flex items-center">
+      <a class="text-xs sm:text-sm p-1.5 bg-bgr-tone border border-brd-soft rounded-full font-medium flex items-center gap-1 self-start hover:border-typ hover:bg-typ hover:text-bgr {{a_class}}" href="{{website}}">
+        <span class="rounded-full bg-bgr-reverse text-typ-reverse">{{> icon name="link" icon_class="size-4 stroke-[2.5]"}}</span>
+      </a>
+    </li>
+  {{/if}}
+</ul>

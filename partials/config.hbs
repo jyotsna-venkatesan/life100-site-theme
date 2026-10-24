@@ -1,0 +1,35 @@
+{{!-- Global colors --}}
+<style>
+  :root {
+    --color-bgr: {{@custom.background_color}};
+    --color-bgr-tone: color-mix(in srgb, var(--color-bgr) 98%, var(--color-typ) 3%);
+    --color-typ: {{@custom.text_color}};
+    --color-typ-tone: color-mix(in srgb, var(--color-typ) 80%, var(--color-bgr) 20%);
+    --color-brd: {{@custom.border_color}};
+    --color-brd-soft: color-mix(in srgb, var(--color-brd) 10%, var(--color-bgr) 90%);
+    --font-weight-headings: var(--font-weight-{{@custom.headings_font_weight}});
+  }
+  h1,h2,h3,h4,h5,h6 {
+    font-weight: var(--font-weight-headings)!important;
+  }
+</style>
+
+{{!-- Theme Config & color scheme --}}
+<script>
+  const THEME_CONFIG = {
+    SITE_URL: '{{@site.url}}',
+    CONTENT_API_URL: '{{content_api_url}}',
+    CONTENT_API_KEY: '{{content_api_key}}',
+    API_VERSION: 'v6.0',
+    ENABLE_IMAGE_ZOOM: true,
+    PAGINATION: {
+      POSTS_PER_PAGE: parseInt('{{@config.posts_per_page}}'),
+      CURRENT_PAGE: parseInt('{{pagination.page}}'),
+      NEXT_PAGE: parseInt('{{pagination.next}}'),
+      NEXT_PAGE_LINK: '',
+      MAX_PAGES: parseInt('{{pagination.pages}}'), 
+      LAST_PAGE: `{{pagination.page}}` === `{{pagination.pages}}` ? true : false,
+      TOTAL: parseInt('{{pagination.total}}')
+    }
+  }
+</script>

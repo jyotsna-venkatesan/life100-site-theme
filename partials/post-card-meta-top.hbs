@@ -1,0 +1,50 @@
+<div class="inline-flex whitespace-nowrap font-sans font-normal uppercase text-[0.8rem] {{element_class}}" data-post-card-meta="top">
+  {{!-- Tags --}}
+  {{#if tags}}
+    <ul class="flex gap-2 font-semibold" data-post-card-tags>
+      {{#foreach tags limit="1"}}
+        <li><a href="{{url}}" class="text-brand decoration-2 underline-offset-2 hover:underline">{{name}}</a></li>
+      {{/foreach}}
+    </ul>
+  {{/if}}
+
+  {{!-- Visibility --}}
+  {{#match visibility "!=" "public"}}
+    <div class="inline-flex" data-post-card-visibility>
+      <span class="mx-2 text-brd-soft">/</span>
+      <span class="flex gap-0.5 items-center normal-case font-medium italic">
+        {{> icon name="bolt" icon_class="size-4 text-brand [&_svg]:fill-brand"}}
+        <span class="opacity-75">
+          {{#has visibility="tiers"}}{{tiers}}{{/has}}
+          {{#has visibility="members"}}{{t "Members-only"}}{{/has}}
+          {{#has visibility="paid"}}{{t "Paid-only"}}{{/has}}
+        </span>
+      </span>
+    </div>
+  {{/match}}
+
+  {{!-- Comment count --}}
+  {{#if @custom.post_card_comment_count}}
+    <div class="hidden sm:inline-flex" data-post-card-comment-count 
+      x-data="{ show: false }"
+      x-init="new MutationObserver(() => {
+        const count = $el.querySelector('a span')?.textContent || '0';
+        show = count && count !== '0';
+      }).observe($el, { childList: true, subtree: true })"
+      x-show="show">
+      <span class="inline mx-2.5 text-brd-soft">/</span>
+      
+      <a class="flex gap-1 items-center hover:text-brand lowercase italic font-medium" href="{{url}}#comments">
+        {{!-- {{t "comment"}} {{t "comments"}} --}}
+        {{>icon name="comments" icon_class="size-4 stroke-[1.5]" }}
+        {{comment_count
+          empty="0"
+          singular=(t 'comment')
+          plural=(t 'comments')
+          class="opacity-75"
+          autowrap="span"
+        }}
+      </a>
+    </div>
+  {{/if}}
+</div>

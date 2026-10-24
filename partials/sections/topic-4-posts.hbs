@@ -1,0 +1,22 @@
+{{#get "posts" filter="tag:{{slug}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="4"}}
+  {{#if posts}}
+    <section class="px-5 sm:px-6 mt-20" data-topic="{{../slug}}" data-topic-number="{{@number}}" data-layout-alt>
+      <div class="max-w-site mx-auto">
+        {{!-- {{t "See all"}} --}}
+        {{> section-heading 
+          section_title=../name 
+          section_link=../url 
+          section_link_text=(t 'See all')
+        }}
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {{#foreach posts from="1" to="4"}}
+            {{> cards/post-card-vertical
+              card_class=""
+              excerpt_class="hidden"
+            }}
+          {{/foreach}}
+        </div>
+      </div>
+    </section>
+  {{/if}}
+{{/get}}

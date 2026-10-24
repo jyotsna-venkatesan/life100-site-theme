@@ -1,0 +1,34 @@
+<script>
+window.GAMES = window.GAMES || {};
+
+window.GAMES['word-recall'] = {
+  title: 'Word Recall',
+  desc: 'Memorize a set of words, then type back as many as you can.',
+  max: 8,
+  icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M8 7h8"/><path d="M8 11h8"/></svg>',
+  study: 'Memorize these words!',
+  prompt: 'Type as many words as you can remember',
+  placeholder: 'Separate words with spaces or commas...',
+  multiline: true,
+  generate() { 
+    return shuffle(window.wordPool).slice(0, 8); 
+  },
+  render(words) { return words.map(w => `<span class="g-chip">${esc(w)}</span>`).join(''); },
+  score(words, input) {
+    const typed = input.toLowerCase().split(/[\s,]+/).filter(Boolean);
+    return words.filter(w => typed.includes(w)).length;
+  },
+  breakdown(words, input) {
+    const typed = input.toLowerCase().split(/[\s,]+/).filter(Boolean);
+    return `
+      <div class="g-breakdown-row">
+        <h3>The words</h3>
+        <div class="g-tags">${words.map(w => `<span class="g-tag ${typed.includes(w) ? 'hit' : 'miss'}">${typed.includes(w) ? '✓' : '✗'}${esc(w)}</span>`).join('')}</div>
+      </div>
+      <div class="g-breakdown-row">
+        <h3>What you typed</h3>
+        <div class="g-typed">${input.trim() ? esc(input) : '(Nothing entered)'}</div>
+      </div>`;
+  }
+};
+</script>

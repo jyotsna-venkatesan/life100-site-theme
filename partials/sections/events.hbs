@@ -1,0 +1,21 @@
+{{#if @custom.show_events}}
+  {{#get "posts" filter="tag:[event,hash-event]" include="tags,authors,tiers" limit="4" order="featured desc, published_at desc" as |events|}}
+    {{#if events}}
+      <section class="px-5 sm:px-6 mt-20" data-events>
+        <div class="max-w-site mx-auto">
+          {{!-- {{t "Events"}} {{t "See all"}} --}}
+          {{> section-heading 
+            section_title=(t 'Editor\'s Picks')
+          }}
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {{#foreach events}}
+              {{> cards/event-card
+                excerpt_class="line-clamp-3"
+              }}
+            {{/foreach}}
+          </div>
+        </div>
+      </section>
+    {{/if}}
+  {{/get}}
+{{/if}}

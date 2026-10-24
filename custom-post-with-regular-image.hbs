@@ -1,0 +1,24 @@
+{{!< default}}
+
+{{#post}}
+  {{> post-hero
+    type="regular-image"
+    media_class="max-w-content"
+  }}
+
+  <article class="ghost-content prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+    {{content}}
+  </article>
+
+  {{> author-box}}
+
+  {{> post-tags}}
+
+  {{> comments}}
+
+  {{> related-tag}}
+
+  {{> related-author}}
+
+  {{> sections/sponsored}}
+{{/post}}

@@ -1,0 +1,39 @@
+{{#get "posts" filter="tag:{{slug}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="5"}}
+  {{#if posts}}
+    <section class="px-5 sm:px-6 mt-20 {{../section_class}}" data-topic="{{../slug}}" data-topic-number="{{@number}}">
+      <div class="max-w-site mx-auto">
+        {{!-- {{t "See all"}} --}}
+        {{> section-heading 
+          section_title=../name 
+        }}
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="flex flex-col gap-3 sm:col-span-2 lg:col-span-1 max-w-lg sm:pr-6" data-topic-info>
+            {{#if ../description}}
+              <p class="text-base md:text-lg text-typ-tone text-balance leading-snug [&_a]:underline [&_a]:decoration-2 [&_a]:underline-offset-2 [&_a:hover]:text-brand">{{{../description}}}</p>
+            {{/if}}
+            <a href="{{../url}}" class="mt-1 font-sans text-xs md:text-[0.8rem] uppercase font-semibold text-typ hover:text-brand flex items-center gap-0.5 hover:gap-0.75">
+              <span>{{t "All in"}} {{../name}}</span>
+              {{> icon name="chevron-right" icon_class="size-3.25 stroke-[3]"}}
+            </a>
+          </div>
+          <div class="border-b border-brd-soft pb-5 sm:pb-0 sm:border-b-0 md:border-r md:pr-5" data-topic-main>
+            {{#foreach posts from="1" to="1"}}
+              {{> cards/post-card-vertical
+                card_class="[&_[data-post-card-type]]:lg:scale-150"
+                title_class="lg:text-2xl"
+                excerpt_class="md:text-lg"
+              }}
+            {{/foreach}}
+          </div>
+          <div class="flex flex-col gap-5" data-topic-secondary>
+            {{#foreach posts from="2" to="5"}}
+              {{> cards/post-card-horizontal-sm 
+                card_class="not-last-of-type:border-b border-brd-soft not-last-of-type:pb-5 flex-row-reverse md:gap-4!"
+              }}
+            {{/foreach}}
+          </div>
+        </div>
+      </div>
+    </section>
+  {{/if}}
+{{/get}}

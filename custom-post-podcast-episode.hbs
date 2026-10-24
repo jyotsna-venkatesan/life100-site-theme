@@ -1,0 +1,63 @@
+{{!< default}}
+
+{{#post}}
+  <section class="px-5 sm:px-6" data-post-hero="podcast-episode" x-data="{ podcast: null }" x-init="$nextTick(() => { podcast = getMetaInfo($el,'podcast') })" data-meta="{{codeinjection_foot}}">
+    <div class="max-w-site mx-auto my-8 flex items-center flex-col md:flex-row-reverse gap-4 bg-bgr-tone">
+      {{!-- Content --}}
+      <div class="text-typ-tone w-full flex-2 flex flex-col gap-4 mx-auto max-w-content p-6 pl-" data-post-hero-content>
+        
+        {{!-- Tag --}}
+        <div class="inline-flex whitespace-nowrap font-sans font-normal uppercase text-sm">
+          {{#if tags}}
+            <ul class="flex gap-2 font-semibold" data-post-card-tags>
+              {{#foreach tags limit="1"}}
+                <li><a href="{{url}}" class="text-brand decoration-2 underline-offset-2 hover:underline">{{name}}</a></li>
+              {{/foreach}}
+            </ul>
+          {{/if}}
+
+          {{!-- Episode? --}}
+          <template x-if="podcast"><span class="mx-2 text-brd-soft">/</span></template>
+          <template x-if="podcast">
+            <span class="text-typ-tone font-semibold" x-text="`{{t "Episode"}} ${podcast.episodeNumber}`"></span>
+          </template>
+        </div>
+
+        {{!-- Title --}}
+        <h1 class="text-typ font-semibold tracking-tight text-2xl md:text-3xl md:font-medium lg:text-4xl{{^is "post"}} xl:text-5xl{{/is}}">
+          {{title}}
+        </h1>
+
+        {{!-- Excerpt --}}
+        {{#if custom_excerpt}}
+          <p class="text-base md:text-lg">{{custom_excerpt}}</p>
+        {{/if}}
+
+        {{!-- Podcast info --}}
+      </div>
+
+      {{!-- Feature image --}}
+      {{#if feature_image}}
+        <figure class="flex-1 w-full h-full relative {{#if media_class}}{{media_class}}{{else}}max-w-content{{/if}}">
+          {{> image
+            image_type="post"
+            image_class="w-full object-cover rounded-theme aspect-1/1 bg-bgr-tone"
+            image_url=feature_image
+            size_s=true
+            size_m=true
+            size_l=true
+            size_xl=true
+            sizes="(max-width: 600px) 480px, 720px"
+            loading="eager"
+          }}
+          {{!-- Figcaption --}}
+          {{#if feature_image_caption}}<figcaption class="font-sans mt-1 text-xs opacity-80 text-typ-tone [&>a]:underline [&>a]:underline-offset-2 [&>a:hover]:text-brand text-center">{{feature_image_caption}}</figcaption>{{/if}}
+        </figure>
+      {{/if}}
+    </div>
+  </section>
+
+  <article class="ghost-content no-dropcap prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+    {{content}}
+  </article>
+{{/post}}

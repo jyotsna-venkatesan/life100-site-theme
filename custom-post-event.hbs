@@ -1,0 +1,66 @@
+{{!< default}}
+
+{{#post}}
+  <section class="px-5 sm:px-6" data-post-hero="event" x-data="{ event: null }" x-init="$nextTick(() => { event = getMetaInfo($el,'event') })" data-meta="{{codeinjection_foot}}">
+    <div class="max-w-site mx-auto py-8 flex items-center flex-col md:flex-row gap-6">
+
+      {{!-- Content --}}
+      <div class="text-typ-tone w-full flex-1 flex flex-col gap-4 mx-auto max-w-content" data-post-hero-content>
+
+        {{!-- Title --}}
+        <h1 class="text-typ font-semibold tracking-tight text-2xl md:text-3xl md:font-medium lg:text-4xl{{^is "post"}} xl:text-5xl{{/is}}">
+          {{title}}
+        </h1>
+
+        {{!-- Excerpt --}}
+        {{#if custom_excerpt}}
+          <p class="text-base md:text-lg">{{custom_excerpt}}</p>
+        {{/if}}
+
+        {{!-- Event info --}}
+        <template x-if="event">
+          <ul class="flex gap-2 flex-wrap text-sm font-medium font-sans whitespace-nowrap" x-show="event" x-cloak>      
+            <li x-show="event.date" class="flex items-center gap-1">
+              {{> icon name="calendar" icon_class="size-5 stroke-2"}}
+              <span x-text="event.date"></span>
+            </li>
+            <li x-show="event.location" class="flex items-center gap-1 before:content-['/'] before:mr-1 before:text-brd-soft">
+              {{> icon name="map-pin" icon_class="size-5 stroke-2"}}
+              <span x-text="event.location"></span>
+            </li>
+            <li x-show="event.registration && new Date() <= new Date(event.registration_deadline || new Date())" class="flex basis-full items-center gap-1 mt-1">
+              <a :href="event.registration" class="flex items-center gap-1 bg-typ text-bgr px-3 pl-4 py-1.5 hover:bg-brand hover:text-brand-contrast font-semibold">
+                <span>{{t "Register"}}</span>
+                {{> icon name="arrow-up-right" icon_class="size-4.5 stroke-[2.5]"}}
+              </a>
+            </li>
+          </ul>
+        </template>
+      </div>
+
+      {{!-- Feature image --}}
+      {{#if feature_image}}
+        <figure class="flex-1 w-full h-full relative {{#if media_class}}{{media_class}}{{else}}max-w-content{{/if}}">
+          {{> image
+            image_type="post"
+            image_class="w-full object-cover rounded-theme aspect-16/9 bg-bgr-tone"
+            image_url=feature_image
+            size_s=true
+            size_m=true
+            size_l=true
+            size_xl=true
+            sizes="(max-width: 600px) 480px, 720px"
+            loading="eager"
+          }}
+          {{!-- Figcaption --}}
+          {{#if feature_image_caption}}<figcaption class="font-sans mt-1 text-xs opacity-80 text-typ-tone [&>a]:underline [&>a]:underline-offset-2 [&>a:hover]:text-brand text-center">{{feature_image_caption}}</figcaption>{{/if}}
+        </figure>
+      {{/if}}
+
+    </div>
+  </section>
+
+  <article class="ghost-content no-dropcap prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+    {{content}}
+  </article>
+{{/post}}

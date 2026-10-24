@@ -1,0 +1,35 @@
+<aside class="{{aside_class}} px-5 sm:px-6 lg:px-0 flex-1 mt-8 flex flex-col gap-6 lg:border-l border-brd-soft lg:pl-6">
+
+  <div class="flex flex-col gap-6" x-data="{ activeTab: 'latest' }">
+    <div class="border-b-3 border-brd flex">
+      <button @click="activeTab = 'latest'" class="inline-block px-2.5 py-0.75 cursor-pointer text-[0.8rem] font-semibold font-sans uppercase" :class="activeTab === 'latest' ? 'bg-brd text-bgr' : 'hover:bg-brd-soft'">{{t "Latest"}}</button>
+      <button @click="activeTab = 'featured'" class="inline-block px-2.5 py-0.75 cursor-pointer text-[0.8rem] font-semibold font-sans uppercase" :class="activeTab === 'featured' ? 'bg-brd text-bgr' : 'hover:bg-brd-soft'">{{t "Featured"}}</button>
+    </div>
+
+    {{#get "posts" filter="featured:false+id:-{{id}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="5" as |latest|}}
+      <div class="flex flex-col gap-8 md:grid md:grid-cols-2 lg:flex lg:flex-col lg:gap-6" x-show="activeTab === 'latest'">
+        {{#foreach latest}}
+          {{> cards/post-card-horizontal-sm
+            card_class="not-last-of-type:border-b border-brd-soft not-last-of-type:pb-6"
+            image_loading="eager"
+          }}
+        {{/foreach}}
+      </div>
+    {{/get}}
+
+    {{#get "posts" filter="featured:true+id:-{{id}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="5" as |featured|}}
+      <div class="flex flex-col gap-8 md:grid md:grid-cols-2 lg:flex lg:flex-col lg:gap-6" x-show="activeTab === 'featured'">
+        {{#foreach featured}}
+          {{> cards/post-card-horizontal-sm
+            card_class="not-last-of-type:border-b border-brd-soft not-last-of-type:pb-6"
+            image_loading="lazy"
+          }}
+        {{/foreach}}
+      </div>
+    {{/get}}
+  </div>
+
+  {{> subscribe-cta
+    cta_class="mt-6"
+  }}
+</aside>

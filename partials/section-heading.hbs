@@ -1,0 +1,10 @@
+<div class="flex items-end mb-6" data-section-head>
+  <h2 class="text-2xl md:text-3xl lg:text-4xl font-[calc(var(--font-weight-headings)_+_100)]! leading-none -mb-1 {{title_class}}" data-section-title>{{section_title}}</h2>
+  <span class="flex-1 border-b-3 border-brd ml-3"></span>
+  {{#if section_link}}
+    <a href="{{section_link}}" class="group uppercase font-sans text-xs sm:text-sm font-semibold flex items-center gap-0.5 bg-brd px-2.5 pl-4 py-1.5 text-bgr hover:bg-brand hover:text-brand-contrast">
+      <span>{{section_link_text}}</span>
+      {{> icon name="chevron-right" icon_class="size-4 stroke-3"}}      
+    </a>
+  {{/if}}
+</div>

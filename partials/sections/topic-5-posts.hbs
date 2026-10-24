@@ -1,0 +1,142 @@
+{{#get "posts" filter="tag:{{slug}}+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="10"}}
+  {{#if posts}}
+    <section class="px-5 sm:px-6 mt-20" data-topic="{{../slug}}" data-topic-number="{{@number}}" data-layout-alt>
+      <div class="max-w-site mx-auto force-title-case">
+        {{> section-heading 
+          section_title=../name 
+          section_link=../url 
+          section_link_text=(t 'See all')
+        }}
+
+        {{!-- Navigation arrows --}}
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 16px;">
+          <button type="button" id="prev-{{../slug}}" onclick="topicNav('{{../slug}}', -1, event)" style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; border:none; background:#e5e5e5; cursor:not-allowed; opacity:0.5; box-shadow: 0 2px 6px rgba(0,0,0,0.12); pointer-events:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          {{#if posts.[5]}}
+            <button type="button" id="next-{{../slug}}" onclick="topicNav('{{../slug}}', 1, event)" style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; border:none; background:#3D251D; cursor:pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          {{else}}
+            <button type="button" id="next-{{../slug}}" style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; border:none; background:#e5e5e5; cursor:not-allowed; opacity:0.5; box-shadow: 0 2px 6px rgba(0,0,0,0.12); pointer-events:none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          {{/if}}
+        </div>
+
+        {{!-- Page 1: posts 1-5 --}}
+        <div id="topic-page-1-{{../slug}}">
+          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="sm:col-span-2 pb-5 border-b border-brd-soft lg:pb-0 lg:border-b-0 lg:pr-5 lg:border-r" data-topic-main>
+              {{#foreach posts from="1" to="1"}}
+                {{> cards/post-card-vertical
+                  card_class="[&_[data-post-card-type]]:lg:scale-175"
+                  title_class="lg:text-3xl"
+                  excerpt_class="md:text-lg"
+                }}
+              {{/foreach}}
+            </div>
+            <div class="flex flex-col gap-5 pb-5 border-b border-brd-soft sm:pb-0 sm:border-b-0 sm:pr-5 sm:border-r" data-topic-secondary="1">
+              {{#foreach posts from="2" to="2"}}
+                {{> cards/post-card-vertical
+                  card_class=""
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+              {{#foreach posts from="3" to="3"}}
+                {{> cards/post-card-vertical
+                  card_class="border-t border-brd-soft pt-5"
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+            </div>
+            <div class="flex flex-col gap-5" data-topic-secondary="2">
+              {{#foreach posts from="4" to="4"}}
+                {{> cards/post-card-vertical
+                  card_class=""
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+              {{#foreach posts from="5" to="5"}}
+                {{> cards/post-card-vertical
+                  card_class="border-t border-brd-soft pt-5"
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+            </div>
+          </div>
+        </div>
+
+        {{!-- Page 2: posts 6-10 --}}
+        <div id="topic-page-2-{{../slug}}" style="display:none;">
+          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="sm:col-span-2 pb-5 border-b border-brd-soft lg:pb-0 lg:border-b-0 lg:pr-5 lg:border-r" data-topic-main>
+              {{#foreach posts from="6" to="6"}}
+                {{> cards/post-card-vertical
+                  card_class="[&_[data-post-card-type]]:lg:scale-175"
+                  title_class="lg:text-3xl"
+                  excerpt_class="md:text-lg"
+                }}
+              {{/foreach}}
+            </div>
+            <div class="flex flex-col gap-5 pb-5 border-b border-brd-soft sm:pb-0 sm:border-b-0 sm:pr-5 sm:border-r" data-topic-secondary="1">
+              {{#foreach posts from="7" to="7"}}
+                {{> cards/post-card-vertical
+                  card_class=""
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+              {{#foreach posts from="8" to="8"}}
+                {{> cards/post-card-vertical
+                  card_class="border-t border-brd-soft pt-5"
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+            </div>
+            <div class="flex flex-col gap-5" data-topic-secondary="2">
+              {{#foreach posts from="9" to="9"}}
+                {{> cards/post-card-vertical
+                  card_class=""
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+              {{#foreach posts from="10" to="10"}}
+                {{> cards/post-card-vertical
+                  card_class="border-t border-brd-soft pt-5"
+                  excerpt_class="hidden"
+                }}
+              {{/foreach}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  {{/if}}
+{{/get}}
+
+<script>
+  var topicPages = {};
+  function topicNav(slug, dir, e) {
+    if (e) e.preventDefault();
+    if (!topicPages[slug]) topicPages[slug] = 1;
+    var current = topicPages[slug];
+    var next = current + dir;
+    if (next < 1 || next > 2) return;
+    document.getElementById('topic-page-' + current + '-' + slug).style.display = 'none';
+    document.getElementById('topic-page-' + next + '-' + slug).style.display = 'block';
+    topicPages[slug] = next;
+    var prevBtn = document.getElementById('prev-' + slug);
+    var nextBtn = document.getElementById('next-' + slug);
+    prevBtn.style.background = next === 1 ? '#e5e5e5' : '#3D251D';
+    prevBtn.style.opacity = next === 1 ? '0.5' : '1';
+    prevBtn.style.cursor = next === 1 ? 'not-allowed' : 'pointer';
+    prevBtn.style.pointerEvents = next === 1 ? 'none' : 'auto';
+    prevBtn.querySelector('svg').style.stroke = next === 1 ? '#999999' : 'white';
+    nextBtn.style.background = next === 2 ? '#e5e5e5' : '#3D251D';
+    nextBtn.style.opacity = next === 2 ? '0.5' : '1';
+    nextBtn.style.cursor = next === 2 ? 'not-allowed' : 'pointer';
+    nextBtn.style.pointerEvents = next === 2 ? 'none' : 'auto';
+    nextBtn.querySelector('svg').style.stroke = next === 2 ? '#999999' : 'white';
+  }
+</script>

@@ -1,0 +1,33 @@
+{{!< default}}
+
+{{#post}}
+  <section class="lg:px-6 lg:[&_section]:px-0! lg:[&_[data-post-info]]:px-0! lg:[&_article]:[--gap:0]!" style="--container-content: 760px;" data-post-with-sidebar>
+    <div class="max-w-site mx-auto flex flex-col gap-6 lg:flex-row">
+      <div class="flex-2">
+        {{> post-hero
+          type="with-sidebar"
+        }}
+
+        <article class="ghost-content prose prose-lg prose-theme"{{#unless access}} data-preview{{/unless}}>
+          {{content}}
+        </article>
+
+        {{> author-box}}
+
+        {{> post-tags}}
+
+        {{> comments
+          wrapper_class="mb-0!"
+        }}
+      </div>
+      
+      {{> post-sidebar}}
+    </div>
+  </section>
+
+  {{> related-tag}}
+
+  {{> related-author}}
+
+  {{> sections/sponsored}}
+{{/post}}

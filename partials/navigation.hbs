@@ -1,0 +1,11 @@
+<ul class="{{ul_class}}">
+  {{#foreach navigation}}
+    <li class="{{link_class for=(url) class=(concat "nav-" slug)}} {{../li_class}}{{#match label.[0] "-"}} is-subitem{{/match}}{{#match url "#"}} nav-toggle{{/match}}" 
+      data-label="{{label}}" data-slug="{{slug}}" data-length="{{label.length}}">
+      <a class="{{../a_class}}" href="{{url absolute="true"}}"{{#match url.[0] "#"}} role="button"{{/match}}
+        {{#match url "#"}}@click="toggleDropdown(event);return false;" aria-haspopup="true" aria-expanded="false"{{/match}}>
+        <span>{{label}}</span>
+      </a>
+    </li>
+  {{/foreach}}
+</ul>

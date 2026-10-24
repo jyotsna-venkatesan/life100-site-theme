@@ -1,0 +1,64 @@
+{{!< default}}
+
+{{!-- Hero --}}
+{{#author}}
+  <section class="px-5 sm:px-6" data-author-hero>
+    <div class="max-w-site mx-auto flex flex-col-reverse md:flex-row gap-6 py-12">
+      <div class="max-w-133 flex flex-col justify-center gap-3 md:gap-4 py-4">
+        <h1 class="font-semibold tracking-tight text-3xl sm:text-4xl md:text-5xl">{{name}}</h1>
+        <div class="">
+          {{!-- {{#if profile_image}}
+            <figure class="flex-1 h-full w-full left-0 top-0 max-w-30 float-left mr-4">
+              {{> image
+                picture_class="flex h-full"
+                image_type="post"
+                image_class="w-full object-cover object-center rounded-theme aspect-square"
+                image_url=profile_image
+                size_s=true
+                size_m=true
+                sizes="120px"
+                loading="eager"
+              }}
+            </figure>
+          {{/if}} --}}
+          {{#if bio}}
+            <p class="text-lg md:text-xl text-typ-tone text-balance">{{bio}}</p>
+          {{/if}}
+        </div>
+        {{> author-socials }}
+      </div>
+      {{#if profile_image}}
+        <figure class="flex-1 h-full w-full left-0 top-0 max-w-40 lg:max-w-60">
+          {{> image
+            picture_class="flex h-full"
+            image_type="post"
+            image_class="w-full object-cover object-center rounded-theme aspect-square"
+            image_url=profile_image
+            size_s=true
+            size_m=true
+            size_l=true
+            size_xl=true
+            sizes="(max-width: 600px) 480px, (max-width: 1080px) 940px, 1200px"
+            loading="eager"
+          }}
+        </figure>
+      {{/if}}
+    </div>
+  </section>
+{{/author}}
+
+<section class="px-5 sm:px-6">
+  <div class="max-w-site mx-auto">
+    <div class="flex flex-col md:flex-row gap-8 lg:gap-10">
+      <div class="flex-3 max-w-200 border-t-3 border-brd-soft pt-8">
+        {{> post-feed 
+          feed_type="latest"
+        }}
+
+        {{> pagination }}
+      </div>
+
+      {{> sidebar}}
+    </div>
+  </div>
+</section>  
