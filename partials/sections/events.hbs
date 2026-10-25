@@ -1,21 +1,60 @@
 {{#if @custom.show_events}}
-  {{#get "posts" filter="tag:[event,hash-event]" include="tags,authors,tiers" limit="4" order="featured desc, published_at desc" as |events|}}
-    {{#if events}}
-      <section class="px-5 sm:px-6 mt-20" data-events>
-        <div class="max-w-site mx-auto">
-          {{!-- {{t "Events"}} {{t "See all"}} --}}
-          {{> section-heading 
-            section_title=(t 'Editor\'s Picks')
-          }}
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {{#foreach events}}
-              {{> cards/event-card
-                excerpt_class="line-clamp-3"
-              }}
-            {{/foreach}}
-          </div>
-        </div>
-      </section>
-    {{/if}}
-  {{/get}}
+  <section class="px-5 sm:px-6 mt-20" data-events>
+    <div class="max-w-site mx-auto">
+      {{> section-heading 
+        section_title=(t "Editor's Picks")
+      }}
+      <div class="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        
+        {{!-- Card 1: Longevity --}}
+        <a href="https://6090-club.ghost.io/events/longevity/" class="flex flex-col gap-3 group hover:opacity-90 transition-opacity">
+          <figure class="block rounded-theme overflow-hidden bg-[#eadecc]">
+            <img data-asset-key="card-longevity" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" alt="Longevity" class="w-full aspect-[16/9] object-cover rounded-[inherit] transition-transform duration-300 group-hover:scale-105" loading="lazy">
+          </figure>
+          <h3 class="text-base font-semibold md:text-lg leading-tight">Longevity</h3>
+        </a>
+
+        {{!-- Card 2: Health & Wellness --}}
+        <a href="https://6090-club.ghost.io/tag/health-wellness/" class="flex flex-col gap-3 group hover:opacity-90 transition-opacity">
+          <figure class="block rounded-theme overflow-hidden bg-[#eadecc]">
+            <img data-asset-key="card-health-wellness" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" alt="Health &amp; Wellness" class="w-full aspect-[16/9] object-cover rounded-[inherit] transition-transform duration-300 group-hover:scale-105" loading="lazy">
+          </figure>
+          <h3 class="text-base font-semibold md:text-lg leading-tight">Health &amp; Wellness</h3>
+        </a>
+
+        {{!-- Card 3: Games --}}
+        <a href="https://6090-club.ghost.io/games/" class="flex flex-col gap-3 group hover:opacity-90 transition-opacity">
+          <figure class="block rounded-theme overflow-hidden bg-[#eadecc]">
+            <img data-asset-key="card-games" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" alt="Games" class="w-full aspect-[16/9] object-cover rounded-[inherit] transition-transform duration-300 group-hover:scale-105" loading="lazy">
+          </figure>
+          <h3 class="text-base font-semibold md:text-lg leading-tight">Games</h3>
+        </a>
+
+        {{!-- Card 4: Travel --}}
+        <a href="https://6090-club.ghost.io/tag/travel/" class="flex flex-col gap-3 group hover:opacity-90 transition-opacity">
+          <figure class="block rounded-theme overflow-hidden bg-[#eadecc]">
+            <img data-asset-key="card-travel" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" alt="Travel" class="w-full aspect-[16/9] object-cover rounded-[inherit] transition-transform duration-300 group-hover:scale-105" loading="lazy">
+          </figure>
+          <h3 class="text-base font-semibold md:text-lg leading-tight">Travel</h3>
+        </a>
+
+        {{!-- Card 5: Leisure --}}
+        <a href="https://6090-club.ghost.io/tag/leisure/" class="flex flex-col gap-3 group hover:opacity-90 transition-opacity">
+          <figure class="block rounded-theme overflow-hidden bg-[#eadecc]">
+            <img data-asset-key="card-leisure" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" alt="Leisure" class="w-full aspect-[16/9] object-cover rounded-[inherit] transition-transform duration-300 group-hover:scale-105" loading="lazy">
+          </figure>
+          <h3 class="text-base font-semibold md:text-lg leading-tight">Leisure</h3>
+        </a>
+
+        {{!-- Card 6: Sixth Card --}}
+        <a href="URL_FOR_SIXTH_CARD" class="flex flex-col gap-3 group hover:opacity-90 transition-opacity">
+          <figure class="block rounded-theme overflow-hidden bg-[#eadecc]">
+            <img data-asset-key="card-card6" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E" alt="Sixth card" class="w-full aspect-[16/9] object-cover rounded-[inherit] transition-transform duration-300 group-hover:scale-105" loading="lazy">
+          </figure>
+          <h3 class="text-base font-semibold md:text-lg leading-tight">Sixth Card Title</h3>
+        </a>
+
+      </div>
+    </div>
+  </section>
 {{/if}}
