@@ -71,6 +71,20 @@
           </div>
 
           <div id="g-results" hidden></div>
+
+          {{!-- Persistent In-Game Bottom Navigation Controls --}}
+          <div class="g-play-footer">
+            <button type="button" class="g-btn g-btn-dark g-btn-sm" id="btn-another-game" onclick="handleAnotherGame()">
+              Another Game
+            </button>
+            <button type="button" class="g-btn g-btn-outline g-btn-sm" id="btn-end-game" onclick="handleEndGame()">
+              End Game
+            </button>
+            <button type="button" class="g-btn g-btn-orange g-btn-sm" id="btn-next-level" onclick="handleNextLevel()">
+              Next Level &rarr;
+            </button>
+          </div>
+
         </div>
       </div>
 

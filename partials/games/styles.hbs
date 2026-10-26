@@ -285,4 +285,45 @@
     .sp-board { gap: 8px !important; }
     .sp-board .og-tile { padding: 4px; }
   }
+
+  /* Persistent Game Navigation Bar */
+.g-play-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(61, 37, 29, 0.12);
+  flex-wrap: wrap;
+}
+
+.g-play-footer .g-btn {
+  flex: 1 1 auto;
+  min-width: 110px;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Secondary outline style for End Game */
+.g-btn-outline {
+  background-color: transparent !important;
+  color: #3D251D !important;
+  border: 1px solid rgba(61, 37, 29, 0.25) !important;
+}
+
+.g-btn-outline:hover {
+  background-color: rgba(61, 37, 29, 0.06) !important;
+  border-color: #3D251D !important;
+}
+
+@media (max-width: 640px) {
+  .g-play-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .g-play-footer .g-btn {
+    width: 100%;
+  }
+}
 </style>

@@ -82,6 +82,46 @@ function showView(name) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+/* ---------- Persistent Game Navigation Handlers ---------- */
+function abortActiveGameLoop() {
+  cancelTimer();
+  if (window.nb && window.nb.tap) window.nb.tap = null;
+  if (window.gameTimerInterval) { clearInterval(window.gameTimerInterval); window.gameTimerInterval = null; }
+  if (window.studyTimerTimeout) { clearTimeout(window.studyTimerTimeout); window.studyTimerTimeout = null; }
+
+  $('g-timer').hidden = true;
+  $('g-input-wrap').hidden = true;
+  $('g-results').hidden = true;
+}
+
+function handleNextLevel() {
+  if (level < 3) {
+    const unlocked = getUnlocked(activeGame);
+    if (level + 1 <= unlocked) {
+      abortActiveGameLoop();
+      startLevel(level + 1);
+    } else {
+      const g = window.GAMES[activeGame];
+      const needed = g.unlockAt ?? g.max;
+      alert(`Level ${level + 1} is locked! Score at least ${needed}/${g.max} on Level ${level} to unlock it.`);
+    }
+  } else {
+    alert("You're already on the highest level (Hard)!");
+  }
+}
+
+function handleAnotherGame() {
+  abortActiveGameLoop();
+  showHub();
+}
+
+function handleEndGame() {
+  if (confirm("Are you sure you want to end this game?")) {
+    abortActiveGameLoop();
+    openLevels(activeGame);
+  }
+}
+
 /* ---------- Hub ---------- */
 function gameStars(id) {
   let s = 0;
@@ -170,8 +210,33 @@ function startRound() {
   $('play-instructions').textContent = typeof g.study === 'function' ? g.study(level) : g.study;
 
   $('g-results').hidden = true;
-  $('g-results').innerHTML = '';$('g-input-wrap').hidden = true;
+  $('g-results').innerHTML = '';
+  $('g-input-wrap').hidden = true;
   $('g-stage').hidden = false;
+
+  // 1. Reveal in-game footer buttons during active play
+  const footer = document.querySelector('.g-play-footer');
+  if (footer) footer.style.display = 'flex';
+
+  // 2. Style "Next Level" according to unlock status
+  const nextBtn = $('btn-next-level');
+  if (nextBtn) {
+    const unlocked = getUnlocked(activeGame);
+    const canGoNext = (level < 3) && (level + 1 <= unlocked);
+
+    if (canGoNext) {
+      nextBtn.disabled = false;
+      nextBtn.className = 'g-btn g-btn-orange g-btn-sm';
+      nextBtn.textContent = 'Next Level →';
+      nextBtn.title = '';
+    } else {
+      nextBtn.disabled = true;
+      nextBtn.className = 'g-btn g-btn-dark g-btn-sm';
+      nextBtn.style.opacity = '0.55';
+      nextBtn.textContent = level >= 3 ? 'Max Level' : '🔒 Next Level';
+      nextBtn.title = level >= 3 ? "You're on the highest level" : "Complete current level to unlock";
+    }
+  }
 
   if (g.interactive) {
     $('g-timer').hidden = true;
@@ -188,7 +253,7 @@ function startRound() {
   showView('play');
 
   const ms = LEVELS[level].sec * 1000;
-  const fill = $('g-timer-fill'), label =$('g-timer-label');
+  const fill = $('g-timer-fill'), label = $('g-timer-label');
   fill.style.width = '100%';
   fill.classList.remove('low');
   label.textContent = LEVELS[level].sec + 's';
@@ -210,7 +275,7 @@ function beginRecall() {
   $('g-stage').innerHTML = `<div class="g-hidden-msg"><div class="g-hidden-q">?</div><div>Hidden! What did you see?</div></div>`;
 
   $('g-input-label').textContent = g.prompt;
-  const area = $('g-input-area'), text =$('g-input-text');
+  const area = $('g-input-area'), text = $('g-input-text');
   area.hidden = !g.multiline;
   text.hidden = g.multiline;
   const field = g.multiline ? area : text;
@@ -222,7 +287,7 @@ function beginRecall() {
 
 function submitAnswer() {
   const g = window.GAMES[activeGame];
-  const input = (g.multiline ? $('g-input-area') :$('g-input-text')).value;
+  const input = (g.multiline ? $('g-input-area') : $('g-input-text')).value;
   showResults(g.score(roundData, input), g.breakdown(roundData, input));
 }
 
@@ -246,7 +311,12 @@ function showResults(score, breakdownHTML) {
   $('g-timer').hidden = true;
   $('g-stage').hidden = true;
   $('g-input-wrap').hidden = true;
-  $('play-instructions').textContent = 'Round complete!';$('hud-best').textContent = `★ Best ${rec.best}/${g.max}`;
+  $('play-instructions').textContent = 'Round complete!';
+  $('hud-best').textContent = `★ Best ${rec.best}/${g.max}`;
+
+  // Hide the in-game bottom bar while on the results screen
+  const footer = document.querySelector('.g-play-footer');
+  if (footer) footer.style.display = 'none';
 
   $('g-results').innerHTML = `
     <div class="g-result">
