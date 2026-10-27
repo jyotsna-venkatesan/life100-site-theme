@@ -27,6 +27,8 @@
         {{!-- Page 1: posts 1-5 --}}
         <div id="topic-page-1-{{../slug}}">
           <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+            {{!-- Main post --}}
             <div class="sm:col-span-2 pb-5 border-b border-brd-soft lg:pb-0 lg:border-b-0 lg:pr-5 lg:border-r" data-topic-main>
               {{#foreach posts from="1" to="1"}}
                 {{> cards/post-card-vertical
@@ -36,40 +38,47 @@
                 }}
               {{/foreach}}
             </div>
-            <div class="flex flex-col gap-5 pb-5 border-b border-brd-soft sm:pb-0 sm:border-b-0 sm:pr-5 sm:border-r" data-topic-secondary="1">
+
+            {{!-- Smaller posts 2 and 3 --}}
+            <div class="grid grid-rows-2 gap-5 pb-5 border-b border-brd-soft sm:pb-0 sm:border-b-0 sm:pr-5 sm:border-r" data-topic-secondary="1">
               {{#foreach posts from="2" to="2"}}
                 {{> cards/post-card-vertical
-                  card_class=""
+                  card_class="h-full"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
               {{#foreach posts from="3" to="3"}}
                 {{> cards/post-card-vertical
-                  card_class="border-t border-brd-soft pt-5"
+                  card_class="h-full border-t border-brd-soft pt-5"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
             </div>
-            <div class="flex flex-col gap-5" data-topic-secondary="2">
+
+            {{!-- Smaller posts 4 and 5 --}}
+            <div class="grid grid-rows-2 gap-5" data-topic-secondary="2">
               {{#foreach posts from="4" to="4"}}
                 {{> cards/post-card-vertical
-                  card_class=""
+                  card_class="h-full"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
               {{#foreach posts from="5" to="5"}}
                 {{> cards/post-card-vertical
-                  card_class="border-t border-brd-soft pt-5"
+                  card_class="h-full border-t border-brd-soft pt-5"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
             </div>
+
           </div>
         </div>
 
         {{!-- Page 2: posts 6-10 --}}
         <div id="topic-page-2-{{../slug}}" style="display:none;">
           <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+            {{!-- Main post --}}
             <div class="sm:col-span-2 pb-5 border-b border-brd-soft lg:pb-0 lg:border-b-0 lg:pr-5 lg:border-r" data-topic-main>
               {{#foreach posts from="6" to="6"}}
                 {{> cards/post-card-vertical
@@ -79,34 +88,39 @@
                 }}
               {{/foreach}}
             </div>
-            <div class="flex flex-col gap-5 pb-5 border-b border-brd-soft sm:pb-0 sm:border-b-0 sm:pr-5 sm:border-r" data-topic-secondary="1">
+
+            {{!-- Smaller posts 7 and 8 --}}
+            <div class="grid grid-rows-2 gap-5 pb-5 border-b border-brd-soft sm:pb-0 sm:border-b-0 sm:pr-5 sm:border-r" data-topic-secondary="1">
               {{#foreach posts from="7" to="7"}}
                 {{> cards/post-card-vertical
-                  card_class=""
+                  card_class="h-full"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
               {{#foreach posts from="8" to="8"}}
                 {{> cards/post-card-vertical
-                  card_class="border-t border-brd-soft pt-5"
+                  card_class="h-full border-t border-brd-soft pt-5"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
             </div>
-            <div class="flex flex-col gap-5" data-topic-secondary="2">
+
+            {{!-- Smaller posts 9 and 10 --}}
+            <div class="grid grid-rows-2 gap-5" data-topic-secondary="2">
               {{#foreach posts from="9" to="9"}}
                 {{> cards/post-card-vertical
-                  card_class=""
+                  card_class="h-full"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
               {{#foreach posts from="10" to="10"}}
                 {{> cards/post-card-vertical
-                  card_class="border-t border-brd-soft pt-5"
+                  card_class="h-full border-t border-brd-soft pt-5"
                   excerpt_class="hidden"
                 }}
               {{/foreach}}
             </div>
+
           </div>
         </div>
 
@@ -117,22 +131,31 @@
 
 <script>
   var topicPages = {};
+
   function topicNav(slug, dir, e) {
     if (e) e.preventDefault();
+
     if (!topicPages[slug]) topicPages[slug] = 1;
+
     var current = topicPages[slug];
     var next = current + dir;
+
     if (next < 1 || next > 2) return;
+
     document.getElementById('topic-page-' + current + '-' + slug).style.display = 'none';
     document.getElementById('topic-page-' + next + '-' + slug).style.display = 'block';
+
     topicPages[slug] = next;
+
     var prevBtn = document.getElementById('prev-' + slug);
     var nextBtn = document.getElementById('next-' + slug);
+
     prevBtn.style.background = next === 1 ? '#e5e5e5' : '#3D251D';
     prevBtn.style.opacity = next === 1 ? '0.5' : '1';
     prevBtn.style.cursor = next === 1 ? 'not-allowed' : 'pointer';
     prevBtn.style.pointerEvents = next === 1 ? 'none' : 'auto';
     prevBtn.querySelector('svg').style.stroke = next === 1 ? '#999999' : 'white';
+
     nextBtn.style.background = next === 2 ? '#e5e5e5' : '#3D251D';
     nextBtn.style.opacity = next === 2 ? '0.5' : '1';
     nextBtn.style.cursor = next === 2 ? 'not-allowed' : 'pointer';

@@ -1,10 +1,15 @@
 <article class="{{post_class}} {{card_class}} relative flex flex-col h-full bg-bgr-tone overflow-hidden group" data-post-card="video">
-  
+
   {{#if feature_image}}
-    <a href="{{url}}" class="relative block overflow-hidden group">
-      <figure class="block relative aspect-video" role="none">
-        <img src="{{img_url feature_image size="m"}}" alt="{{title}}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-        
+    <a href="{{url}}" class="relative block w-full overflow-hidden group">
+      <figure class="relative w-full overflow-hidden bg-black/10" role="none">
+        <img 
+          src="{{img_url feature_image size="m"}}" 
+          alt="{{title}}" 
+          class="w-full object-cover block group-hover:scale-105 transition-transform duration-500" 
+          style="aspect-ratio: 16 / 9; object-fit: cover; width: 100%;"
+          loading="lazy"
+        >
         <div class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
           <div class="bg-black/40 group-hover:bg-brand transition-colors p-4 rounded-full backdrop-blur-sm border border-white/20">
             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -14,30 +19,33 @@
     </a>
   {{/if}}
 
-  <div class="flex flex-col gap-2.5 p-6" data-post-card-content>
-    <div class="flex items-center gap-2 text-[0.75rem] uppercase font-bold tracking-wider">
-      {{#foreach tags limit="1"}}
-        <a href="{{url}}" class="text-brand hover:underline">{{name}}</a>
-      {{/foreach}}
+  <div class="flex flex-col flex-1 justify-between gap-2.5 p-6" data-post-card-content>
+    <div>
+      <div class="flex items-center gap-2 text-[0.75rem] uppercase font-bold tracking-wider mb-2">
+        {{#foreach tags limit="1"}}
+          <a href="{{url}}" class="text-brand hover:underline">{{name}}</a>
+        {{/foreach}}
 
-      {{!-- Display Internal Tag as duration (e.g., #04:30) --}}
-      {{#foreach tags}}
-        {{#if (has tag="#*")}}
-          {{#if (has tag=name)}}
-            <span class="text-typ-tone/60 border-l border-typ-tone/20 pl-2">
-              {{name}}
-            </span>
+        {{!-- Display Internal Tag as duration (e.g., #04:30) --}}
+        {{#foreach tags}}
+          {{#if (has tag="#*")}}
+            {{#if (has tag=name)}}
+              <span class="text-typ-tone/60 border-l border-typ-tone/20 pl-2">
+                {{name}}
+              </span>
+            {{/if}}
           {{/if}}
-        {{/if}}
-      {{/foreach}}
-    </div>
+        {{/foreach}}
+      </div>
 
-    <h3 class="text-lg font-semibold leading-tight hover:text-brand transition-colors">
-      <a href="{{url}}">{{title}}</a>
-    </h3>
+      <h3 class="text-lg font-semibold leading-tight hover:text-brand transition-colors line-clamp-2">
+        <a href="{{url}}">{{title}}</a>
+      </h3>
+    </div>
 
     {{#if custom_excerpt}}
       <p class="text-sm text-typ-tone leading-normal {{excerpt_class}}">{{custom_excerpt}}</p>
     {{/if}}
   </div>
+
 </article>
