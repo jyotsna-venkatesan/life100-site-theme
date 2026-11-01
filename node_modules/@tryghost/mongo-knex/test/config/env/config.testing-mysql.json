@@ -1,0 +1,10 @@
+{
+    "database": {
+        "client": "mysql2",
+        "connection": {
+            "user": "root",
+            "password": "",
+            "database": "mk_testing"
+        }
+    }
+}

@@ -104,15 +104,6 @@
         "default": "medium",
         "description": "Set the font weight for headings"
       },
-      "header_logo_position": {
-        "type": "select",
-        "options": [
-          "left",
-          "center"
-        ],
-        "default": "left",
-        "description": "Set the position of the logo in the main header"
-      },
       "use_portal_links": {
         "type": "boolean",
         "default": true,
@@ -187,12 +178,6 @@
         "type": "boolean",
         "default": true,
         "description": "Show the podcasts section on the homepage (from /podcasts/ page)",
-        "group": "homepage"
-      },
-      "show_videos": {
-        "type": "boolean",
-        "default": true,
-        "description": "Show the videos section on the homepage (posts tagged 'video')",
         "group": "homepage"
       },
       "show_writers": {
