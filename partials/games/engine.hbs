@@ -73,7 +73,13 @@ let level = 1;
 let roundData = null;
 let tickId = null;
 
-function cancelTimer() { if (tickId) { clearInterval(tickId); tickId = null; } }
+function cancelTimer() { 
+  if (tickId) { 
+    clearInterval(tickId); 
+    clearTimeout(tickId); 
+    tickId = null; 
+  } 
+}
 
 function showView(name) {
   cancelTimer();
@@ -85,7 +91,7 @@ function showView(name) {
 /* ---------- Persistent Game Navigation Handlers ---------- */
 function abortActiveGameLoop() {
   cancelTimer();
-  if (window.nb && window.nb.tap) window.nb.tap = null;
+  if (window.nb) window.nb.tap = null;
   if (window.gameTimerInterval) { clearInterval(window.gameTimerInterval); window.gameTimerInterval = null; }
   if (window.studyTimerTimeout) { clearTimeout(window.studyTimerTimeout); window.studyTimerTimeout = null; }
 
@@ -214,11 +220,11 @@ function startRound() {
   $('g-input-wrap').hidden = true;
   $('g-stage').hidden = false;
 
-  // 1. Reveal in-game footer buttons during active play
+  // Reveal bottom footer buttons by default
   const footer = document.querySelector('.g-play-footer');
   if (footer) footer.style.display = 'flex';
 
-  // 2. Style "Next Level" according to unlock status
+  // Configure Next Level button state
   const nextBtn = $('btn-next-level');
   if (nextBtn) {
     const unlocked = getUnlocked(activeGame);
@@ -238,6 +244,7 @@ function startRound() {
     }
   }
 
+  // Interactive games (like Shape Match) manage their own stage and footer display
   if (g.interactive) {
     $('g-timer').hidden = true;
     $('g-stage').innerHTML = '';
@@ -314,7 +321,6 @@ function showResults(score, breakdownHTML) {
   $('play-instructions').textContent = 'Round complete!';
   $('hud-best').textContent = `★ Best ${rec.best}/${g.max}`;
 
-  // Hide the in-game bottom bar while on the results screen
   const footer = document.querySelector('.g-play-footer');
   if (footer) footer.style.display = 'none';
 

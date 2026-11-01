@@ -62,6 +62,10 @@ window.GAMES['n-back'] = {
     let responded = false, pending = '', live = false;
     let card, status, prog;
 
+    // Keep bottom action buttons hidden during intro/instructions
+    const footer = document.querySelector('.g-play-footer');
+    if (footer) footer.style.display = 'none';
+
     stage.innerHTML = `
       <div class="nb-wrap">
         <p class="nb-intro">${cfg.n === 1
@@ -80,6 +84,9 @@ window.GAMES['n-back'] = {
     }
 
     function begin() {
+      // Reveal in-game navigation controls once game actually starts
+      if (footer) footer.style.display = 'flex';
+
       stage.innerHTML = `
         <div class="nb-wrap">
           <div class="nb-progress"></div>
@@ -143,10 +150,6 @@ window.GAMES['n-back'] = {
             <span class="g-tag ${misses ? 'miss' : 'hit'}">${misses ? '✗' : '✓'} ${misses} missed</span>
             <span class="g-tag ${falseAlarms ? 'miss' : 'hit'}">${falseAlarms ? '✗' : '✓'} ${falseAlarms} wrong tap${falseAlarms === 1 ? '' : 's'}</span>
           </div>
-        </div>
-        <div class="g-breakdown-row">
-          <h3>How the score works</h3>
-          <div class="g-typed">Matches caught minus wrong taps (never below 0) = ${score}</div>
         </div>`);
     }
   }
