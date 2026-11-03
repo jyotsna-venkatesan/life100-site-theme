@@ -101,13 +101,13 @@ async function syncRiddlesFromGhost() {
 syncRiddlesFromGhost();
 
 window.GAMES['riddles'] = {
-  title: 'Lateral Riddles',
-  desc: 'Classic lateral puzzles designed to test assumptions and out-of-the-box deduction.',
+  title: 'Clever Riddles',
+  desc: 'Classic clever puzzles designed to test assumptions and out-of-the-box deduction.',
   max: RIDDLES_PER_ROUND,
   interactive: true,
   icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><path d="M9 21h6"/></svg>',
   study: 'Read carefully, form a hypothesis in your mind, then reveal the solution to test your deduction.',
-  levelSub: 'Pick how complex the lateral thinking gets.',
+  levelSub: 'Pick how complex the clever thinking gets.',
   levelNote: l => ['Clear lateral clues', 'Physical & sequential logic', 'Counter-intuitive mind benders'][l - 1],
   unlockAt: 2,
 
@@ -137,7 +137,7 @@ window.GAMES['riddles'] = {
 
           <div class="rd-hint-container">
             <button type="button" class="rd-hint-trigger" id="rd-hint-btn">
-              💡 Need a lateral hint?
+              💡 Need a hint?
             </button>
             <div class="rd-hint-content" id="rd-hint-box" style="display:none;">
               <em>${esc(item.hint)}</em>
