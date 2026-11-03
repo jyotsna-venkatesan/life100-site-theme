@@ -326,4 +326,190 @@
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   LATERAL RIDDLES (FLASHCARD STYLE)
+   ========================================================================== */
+.rd-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+
+.rd-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(61, 37, 29, 0.1);
+  padding-bottom: 12px;
+}
+
+.rd-badge {
+  background-color: rgba(61, 37, 29, 0.08);
+  color: #3D251D;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.rd-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #3D251D;
+  font-weight: 700;
+}
+
+.rd-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(61, 37, 29, 0.14);
+  border-left: 5px solid #fc9504;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.rd-riddle {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #2b1810;
+  margin: 0;
+  font-weight: 500;
+}
+
+.rd-hint-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rd-hint-trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #c96b00;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: left;
+}
+
+.rd-hint-content {
+  background: rgba(252, 149, 4, 0.08);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #5a362c;
+  line-height: 1.5;
+}
+
+.rd-stage-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.rd-prompt-instruction {
+  font-size: 0.925rem;
+  color: rgba(61, 37, 29, 0.7);
+  margin: 0;
+  text-align: center;
+}
+
+.rd-solution-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: fadeIn 0.3s ease;
+}
+
+.rd-solution-box {
+  background-color: #fffaf5;
+  border: 1.5px solid #fc9504;
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+
+.rd-sol-label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: #c96b00;
+  margin-bottom: 6px;
+}
+
+.rd-sol-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2b1810;
+  margin: 0 0 10px 0;
+  line-height: 1.45;
+}
+
+.rd-insight {
+  font-size: 0.95rem;
+  color: #5a362c;
+  line-height: 1.5;
+  border-top: 1px dashed rgba(61, 37, 29, 0.15);
+  padding-top: 10px;
+}
+
+.rd-evaluate-block {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.rd-eval-prompt {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #3D251D;
+  margin-bottom: 14px;
+}
+
+.rd-eval-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+
+.rd-eval-btn {
+  flex: 1;
+  max-width: 220px;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.rd-eval-pass {
+  background-color: #2a9d8f;
+  color: #ffffff;
+}
+
+.rd-eval-pass:hover:not(:disabled) {
+  background-color: #238276;
+  transform: translateY(-1px);
+}
+
+.rd-eval-fail {
+  background-color: #f7ede2;
+  color: #3D251D;
+  border-color: rgba(61, 37, 29, 0.2);
+}
+
+.rd-eval-fail:hover:not(:disabled) {
+  background-color: #ebdcd0;
+  transform: translateY(-1px);
+}
 </style>

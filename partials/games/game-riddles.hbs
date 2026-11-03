@@ -1,0 +1,239 @@
+<script>
+window.GAMES = window.GAMES || {};
+
+const RIDDLES_PER_ROUND = 3;
+
+// Default local fallback pool in case the Ghost page is unreachable
+let RIDDLE_STORAGE = {
+  1: [
+    {
+      title: "The Heavy Rain",
+      riddle: "A man is caught outside in a sudden downpour without an umbrella, hat, or hood. His clothes are completely soaked, yet not a single hair on his head gets wet. How is this possible?",
+      hint: "Focus on the exact wording: 'not a single hair'.",
+      solution: "He was completely bald.",
+      insight: "Our minds automatically visualize someone with hair. Lateral thinking requires questioning unconscious mental imagery."
+    },
+    {
+      title: "The Midnight Reader",
+      riddle: "An elderly lady is sitting alone in her room reading a novel. Suddenly, all electrical power cuts out and the room goes pitch black. She continues reading comfortably without turning on a flashlight or candle. How?",
+      hint: "Does reading always depend on sight?",
+      solution: "She was blind and reading a book in Braille.",
+      insight: "We assume reading is an exclusively visual task. Challenging sensory assumptions reveals the answer."
+    },
+    {
+      title: "The Elevator Man",
+      riddle: "A person living on the 15th floor takes the elevator down to the ground floor every morning. When coming home on sunny days, they ride to the 10th floor and walk up 5 flights. On rainy days, they ride straight to the 15th floor. Why?",
+      hint: "What physical accessory does someone only carry on rainy days?",
+      solution: "They are a person of short stature who cannot reach the 15th-floor button with their hands, but can press it with an umbrella on rainy days.",
+      insight: "The premise misdirects you into analyzing fitness or elevator mechanics rather than physical reach."
+    }
+  ],
+  2: [
+    {
+      title: "The Three Light Switches",
+      riddle: "There are three switches outside a closed, windowless room controlling three standard incandescent bulbs inside. You can only enter the room once. How do you definitively determine which switch controls which bulb?",
+      hint: "What other physical change occurs in a light bulb besides emitting light?",
+      solution: "Turn Switch 1 ON for 10 minutes, turn it OFF, turn Switch 2 ON, and enter immediately. The lit bulb is Switch 2, the warm unlit bulb is Switch 1, and the cold unlit bulb is Switch 3.",
+      insight: "Thinking outside the box means using senses other than sight. Heat persists even after the electrical circuit is broken."
+    },
+    {
+      title: "The Low Clearance",
+      riddle: "A delivery truck arrives at a stone arched underpass, but the trailer roof is exactly 2 cm higher than the arch. The driver cannot turn around, reverse, or take a detour. How can they pass through safely without damaging the truck or bridge?",
+      hint: "Can you temporarily lower the vehicle without modifying its frame?",
+      solution: "Let some air out of the truck's tires to lower the vehicle clearance by a few centimeters, drive through, then reinflate them.",
+      insight: "Rather than attempting to modify rigid structures (the arch or trailer), adjust the flexible component: tire pressure."
+    },
+    {
+      title: "The Dark Cabin",
+      riddle: "You enter a drafty, pitch-black mountain cabin during a winter blizzard. Inside, you find a kerosene lantern, an oil heater, and a pre-built wood fireplace, but you only have a single match. Which do you light first?",
+      hint: "What tool in your hand must ignite before anything else can catch fire?",
+      solution: "The match.",
+      insight: "The list of cabin objects directs your attention outward, making you compare heating appliances while forgetting the tool in your hand."
+    }
+  ],
+  3: [
+    {
+      title: "The Iced Tea Pitcher",
+      riddle: "Two patrons order iced tea from the exact same pitcher. The first guest gulps down five glasses in two minutes and survives unharmed. The second guest sips a single glass slowly over an hour and dies of poison. How?",
+      hint: "Where was the toxin actually stored?",
+      solution: "The poison was frozen inside the ice cubes, which melted in the slow drinker's glass but stayed frozen when the first drinker downed theirs.",
+      insight: "We treat 'iced tea' as a single liquid, forgetting it consists of both liquid and melting solids."
+    },
+    {
+      title: "The Two River Travelers",
+      riddle: "Two hikers arrive at the bank of a swift, deep river with no bridge. They find a small rowboat that can hold only one person at a time without sinking. Both hikers cross safely using that boat without swimming, ropes, or third-party help. How?",
+      hint: "Did they arrive together?",
+      solution: "They arrived at opposite banks of the river. One rowed across to the other, who then rowed the boat back.",
+      insight: "The phrasing 'two hikers arrive at a river' tricks the brain into assuming they were walking together as a pair."
+    },
+    {
+      title: "The Corked Bottle",
+      riddle: "A coin is dropped inside an empty glass bottle, and a solid cork stopper is firmly hammered into the neck. How can you remove the coin without pulling the cork out, cutting the stopper, or cracking the glass?",
+      hint: "Does opening the neck require removing the stopper upward?",
+      solution: "Push the cork down into the wider body of the bottle, turn it upside down, and shake the coin out through the open neck.",
+      insight: "We instinctively assume opening a container requires extracting the plug. Pushing it inward clears the passage just as effectively."
+    }
+  ]
+};
+
+// Fetch dynamic riddles from Ghost page /game-riddles/
+async function syncRiddlesFromGhost() {
+  try {
+    const res = await fetch('/game-riddles/');
+    if (!res.ok) return;
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const el = doc.getElementById('riddles-data');
+    if (el) {
+      const data = JSON.parse(el.textContent);
+      const grouped = { 1: [], 2: [], 3: [] };
+      data.forEach(item => {
+        if (grouped[item.level]) grouped[item.level].push(item);
+      });
+      [1, 2, 3].forEach(lvl => {
+        if (grouped[lvl].length > 0) RIDDLE_STORAGE[lvl] = grouped[lvl];
+      });
+    }
+  } catch (e) {
+    console.warn('Using local fallback riddles:', e);
+  }
+}
+syncRiddlesFromGhost();
+
+window.GAMES['riddles'] = {
+  title: 'Lateral Riddles',
+  desc: 'Classic lateral puzzles designed to test assumptions and out-of-the-box deduction.',
+  max: RIDDLES_PER_ROUND,
+  interactive: true,
+  icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><path d="M9 21h6"/></svg>',
+  study: 'Read carefully, form a hypothesis in your mind, then reveal the solution to test your deduction.',
+  levelSub: 'Pick how complex the lateral thinking gets.',
+  levelNote: l => ['Clear lateral clues', 'Physical & sequential logic', 'Counter-intuitive mind benders'][l - 1],
+  unlockAt: 2,
+
+  start(stage, lvl, done) {
+    const pool = RIDDLE_STORAGE[lvl] || RIDDLE_STORAGE[1];
+    const sequence = shuffle([...pool]).slice(0, RIDDLES_PER_ROUND);
+    let index = 0;
+    let score = 0;
+    const results = [];
+
+    // Ensure persistent navigation footer is visible during active play
+    const footer = document.querySelector('.g-play-footer');
+    if (footer) footer.style.display = 'flex';
+
+    function showCard() {
+      const item = sequence[index];
+      stage.innerHTML = `
+        <div class="rd-wrap">
+          <div class="rd-meta">
+            <span class="rd-badge">Riddle ${index + 1} of ${RIDDLES_PER_ROUND}</span>
+            <h3 class="rd-title">${esc(item.title)}</h3>
+          </div>
+
+          <div class="rd-card">
+            <p class="rd-riddle">"${esc(item.riddle)}"</p>
+          </div>
+
+          <div class="rd-hint-container">
+            <button type="button" class="rd-hint-trigger" id="rd-hint-btn">
+              💡 Need a lateral hint?
+            </button>
+            <div class="rd-hint-content" id="rd-hint-box" style="display:none;">
+              <em>${esc(item.hint)}</em>
+            </div>
+          </div>
+
+          <div class="rd-stage-actions" id="rd-phase-think">
+            <p class="rd-prompt-instruction">Formulate your hypothesis in your mind first, then reveal the solution.</p>
+            <button type="button" class="g-btn g-btn-orange g-btn-lg" id="rd-reveal-btn">
+              Reveal Solution 👁
+            </button>
+          </div>
+
+          <div class="rd-solution-panel" id="rd-phase-answer" style="display:none;">
+            <div class="rd-solution-box">
+              <span class="rd-sol-label">The Lateral Solution</span>
+              <p class="rd-sol-text">${esc(item.solution)}</p>
+              <div class="rd-insight">
+                <strong>Why this works:</strong> ${esc(item.insight)}
+              </div>
+            </div>
+
+            <div class="rd-evaluate-block">
+              <p class="rd-eval-prompt">Did you solve it before revealing?</p>
+              <div class="rd-eval-buttons">
+                <button type="button" class="rd-eval-btn rd-eval-pass" id="rd-pass-btn">
+                  ✓ I figured it out!
+                </button>
+                <button type="button" class="rd-eval-btn rd-eval-fail" id="rd-fail-btn">
+                  ✗ It tricked me
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Hint Toggle
+      const hintBtn = stage.querySelector('#rd-hint-btn');
+      const hintBox = stage.querySelector('#rd-hint-box');
+      hintBtn.addEventListener('click', () => {
+        const hidden = hintBox.style.display === 'none';
+        hintBox.style.display = hidden ? 'block' : 'none';
+        hintBtn.textContent = hidden ? '🙈 Hide hint' : '💡 Need a lateral hint?';
+      });
+
+      // Reveal Solution Phase
+      const thinkActions = stage.querySelector('#rd-phase-think');
+      const answerPanel = stage.querySelector('#rd-phase-answer');
+      const revealBtn = stage.querySelector('#rd-reveal-btn');
+
+      revealBtn.addEventListener('click', () => {
+        thinkActions.style.display = 'none';
+        answerPanel.style.display = 'block';
+        answerPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      // Self-Scoring
+      const passBtn = stage.querySelector('#rd-pass-btn');
+      const failBtn = stage.querySelector('#rd-fail-btn');
+
+      const handleOutcome = isCorrect => {
+        passBtn.disabled = true;
+        failBtn.disabled = true;
+        if (isCorrect) score++;
+        results.push({ title: item.title, isCorrect });
+
+        index++;
+        if (index < RIDDLES_PER_ROUND) {
+          showCard();
+        } else {
+          finishSession();
+        }
+      };
+
+      passBtn.addEventListener('click', () => handleOutcome(true));
+      failBtn.addEventListener('click', () => handleOutcome(false));
+    }
+
+    function finishSession() {
+      const breakdownHTML = `
+        <div class="g-breakdown-row">
+          <h3>Riddle Breakdown</h3>
+          <div class="g-tags">
+            ${results.map(r => `
+              <span class="g-tag ${r.isCorrect ? 'hit' : 'miss'}">
+                ${r.isCorrect ? '✓' : '✗'} ${esc(r.title)}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      done(score, breakdownHTML);
+    }
+
+    showCard();
+  }
+};
+</script>
