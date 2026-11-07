@@ -53,7 +53,7 @@ function shuffle(array) {
 }
 
 /* ---------- Storage ---------- */
-function getUnlocked(game) { return parseInt(localStorage.getItem('unlocked_lvl_' + game) || '1'); }
+function getUnlocked(game) { return 3; } // all levels are open from the start
 function unlockNext(game, lvl) {
   if (lvl + 1 > getUnlocked(game) && lvl + 1 <= 3) localStorage.setItem('unlocked_lvl_' + game, lvl + 1);
 }
@@ -136,15 +136,13 @@ function gameStars(id) {
 }
 
 function showHub() {
-  let totalStars = 0, totalUnlocked = 0, totalPerfect = 0;
+  let totalStars = 0, totalPlayed = 0;
   Object.keys(window.GAMES).forEach(id => {
     totalStars += gameStars(id);
-    totalUnlocked += getUnlocked(id);
-    [1, 2, 3].forEach(l => { if (getBest(id, l) === window.GAMES[id].max) totalPerfect++; });
+    totalPlayed += [1, 2, 3].filter(l => getBest(id, l) !== null).length;
   });
   $('stat-stars').textContent = totalStars;
-  $('stat-unlocked').textContent = totalUnlocked;
-  $('stat-perfect').textContent = totalPerfect;
+  $('stat-played').textContent = totalPlayed;
 
   $('hub-cards').innerHTML = Object.keys(window.GAMES).map(id => {
     const g = window.GAMES[id];
@@ -158,7 +156,7 @@ function showHub() {
           </div>
         </div>
         <div class="g-card-foot">
-          <div class="g-card-progress">${gameStars(id)}/9 stars · Level ${getUnlocked(id)} unlocked</div>
+          <div class="g-card-progress">${gameStars(id)}/9 stars</div>
           <span class="g-card-play">Play ▶</span>
         </div>
       </button>`;
