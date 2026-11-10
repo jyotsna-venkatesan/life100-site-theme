@@ -356,5 +356,18 @@ function showResults(score, breakdownHTML) {
 
 $('g-input-text').addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(); });
 
-showHub();
+function handleRoute() {
+  const hash = window.location.hash.replace('#', '').trim();
+  if (hash && window.GAMES && window.GAMES[hash]) {
+    openLevels(hash);
+  } else {
+    showHub();
+  }
+}
+
+// Check route on initial page load
+handleRoute();
+
+// Listen for browser back/forward or hash changes
+window.addEventListener('hashchange', handleRoute);
 </script>

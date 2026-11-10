@@ -82,6 +82,9 @@
 {{!-- Events --}}
 {{> sections/events}}
 
+{{!-- Brain Games --}}
+{{> sections/games-teaser}}
+
 {{!-- Latest posts section (if the hero section is set to featured) --}}
 {{#match @custom.hero_posts_filter "featured"}}
   {{#get "posts" filter="featured:false+tag:-[hash-podcast,hash-event,hash-newsletter,hash-sponsored]" include="tags,authors,tiers" limit="3"}}
