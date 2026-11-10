@@ -18,13 +18,14 @@
     </a>
   {{/if}}
 
-  <div class="bg-bgr flex-1 flex flex-col gap-2.5{{#if feature_image}} lg:pl-8 lg:ml-16 lg:-mt-14 lg:pt-6 z-10{{/if}}" data-post-card-content>
+  {{!-- justify-center vertically centres the text in the white box; pt-8 / lg:pt-12 adds generous space above content --}}
+  <div class="bg-bgr flex-1 flex flex-col justify-center gap-2.5 pt-8 pb-6{{#if feature_image}} lg:pl-8 lg:ml-16 lg:-mt-14 lg:pt-12 lg:pb-6 z-10{{/if}}" data-post-card-content>
 
     {{!-- Post meta: tag / visibility / comment count --}}
     {{#has tag="#top-story"}}
-      <span class="inline-block self-start mb-1 ml-1 text-sm uppercase font-semibold font-sans bg-transparent text-brand-contrast py-1 px-2.5 relative before:absolute before:inset-0 before:bg-brand before:rounded-theme before:z-[-1] before:skew-x-[-15deg]" data-top-story>{{t "Top Story"}}</span>
+      <span class="inline-block self-start mt-2 mb-1 ml-1 text-sm uppercase font-semibold font-sans bg-transparent text-brand-contrast py-1 px-2.5 relative before:absolute before:inset-0 before:bg-brand before:rounded-theme before:z-[-1] before:skew-x-[-15deg]" data-top-story>{{t "Top Story"}}</span>
     {{else}}
-      {{> post-card-meta-top element_class="mb-1"}}
+      {{> post-card-meta-top element_class="mt-2 mb-1"}}
     {{/has}}
 
     {{!-- Title --}}
@@ -44,8 +45,8 @@
     {{!-- Post meta: authors and date --}}
     {{> post-card-meta-bottom }}
 
-    {{!-- Read More button --}}
-    <a href="{{url}}" class="self-end mt-1 inline-flex items-center gap-1.5 text-sm font-semibold uppercase tracking-tight text-brand hover:underline underline-offset-4">
+    {{!-- Read More button (centred, orange button style) --}}
+    <a href="{{url}}" class="self-center mt-3 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-[#fc9504] text-[#1b1000] text-sm font-bold uppercase tracking-tight no-underline shadow-[0_3px_0_#d97f00] hover:bg-[#ffa404] active:translate-y-[2px] active:shadow-none transition-all">
       {{t "Read More"}}
       <span aria-hidden="true">→</span>
     </a>

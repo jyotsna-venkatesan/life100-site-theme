@@ -1,0 +1,91 @@
+<section class="px-5 sm:px-6 mt-20" data-games-teaser>
+  <div class="max-w-site mx-auto">
+
+    {{!-- Heading: the theme's own partial, so font/size/lines match the other sections --}}
+    {{> section-heading
+      section_title=(t "Brain Games")
+    }}
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+
+      {{!-- Word Recall --}}
+      <a href="/games/#word-recall" class="group flex flex-col items-center text-center gap-3 p-4 md:p-5 bg-white rounded-2xl border-2 border-[#f6dccb] shadow-[0_4px_0_#f6dccb] hover:-translate-y-0.5 hover:shadow-[0_6px_0_#f6dccb] active:translate-y-[3px] active:shadow-none transition-all">
+        <span class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#fc9504] text-[#1b1000] flex items-center justify-center shadow-[0_3px_0_#d97f00] group-hover:scale-105 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M8 7h8"/><path d="M8 11h8"/></svg>
+        </span>
+        <span class="flex flex-col gap-1">
+          <span class="text-base font-semibold md:text-lg leading-tight">Word Recall</span>
+          <span class="text-sm text-typ-tone leading-snug">Short-term memory</span>
+        </span>
+      </a>
+
+      {{!-- Number Match --}}
+      <a href="/games/#numbers" class="group flex flex-col items-center text-center gap-3 p-4 md:p-5 bg-white rounded-2xl border-2 border-[#f6dccb] shadow-[0_4px_0_#f6dccb] hover:-translate-y-0.5 hover:shadow-[0_6px_0_#f6dccb] active:translate-y-[3px] active:shadow-none transition-all">
+        <span class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#fc9504] text-[#1b1000] flex items-center justify-center shadow-[0_3px_0_#d97f00] group-hover:scale-105 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3 8 21"/><path d="M16 3l-2 18"/></svg>
+        </span>
+        <span class="flex flex-col gap-1">
+          <span class="text-base font-semibold md:text-lg leading-tight">Number Match</span>
+          <span class="text-sm text-typ-tone leading-snug">Number memory</span>
+        </span>
+      </a>
+
+      {{!-- Odd Grids --}}
+      <a href="/games/#oddgrids" class="group flex flex-col items-center text-center gap-3 p-4 md:p-5 bg-white rounded-2xl border-2 border-[#f6dccb] shadow-[0_4px_0_#f6dccb] hover:-translate-y-0.5 hover:shadow-[0_6px_0_#f6dccb] active:translate-y-[3px] active:shadow-none transition-all">
+        <span class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#fc9504] text-[#1b1000] flex items-center justify-center shadow-[0_3px_0_#d97f00] group-hover:scale-105 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </span>
+        <span class="flex flex-col gap-1">
+          <span class="text-base font-semibold md:text-lg leading-tight">Odd Grids</span>
+          <span class="text-sm text-typ-tone leading-snug">Pattern spotting</span>
+        </span>
+      </a>
+
+      {{!-- Shape Match --}}
+      <a href="/games/#nback" class="group flex flex-col items-center text-center gap-3 p-4 md:p-5 bg-white rounded-2xl border-2 border-[#f6dccb] shadow-[0_4px_0_#f6dccb] hover:-translate-y-0.5 hover:shadow-[0_6px_0_#f6dccb] active:translate-y-[3px] active:shadow-none transition-all">
+        <span class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#fc9504] text-[#1b1000] flex items-center justify-center shadow-[0_3px_0_#d97f00] group-hover:scale-105 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 2 14h12z"/><circle cx="17" cy="16" r="5"/></svg>
+        </span>
+        <span class="flex flex-col gap-1">
+          <span class="text-base font-semibold md:text-lg leading-tight">Shape Match</span>
+          <span class="text-sm text-typ-tone leading-snug">Working memory</span>
+        </span>
+      </a>
+
+      {{!-- Photo Detective --}}
+      <a href="/games/#spot-odd" class="group flex flex-col items-center text-center gap-3 p-4 md:p-5 bg-white rounded-2xl border-2 border-[#f6dccb] shadow-[0_4px_0_#f6dccb] hover:-translate-y-0.5 hover:shadow-[0_6px_0_#f6dccb] active:translate-y-[3px] active:shadow-none transition-all">
+        <span class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#fc9504] text-[#1b1000] flex items-center justify-center shadow-[0_3px_0_#d97f00] group-hover:scale-105 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </span>
+        <span class="flex flex-col gap-1">
+          <span class="text-base font-semibold md:text-lg leading-tight">Photo Detective</span>
+          <span class="text-sm text-typ-tone leading-snug">Visual focus</span>
+        </span>
+      </a>
+
+      {{!-- Clever Riddles --}}
+      <a href="/games/#riddles" class="group flex flex-col items-center text-center gap-3 p-4 md:p-5 bg-white rounded-2xl border-2 border-[#f6dccb] shadow-[0_4px_0_#f6dccb] hover:-translate-y-0.5 hover:shadow-[0_6px_0_#f6dccb] active:translate-y-[3px] active:shadow-none transition-all">
+        <span class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#fc9504] text-[#1b1000] flex items-center justify-center shadow-[0_3px_0_#d97f00] group-hover:scale-105 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><path d="M9 21h6"/></svg>
+        </span>
+        <span class="flex flex-col gap-1">
+          <span class="text-base font-semibold md:text-lg leading-tight">Clever Riddles</span>
+          <span class="text-sm text-typ-tone leading-snug">Lateral logic</span>
+        </span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+{{!-- Adds the "See all games" button to the heading, styled by your existing [data-section-head] > a CSS --}}
+<script>
+(function () {
+  var head = document.querySelector('[data-games-teaser] [data-section-head]');
+  if (!head || head.querySelector('a')) return;
+  var a = document.createElement('a');
+  a.href = '/games/';
+  a.innerHTML = '<span>SEE ALL</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+  head.appendChild(a);
+})();
+</script>
